@@ -23,7 +23,7 @@ Exemple : la couleur de la barre supérieure est définie dans le CSS Shell. La 
 
 GNOME Shell utilise Clutter et le toolkit St. Les éléments de l'interface sont des acteurs St, pas des widgets GTK. Le thème est chargé depuis une feuille de style Shell.
 
-Le thème installé par défaut est construit à partir des sources du dépôt GNOME Shell. La version 51 fournit notamment des feuilles clair, sombre et contraste élevé. Les noms de classes peuvent évoluer entre les versions : il faut donc vérifier les sélecteurs dans la version ciblée.
+Le thème installé par défaut est construit à partir des sources du dépôt GNOME Shell. La version 51 fournit notamment des feuilles clair, sombre et contraste élevé. Les noms de classes peuvent évoluer entre les versions : il faut donc vérifier les sélecteurs dans la version ciblée. Les sources de thème sont organisées en SCSS puis compilées en CSS pendant la construction ; le CSS livré est le résultat généré, pas le fichier de travail à modifier dans le dépôt GNOME Shell.
 
 ### 2.1 Barre supérieure
 
