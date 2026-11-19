@@ -8,7 +8,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gdk, Gio, Gtk
 
-from .exporter import export_css, export_gnome_shell_theme
+from .exporter import export_css, export_gnome_shell_css, export_gnome_shell_theme
 from .model import ThemeDocument, ThemeTokens
 from .mutter import NestedShellController
 
@@ -319,9 +319,9 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
                 self.nested_button.set_label("▶ Lancer Mutter imbriqué")
                 self.status.set_text("Session Mutter imbriquée arrêtée.")
             else:
-                self.shell.start()
+                self.shell.start(export_gnome_shell_css(self.tokens))
                 self.nested_button.set_label("■ Arrêter Mutter imbriqué")
-                self.status.set_text("Session GNOME Shell imbriquée lancée dans une fenêtre séparée. L'injection du thème viendra via le pont runtime.")
+                self.status.set_text("Aperçu GNOME Shell lancé avec le thème courant dans une session D-Bus et une configuration isolées. Arrêtez puis relancez pour recharger les modifications.")
         except (RuntimeError, OSError) as exc:
             self.status.set_text(str(exc))
 
