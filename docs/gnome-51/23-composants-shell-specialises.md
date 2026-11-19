@@ -319,3 +319,240 @@ Statut : confirmé / partiel / non testé
 ```
 
 Ne qualifiez pas un composant de compatible sur la seule présence d'un sélecteur dans le fichier SCSS. Le statut « confirmé » exige un composant effectivement affiché et testé dans la version indiquée.
+
+
+## 17. Préparer une campagne de validation reproductible
+
+Les composants spécialisés ne sont pas tous visibles dans une session ordinaire. Certains apparaissent uniquement après une action, lorsqu'un périphérique est connecté ou lorsqu'un service système est disponible. Une campagne fiable doit donc documenter comment chaque élément a été obtenu.
+
+Avant de commencer :
+
+1. Relevez la version exacte de GNOME Shell et de ses composants.
+2. Identifiez la session Wayland ou X11.
+3. Notez le facteur d'échelle de chaque écran.
+4. Désactivez temporairement les extensions non nécessaires, ou consignez précisément celles qui restent actives.
+5. Sauvegardez la feuille CSS et les réglages de départ.
+6. Préparez des comptes, périphériques et données de test sans données personnelles.
+7. Définissez une procédure de retour à l'état initial.
+
+Ne provoquez pas un événement de sécurité ou une opération administrative réelle uniquement pour obtenir une capture. Utilisez une machine virtuelle ou un compte de test lorsque le scénario peut modifier le système.
+
+### Séparer disponibilité, affichage et validation
+
+Pour chaque composant, distinguez trois états :
+
+- **Disponible** : le service, le périphérique ou la fonction existe dans l'environnement.
+- **Affiché** : une action reproductible a réellement fait apparaître le composant.
+- **Validé** : les états visuels, l'interaction, le focus et le comportement de repli ont été contrôlés.
+
+Un composant disponible mais jamais affiché doit rester « non testé ». Un composant affiché une seule fois ne peut pas être déclaré validé pour tous ses états.
+
+## 18. Examiner les composants dans le code source GNOME
+
+Quand un élément ne réagit pas à une règle, recherchez d'abord son implémentation dans la version exacte de GNOME Shell utilisée. Le nom visible à l'écran peut être différent du nom de classe ou du nom du fichier source.
+
+Depuis une copie locale des sources correspondant à la version :
+
+~~~bash
+grep -RInE 'class .*Popup|class .*Dialog|class .*Indicator' js/ui
+grep -RInE 'add_style_class_name|add_style_class_name|set_style' js/ui
+grep -RIn 'add_child' js/ui
+~~~
+
+Ces recherches servent à repérer des points d'entrée, pas à produire automatiquement des sélecteurs CSS. Ouvrez ensuite le fichier concerné et suivez la construction du composant jusqu'aux widgets réellement ajoutés à l'arbre.
+
+Pour chaque élément, consignez :
+- fichier source ;
+- classe JavaScript ;
+- constructeur ou fonction d'affichage ;
+- classes de style ajoutées ;
+- widgets enfants ;
+- conditions d'apparition ;
+- signaux et états modifiés à l'exécution.
+
+Les noms internes peuvent changer entre versions. Recommencez cette vérification après une mise à jour majeure de GNOME Shell.
+
+## 19. Atelier : indicateurs et menus de la zone système
+
+Les indicateurs de la zone système rassemblent des informations d'état et des commandes. Ils peuvent être créés ou enrichis par des extensions et des services.
+
+Construisez une campagne distincte pour chaque famille réellement présente :
+- réseau ;
+- alimentation ;
+- volume et périphériques audio ;
+- Bluetooth ;
+- accessibilité ;
+- disposition clavier ;
+- date et calendrier ;
+- notifications ;
+- extensions tierces.
+
+Pour chaque menu, vérifiez le déclenchement par clic et par clavier, l'ouverture du sous-menu, la sélection d'une action et la fermeture. Contrôlez le focus lorsque le menu s'ouvre et lorsqu'il se ferme.
+
+Testez les états actifs et indisponibles. Un réseau déconnecté, un périphérique absent ou un service arrêté doit rester compréhensible. N'utilisez pas uniquement la couleur pour signaler un état.
+
+Les indicateurs peuvent être ajoutés ou retirés selon les périphériques et les extensions. Ne forcez pas une largeur fixe qui supposerait que tous les indicateurs sont toujours présents.
+
+## 20. Atelier : notifications et centre de notifications
+
+Préparez des notifications de test avec des longueurs différentes et, si possible, des actions. N'utilisez pas de contenu privé ou de message personnel dans les captures de référence.
+
+Scénarios à couvrir :
+- notification courte ;
+- notification avec titre et corps longs ;
+- notification avec icône ;
+- notification avec image ;
+- notification avec action ;
+- plusieurs notifications successives ;
+- notification persistante ;
+- absence de notification ;
+- ouverture du centre puis fermeture.
+
+Vérifiez que le texte reste lisible, que les actions sont identifiables et que les notifications ne recouvrent pas les commandes importantes. Testez la disparition automatique et le comportement après une interaction.
+
+Une notification et son entrée dans le centre de notifications peuvent être présentées par des composants différents. Inspectez les deux au lieu de supposer qu'une règle appliquée à l'une couvre l'autre.
+
+## 21. Atelier : fenêtres modales et demandes d'autorisation
+
+Les dialogues de confirmation et les demandes d'autorisation peuvent être liés à des opérations sensibles. Leur apparence doit conserver une hiérarchie explicite.
+
+Dans une machine ou un compte de test, vérifiez :
+- titre et description ;
+- identité du demandeur lorsqu'elle est affichée ;
+- action principale ;
+- action d'annulation ;
+- focus initial ;
+- navigation clavier ;
+- fermeture et expiration ;
+- état après refus ;
+- état après acceptation.
+
+N'atténuez pas le contraste des informations d'identité ou des actions. Ne masquez jamais l'origine d'une demande. Un thème doit rendre la décision plus claire, pas pousser l'utilisateur vers l'acceptation.
+
+Si le dialogue est produit par un service extérieur à GNOME Shell, identifiez le processus responsable avant de modifier le thème. Le dialogue peut relever de polkit, du toolkit d'une application ou d'un autre composant système.
+
+## 22. Atelier : sélecteurs de périphériques et états déconnectés
+
+Les composants de sélection audio, Bluetooth, réseau ou alimentation reflètent l'état réel des périphériques. Leur validation nécessite des équipements de test ou un environnement simulé.
+
+Pour un sélecteur audio, testez :
+- une seule sortie ;
+- plusieurs sorties ;
+- périphérique sélectionné ;
+- périphérique déconnecté ;
+- changement de sortie ;
+- apparition et disparition d'un périphérique ;
+- libellé long ;
+- icône générique.
+
+Pour Bluetooth, testez l'absence d'adaptateur, l'adaptateur désactivé, la recherche en cours, un appareil disponible et une connexion interrompue. Pour le réseau, distinguez réseau connu, réseau non disponible, connexion en cours et absence de connexion.
+
+Le style de sélection doit correspondre à l'état réel. N'utilisez pas un style « actif » permanent qui ferait croire qu'un périphérique est connecté alors qu'il ne l'est pas.
+
+## 23. Atelier : avatars, images et contenus dynamiques
+
+Les avatars et images de compte peuvent être fournis par un service, un profil local ou une extension. Ils ne sont pas toujours des ressources du thème.
+
+Préparez des données de test :
+- avatar carré ;
+- avatar non carré ;
+- image haute résolution ;
+- image absente ;
+- image invalide ;
+- nom court ;
+- nom long ;
+- caractères non latins.
+
+Vérifiez le recadrage, le centrage, les coins, la netteté et le comportement de repli. L'absence d'image doit produire un état cohérent et identifiable, sans laisser un espace vide inattendu.
+
+Ne copiez pas de véritables photos de compte dans le dépôt. Les visuels de test doivent être libres de droits ou créés spécifiquement pour les essais.
+
+## 24. Atelier : QR codes, aides et éléments de précision
+
+Lorsqu'un composant affiche un QR code, vérifiez d'abord que le code représente bien les données attendues. Le contraste et la netteté sont fonctionnels : un code joli mais illisible n'est pas valide.
+
+Testez l'affichage à l'échelle native, après redimensionnement de la fenêtre et sur plusieurs facteurs d'échelle. Vérifiez que les marges de silence autour du code sont conservées et qu'aucun arrondi, flou ou effet CSS ne déforme les modules.
+
+Pour les aides visuelles et les infobulles, contrôlez le délai d'apparition, le placement près des bords d'écran, la disparition et l'accessibilité au clavier. Une infobulle ne doit pas être le seul endroit où se trouve une information essentielle.
+
+## 25. Tester les écrans de session et de verrouillage sans risque
+
+Les composants liés à la session peuvent être gérés par GDM, GNOME Shell ou un service distinct. Le CSS du shell utilisateur ne s'applique pas nécessairement à l'écran de connexion.
+
+Séparez les essais :
+- session utilisateur verrouillée ;
+- écran de déverrouillage ;
+- écran de connexion GDM ;
+- changement d'utilisateur ;
+- saisie du mot de passe ;
+- message d'erreur ;
+- retour à la session.
+
+N'installez pas un thème de test directement dans l'environnement de connexion principal sans disposer d'une méthode de récupération. Conservez un compte administrateur de secours et une procédure de restauration accessible depuis un terminal virtuel ou un environnement de récupération.
+
+Ne capturez jamais un mot de passe, un nom de compte privé ou un code de récupération. Les captures de documentation doivent utiliser des comptes de démonstration.
+
+## 26. Diagnostiquer une différence entre deux machines
+
+Deux machines utilisant la même feuille CSS peuvent afficher des composants différents. Comparez les conditions d'exécution avant d'ajouter des exceptions.
+
+Relevez au minimum :
+- version de GNOME Shell ;
+- version de Mutter ;
+- distribution ;
+- session ;
+- résolution et facteur d'échelle ;
+- nombre d'écrans ;
+- extensions activées ;
+- périphériques présents ;
+- services disponibles ;
+- langue et disposition clavier.
+
+Reproduisez ensuite le même scénario sur les deux machines. Si la différence disparaît lorsque les extensions sont désactivées, isolez l'extension responsable. Si elle dépend du périphérique, documentez l'état du matériel au lieu d'ajouter une règle globale.
+
+Une capture seule ne permet pas d'identifier la cause. Conservez aussi les étapes de reproduction et les versions.
+
+## 27. Contrôler les performances et les animations
+
+Les composants spécialisés peuvent apparaître pendant des transitions, des changements de périphériques ou des mises à jour d'état. Une règle CSS coûteuse peut rendre ces transitions moins fluides.
+
+Évitez :
+- les ombres multiples et très étendues ;
+- les filtres coûteux sur de grandes surfaces ;
+- les animations permanentes sans nécessité ;
+- les transitions sur de nombreuses propriétés ;
+- les règles globales qui ciblent de très grands sous-arbres.
+
+Comparez le comportement avec le thème de référence. Observez les menus qui s'ouvrent fréquemment, les notifications répétées et les changements rapides de périphérique.
+
+Distinguez une animation lente d'un retard du service. Vérifiez si le problème existe sans thème personnalisé avant de modifier le CSS.
+
+## 28. Matrice de clôture de la campagne
+
+Une campagne ne se termine pas lorsqu'une capture semble correcte. Pour chaque composant, archivez les preuves et les limites.
+
+~~~text
+Composant :
+Environnement et version :
+Précondition nécessaire :
+Procédure pour l'afficher :
+État normal :
+État actif :
+État indisponible :
+État d'erreur :
+Focus clavier :
+Navigation clavier :
+Comportement Wayland :
+Comportement multi-écrans :
+Extension ou service impliqué :
+Fichier source vérifié :
+Sélecteurs vérifiés :
+Capture avant :
+Capture après :
+Anomalies fonctionnelles :
+Anomalies visuelles :
+Limites non testées :
+Conclusion :
+~~~
+
+Une conclusion « confirmé » doit correspondre à un scénario réellement exécuté. Si un service ou un périphérique n'était pas disponible, indiquez explicitement « non testé » ou « non applicable » et expliquez pourquoi.
