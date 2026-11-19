@@ -15,6 +15,12 @@ Le manuel est organisé par objectifs plutôt que par une seule longue liste de 
 
 Les chapitres courts de synthèse introduisent un domaine. Lorsqu'un chapitre approfondi existe sur le même sujet, ce dernier contient les procédures détaillées et les exercices. Les chapitres de référence ne remplacent pas les ateliers.
 
+### Comprendre la numérotation des fichiers
+
+Les numéros présents dans les noms de fichiers sont des identifiants documentaires historiques, pas un ordre de lecture ni une numérotation continue. Plusieurs fichiers portant le même préfixe traitent de sujets distincts : par exemple, le chapitre `02-css-debutant` enseigne les bases du CSS, tandis que `02-gnome-shell` décrit l'architecture et les composants du Shell. Les numéros 35 et 36 ne correspondent actuellement à aucun chapitre ; leur absence ne signale pas un contenu manquant dans le parcours. Les liens et les rubriques de ce sommaire, et non les préfixes, définissent l'ordre de lecture.
+
+Les chapitres 42 et 48 sont également complémentaires : le premier traite des variables CSS, des requêtes de média et des variantes GTK 4.23 ; le second sert de référence comparative entre les propriétés CSS de GTK 4.23 et celles du moteur St de GNOME Shell.
+
 ## 1. Parcours débutant
 
 1. [Bien démarrer](00-bien-demarrer.md)
