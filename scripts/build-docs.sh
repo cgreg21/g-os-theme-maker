@@ -60,6 +60,7 @@ SOURCE_FILES=(
   docs/gnome-51/45-decorations-csd-ssd-wayland-x11.md
   docs/gnome-51/46-moteur-css-st-cascade-diagnostic.md
   docs/gnome-51/47-reference-proprietes-css-st-51.md
+  docs/gnome-51/48-reference-css-gtk-423-comparaison-st.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
