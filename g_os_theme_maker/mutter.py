@@ -102,7 +102,7 @@ class NestedShellController:
             check=False,
             timeout=5,
         ).stdout
-        match = re.search(r"(\\d+)", version)
+        match = re.search(r"(\d+)", version)
         if match and int(match.group(1)) >= 49:
             return ["gnome-shell", "--devkit", "--wayland"]
         return ["gnome-shell", "--nested", "--wayland"]
