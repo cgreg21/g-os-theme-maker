@@ -15,6 +15,12 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 7. [Créer et modifier les ressources visuelles](06-icones-curseurs-polices-fonds.md)
 8. [Paramètres GNOME, installation et dépannage](07-parametres-installation-diagnostic.md)
 9. [Catalogue pratique de toutes les familles de composants](08-catalogue-pratique-composants.md)
+10. [Personnaliser les applications GNOME](11-applications-gnome.md)
+
+## Compléments pédagogiques
+
+- [Personnaliser les applications GNOME](11-applications-gnome.md)
+- [Méthode d'inspection et de diagnostic CSS](12-inspection-et-diagnostic-css.md)
 
 ## Référence technique
 
