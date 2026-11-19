@@ -1,5 +1,10 @@
 # Comprendre et personnaliser la vue Activités de GNOME Shell 51
 
+![Résultats de recherche dans GNOME](images/official/search-results-order.png)
+
+Cette capture officielle complète la vue du lanceur en montrant le classement des résultats de recherche.
+
+
 Ce chapitre explique la vue d'ensemble affichée avec la touche Super ou le bouton Activités. Il distingue les fenêtres, les espaces de travail, la recherche, le Dash et la grille d'applications. Les repères CSS ci-dessous ont été vérifiés dans les sources amont GNOME Shell **51.0**. Ils décrivent l'implémentation de cette version, pas une API stable.
 
 ![Capture officielle du lanceur GNOME dans la vue Activités](images/official/shell-activities-dash.png)
