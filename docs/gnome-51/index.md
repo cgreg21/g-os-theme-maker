@@ -20,6 +20,7 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 12. [Personnaliser la vue Activités](14-vue-activites-overview.md)
 13. [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
 14. [Écran de verrouillage, déverrouillage et GDM](16-ecran-verrouillage-gdm.md)
+15. [OSD, dialogues, Alt-Tab et capture d'écran](17-osd-dialogues-alt-tab-capture.md)
 
 ## Captures de l'interface GNOME standard
 
