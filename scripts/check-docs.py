@@ -13,6 +13,7 @@ LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 TABLE_SEPARATOR_RE = re.compile(
     r"^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$"
 )
+HTML_TABLE_RE = re.compile(r"<\s*/?\s*table\b", re.IGNORECASE)
 ALLOWED_IMAGES = {".png", ".jpg", ".jpeg"}
 
 
@@ -80,6 +81,12 @@ def main() -> int:
             if TABLE_SEPARATOR_RE.match(line):
                 errors.append(
                     f"{document.relative_to(ROOT)}:{number}: tableau Markdown interdit"
+                )
+
+            without_inline_code = re.sub(r"`+.*?`+", "", line)
+            if HTML_TABLE_RE.search(without_inline_code):
+                errors.append(
+                    f"{document.relative_to(ROOT)}:{number}: tableau HTML interdit"
                 )
 
             for match in IMAGE_RE.finditer(line):
