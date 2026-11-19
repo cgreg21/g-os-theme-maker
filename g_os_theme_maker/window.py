@@ -297,6 +297,12 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             path = Path(file.get_path())
             self.document = ThemeDocument.load(path)
             self.tokens = self.document.tokens
+            if self.selected_widget is not None:
+                self.selected_widget.remove_css_class("preview-selected")
+            self.selected_widget = None
+            self.selected_component = None
+            self.selection_label.set_text("Sélection : aucune")
+            self.component_properties.set_visible(False)
             self.project_path = path
             self._sync_fields()
             self._apply_preview()
