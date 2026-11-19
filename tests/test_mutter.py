@@ -28,7 +28,7 @@ class NestedShellControllerTests(unittest.TestCase):
             self.assertIn("#123456", (extension / "gnome-shell.css").read_text())
             self.assertTrue((extension / "metadata.json").is_file())
             self.assertTrue((extension / "extension.js").is_file())
-            self.assertIn("enabled-extensions", command[3])
+            self.assertIn("enabled-extensions", command[4])
             self.assertIn("--devkit", command[3])
             self.assertTrue(Path(env["DCONF_PROFILE"]).is_file())
         finally:
