@@ -29,7 +29,7 @@ class NestedShellControllerTests(unittest.TestCase):
             self.assertTrue((extension / "metadata.json").is_file())
             self.assertTrue((extension / "extension.js").is_file())
             self.assertIn("enabled-extensions", command[4])
-            self.assertIn("--devkit", command[3])
+            self.assertIn("--devkit", command[4])
             self.assertTrue(Path(env["DCONF_PROFILE"]).is_file())
         finally:
             controller.stop()
