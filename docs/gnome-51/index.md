@@ -38,6 +38,8 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle com
 30. [Maîtriser les thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
 31. [Concevoir et diagnostiquer un thème de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
 32. [Maîtriser Fontconfig et la typographie](34-fontconfig-typographie-detail.md)
+33. [Créer un thème avec l'éditeur visuel](35-editeur-visuel-tokens-projets.md)
+34. [Aperçu GNOME Shell isolé avec Mutter](36-apercu-shell-imbrique-mutter.md)
 
 ## Captures de l'interface GNOME standard
 
