@@ -202,8 +202,15 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         values = self.tokens.component_overrides.get(component, {})
         for key, spin in self.component_fields.items():
             spin.set_value(values.get(key, getattr(self.tokens, key)))
+        defaults = {
+            "background": self.tokens.accent if component == "primary_button" else self.tokens.surface,
+            "foreground": "#ffffff" if component == "primary_button" else self.tokens.foreground,
+            "border": self.tokens.border,
+            "hover": self.tokens.accent,
+            "active": self.tokens.accent,
+        }
         for key, entry in self.component_color_fields.items():
-            entry.set_text(values.get(key, self.tokens.accent if key in ("hover", "active") else getattr(self.tokens, key, self.tokens.surface)))
+            entry.set_text(values.get(key, defaults[key]))
             entry.get_parent().set_visible(key not in ("hover", "active") or component.endswith("button"))
         self.selected_component = component
 
@@ -291,10 +298,10 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         secondary_fg = secondary.get("foreground", self.tokens.foreground)
         css = f"""
         .preview-canvas {{ background: {self.tokens.background}; color: {self.tokens.foreground}; }}
-        .preview-topbar {{ background: {topbar_bg}; color: {topbar_fg}; padding: {topbar.get("spacing", self.tokens.spacing)}px; border-radius: {topbar.get("radius", self.tokens.radius)}px; }}
+        .preview-topbar {{ background: {topbar_bg}; color: {topbar_fg}; border: 1px solid {topbar.get("border", self.tokens.border)}; padding: {topbar.get("spacing", self.tokens.spacing)}px; border-radius: {topbar.get("radius", self.tokens.radius)}px; }}
         .preview-card {{ background: {card_bg}; color: {card_fg}; border: 1px solid {card_border}; border-radius: {card.get("radius", self.tokens.radius)}px; padding: {card.get("spacing", self.tokens.spacing) * 2}px; font-size: {self.tokens.font_size}px; }}
-        .preview-card button {{ background: {secondary_bg}; color: {secondary_fg}; border-radius: {secondary.get("radius", self.tokens.radius)}px; padding: {secondary.get("spacing", self.tokens.spacing)}px; }}\n        .preview-card button.suggested-action {{ border-radius: {primary.get("radius", self.tokens.radius)}px; padding: {primary.get("spacing", self.tokens.spacing)}px; }}
-        .preview-card button.suggested-action {{ background: {primary_bg}; color: {primary_fg}; }}\n        .preview-card button:hover {{ background: {secondary.get("hover", self.tokens.accent)}; }}\n        .preview-card button:active {{ background: {secondary.get("active", self.tokens.accent)}; }}\n        .preview-card button.suggested-action:hover {{ background: {primary.get("hover", self.tokens.accent)}; }}\n        .preview-card button.suggested-action:active {{ background: {primary.get("active", self.tokens.accent)}; }}
+        .preview-card button {{ background: {secondary_bg}; color: {secondary_fg}; border: 1px solid {secondary.get("border", self.tokens.border)}; border-radius: {secondary.get("radius", self.tokens.radius)}px; padding: {secondary.get("spacing", self.tokens.spacing)}px; }}\n        .preview-card button.suggested-action {{ border-radius: {primary.get("radius", self.tokens.radius)}px; padding: {primary.get("spacing", self.tokens.spacing)}px; }}
+        .preview-card button.suggested-action {{ background: {primary_bg}; color: {primary_fg}; border-color: {primary.get("border", self.tokens.border)}; }}\n        .preview-card button:hover {{ background: {secondary.get("hover", self.tokens.accent)}; }}\n        .preview-card button:active {{ background: {secondary.get("active", self.tokens.accent)}; }}\n        .preview-card button.suggested-action:hover {{ background: {primary.get("hover", self.tokens.accent)}; }}\n        .preview-card button.suggested-action:active {{ background: {primary.get("active", self.tokens.accent)}; }}
         """
         css += f"""
         .preview-selectable {{ transition: outline-color 120ms ease; }}
