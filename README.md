@@ -5,14 +5,14 @@ A visual GTK4 application for creating GNOME Shell themes without writing CSS by
 ## Goals
 
 - Visual theme editor for colors, typography, spacing, borders, radii and component states.
-- Live GTK preview and an isolated nested GNOME Shell preview backend.
+- Live GTK preview and an isolated nested GNOME Shell preview that loads the current generated stylesheet.
 - Property inspector for selecting preview components and editing their theme tokens.
 - JSON project files, generic CSS export and installable GNOME Shell theme directory export.
 - No changes to the user's active desktop theme during editing.
 
 ## Current status
 
-The project is being bootstrapped. The first milestone provides the GTK application shell, editable design tokens, a component preview, project serialization and CSS export. The nested Mutter/GNOME Shell runtime is an explicit integration target; the local GTK preview is not presented as a real Mutter session.
+The project is being bootstrapped. The first milestone provides the GTK application shell, editable design tokens, a component preview, project serialization and CSS export. The nested preview starts GNOME Shell through a private D-Bus session, a temporary XDG data/config directory and a temporary dconf profile. A small temporary extension loads the generated stylesheet without changing the active desktop settings. Stop and relaunch the nested session to apply later CSS edits. The local GTK preview remains separate from the real Shell preview.
 
 ## Requirements
 
