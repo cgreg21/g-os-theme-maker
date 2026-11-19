@@ -25,14 +25,17 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 17. [Personnaliser GTK 3 en détail](19-gtk3-theming-detaille.md)
 18. [Personnaliser GTK 4 en détail](20-gtk4-theming-detaille.md)
 19. [Personnaliser Libadwaita en détail](21-libadwaita-theming-detaille.md)
+20. [Créer les ressources d'un thème](22-ressources-icones-curseurs-polices-fonds-sons.md)
 
 ## Captures de l'interface GNOME standard
 
+Les captures GNOME Shell proviennent de l'aide officielle GNOME. Les captures d'applications et le fond d'écran proviennent des notes de version officielles GNOME 51. Les liens permettent de retrouver leur contexte et leur attribution.
+
 - [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
 - [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
-- [Anatomie d'une application GNOME](https://release.gnome.org/49/papers-screenshot.webp)
+- [Anatomie d'une application GNOME](https://release.gnome.org/51/papers-signature-screenshot.webp)
 - [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
-- [Calendrier et notifications](https://help.gnome.org/gnome-help/figures/shell-appts.png)
+- [Calendrier et notifications](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
 
 Les visuels renvoient désormais aux captures officielles de GNOME Help et aux images de présentation GNOME. Ils montrent l'apparence standard ; certaines captures documentaires sont antérieures à GNOME 51 et servent à identifier les composants, pas à figer leurs dimensions.
 

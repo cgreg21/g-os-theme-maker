@@ -4,7 +4,7 @@ Ce chapitre couvre les interfaces ouvertes depuis les indicateurs du panneau : m
 
 ![Capture GNOME des réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
 
-![Capture GNOME du calendrier et des notifications](https://help.gnome.org/gnome-help/figures/shell-appts.png)
+![Capture GNOME du calendrier et des notifications](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
 
 ## Sources amont à conserver sous la main
 

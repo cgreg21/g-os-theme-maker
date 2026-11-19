@@ -26,6 +26,7 @@ SOURCE_FILES=(
   docs/gnome-51/19-gtk3-theming-detaille.md
   docs/gnome-51/20-gtk4-theming-detaille.md
   docs/gnome-51/21-libadwaita-theming-detaille.md
+  docs/gnome-51/22-ressources-icones-curseurs-polices-fonds-sons.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md
