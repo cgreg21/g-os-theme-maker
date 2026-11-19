@@ -11,7 +11,7 @@
 
 Ces cas doivent être indiqués comme « hors périmètre », « extension » ou « dépend de l’application », pas présentés comme une prise en charge garantie.
 
-## 10. Structure d’un thème exporté
+## 2. Structure d’un thème exporté
 
 ```text
 MonTheme/
@@ -40,7 +40,7 @@ MonTheme/
 
 Un répertoire vide n’est pas une ressource de thème terminée. L’export doit signaler clairement les ressources absentes.
 
-## 11. Matrice de tests obligatoire
+## 3. Matrice de tests obligatoire
 
 - **Zone** : Panneau ; **Contrôles minimum** : horloge, activités, indicateurs, confidentialité
 - **Zone** : Activités ; **Contrôles minimum** : recherche, résultats, grille, dossiers, pages
@@ -62,7 +62,7 @@ Un répertoire vide n’est pas une ressource de thème terminée. L’export do
 
 Tester chaque zone en clair, sombre et contraste élevé. Valider la syntaxe CSS avec les outils GTK correspondants et utiliser une session GNOME Shell imbriquée pour les tests Shell. Un aperçu statique ne remplace pas un test réel.
 
-## Délimiter la portée d’un thème
+## 4. Délimiter la portée d’un thème
 
 Avant de commencer un thème, établissez une fiche de périmètre :
 
@@ -75,11 +75,11 @@ Avant de commencer un thème, établissez une fiche de périmètre :
 
 Ne promettez jamais un rendu si le moteur ne fournit pas le mécanisme nécessaire. Les composants ajoutés par les extensions doivent être distingués des composants natifs.
 
-## 9.1 Installation utilisateur
+## 5. Installation utilisateur
 
 Installer dans les répertoires XDG utilisateur : thèmes, icônes, curseurs, polices et fonds. Ne pas écrire dans `/usr/share` sans demande explicite et privilèges. Le paquet doit contenir nom, version, auteur, cibles, versions testées, variantes, ressources absentes, licences, installation, désinstallation et limites.
 
-## 9.2 Validation
+## 6. Validation
 
 1. syntaxe CSS ;
 2. correspondance sélecteurs/nœuds ;
@@ -90,7 +90,7 @@ Installer dans les répertoires XDG utilisateur : thèmes, icônes, curseurs, po
 
 Un CSS qui se parse peut ne correspondre à aucun nœud. Un aperçu statique n'est pas un test moteur.
 
-## 9.3 Diagnostic
+## 7. Diagnostic
 
 ```sh
 gnome-shell --version
@@ -104,14 +104,10 @@ echo "$XDG_CURRENT_DESKTOP"
 
 Les commandes dépendent de la distribution.
 
-## 9.4 Matrice de test
-
-La matrice détaillée figure dans la section « Matrice de tests obligatoire » ci-dessus. Ne maintenez pas deux listes de tests différentes : utilisez une seule matrice comme référence.
-
-## 9.5 Retour arrière
+## 8. Retour arrière
 
 Sauvegarder le thème précédent, fournir désactivation/restauration, désinstaller uniquement les fichiers créés, préserver une session alternative. Ne pas réinitialiser toutes les préférences dconf. Toute cible système doit avoir une procédure de récupération.
 
-## 9.6 Critères de prise en charge
+## 9. Critères de prise en charge
 
 Une cible n'est prise en charge que si moteur/version identifiés, propriétés et sélecteurs documentés, états et variantes testés, parseur sans erreur inexpliquée, installation/retour arrière vérifiés et limites visibles.
