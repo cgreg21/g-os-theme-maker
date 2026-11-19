@@ -395,3 +395,234 @@ Avant chaque publication :
 10. conservez les artefacts et résultats de test.
 
 Après publication, ne remplacez pas le contenu d'une version existante sans créer une nouvelle version clairement identifiée. En cas de défaut critique, marquez la version comme retirée ou déconseillée, expliquez le problème et publiez une version corrigée.
+
+
+## 25. Définir un contrat d'installation clair
+
+Un paquet de thème doit annoncer précisément ce qu'il installe, où il l'installe et ce qu'il ne modifie jamais. L'utilisateur doit pouvoir examiner le contenu avant l'installation et retirer les fichiers sans deviner leurs emplacements.
+
+Documentez au minimum :
+- nom et version du thème ;
+- composants fournis ;
+- dépendances éventuelles ;
+- répertoires de destination ;
+- paramètres GNOME éventuellement modifiés ;
+- extensions requises ou facultatives ;
+- limites connues ;
+- procédure d'installation ;
+- procédure de désinstallation ;
+- procédure de retour au thème précédent.
+
+Séparez les fichiers du thème des scripts d'installation. Le thème doit rester utilisable lorsqu'il est installé manuellement en suivant le README.
+
+Un installateur ne doit pas télécharger ou exécuter du code supplémentaire sans l'annoncer explicitement. N'utilisez pas de commande distante transmise directement à un interpréteur de shell.
+
+## 26. Organiser les composants en paquets indépendants
+
+Les thèmes GTK, GNOME Shell, icônes, curseurs et polices ne suivent pas nécessairement les mêmes mécanismes de sélection ou d'installation. Un paquet unique peut les regrouper, mais il doit conserver une structure qui permet de les installer séparément.
+
+Exemple d'organisation :
+
+~~~text
+Theme-Example/
+├── gtk-3.0/
+├── gtk-4.0/
+├── gnome-shell/
+├── icons/
+├── cursors/
+├── fonts/
+├── backgrounds/
+├── sounds/
+├── licenses/
+├── README.md
+├── CHANGELOG.md
+└── THIRD-PARTY-NOTICES.md
+~~~
+
+N'ajoutez que les composants réellement fournis. Une arborescence vide ou un dossier nommé comme un composant ne signifie pas qu'il est pris en charge.
+
+Documentez les dépendances entre composants. Par exemple, le thème Shell peut utiliser des icônes fournies dans un paquet séparé. Dans ce cas, le README doit expliquer le résultat si l'utilisateur n'installe que le thème Shell.
+
+## 27. Écrire un installateur qui annonce ses actions
+
+Un script d'installation doit être lisible et prévisible. Il doit afficher les chemins visés, refuser les destinations inattendues et éviter d'écraser silencieusement un thème existant.
+
+Avant de copier :
+1. Résolvez le chemin du dossier source.
+2. Vérifiez les composants annoncés.
+3. Vérifiez que le répertoire de destination est un dossier utilisateur prévu.
+4. Affichez les fichiers qui seront copiés.
+5. Demandez confirmation si le nom de destination existe déjà.
+6. Conservez une sauvegarde ou utilisez un nouveau nom de version.
+
+Évitez les installations dans les répertoires système par défaut. Une installation utilisateur réduit les privilèges nécessaires et simplifie la désinstallation.
+
+Un mode simulation est utile : il affiche les opérations sans les effectuer. Il doit être réellement non destructif et ne doit pas modifier les préférences GNOME.
+
+## 28. Gérer les mises à jour sans détruire les personnalisations
+
+Une mise à jour peut remplacer des fichiers modifiés manuellement par l'utilisateur. Préférez des versions installées dans des dossiers distincts, ou avertissez explicitement avant le remplacement.
+
+Avant une mise à jour :
+- identifiez la version actuellement installée ;
+- comparez les fichiers ;
+- repérez les modifications locales ;
+- sauvegardez les fichiers qui seront remplacés ;
+- indiquez les changements incompatibles ;
+- fournissez une procédure de retour à la version précédente.
+
+Ne supprimez pas automatiquement le dossier entier d'un thème. Il peut contenir des fichiers ajoutés par l'utilisateur ou des éléments qui ne font pas partie de votre paquet.
+
+Les noms de dossiers versionnés facilitent le retour arrière, mais nécessitent une procédure claire pour sélectionner la nouvelle version et retirer l'ancienne.
+
+## 29. Détecter les destinations et les liens symboliques dangereux
+
+Un installateur doit contrôler les chemins avant de copier ou supprimer des fichiers. Il ne doit pas suivre aveuglément un lien symbolique vers un emplacement extérieur au dossier du thème.
+
+Vérifiez :
+- chemin source réel ;
+- chemin de destination réel ;
+- liens symboliques présents ;
+- permissions ;
+- propriétaire des fichiers ;
+- absence de traversée inattendue vers un autre dossier.
+
+Ne lancez jamais une suppression récursive sur un chemin construit uniquement à partir d'une variable non vérifiée. Refusez les destinations vides, racine, système ou hors du dossier utilisateur prévu.
+
+Pour un paquet reçu d'une source externe, inspectez l'archive avant extraction. Refusez les chemins contenant une remontée vers le parent et les entrées qui sortent du répertoire cible.
+
+## 30. Vérifier l'archive avant extraction
+
+Une archive peut contenir des chemins inattendus, des fichiers spéciaux ou des doublons. Listez son contenu avant extraction et comparez-le au manifeste du paquet.
+
+Contrôlez :
+- préfixe de répertoire unique ;
+- absence de chemins absolus ;
+- absence de remontée de répertoire ;
+- absence de fichiers spéciaux inattendus ;
+- absence de doublons de chemins ;
+- taille totale raisonnable ;
+- présence des fichiers annoncés ;
+- absence de fichiers temporaires de développement.
+
+Après extraction, comparez l'arborescence obtenue au manifeste. Ne supposez pas que le nom de l'archive garantit le nom du dossier extrait.
+
+## 31. Produire un manifeste des fichiers installés
+
+Un manifeste permet d'expliquer ce que le paquet installe et de retirer uniquement ses propres fichiers.
+
+Exemple de format simple :
+
+~~~text
+version: 1.2.0
+components:
+  - gtk-3.0
+  - gtk-4.0
+  - gnome-shell
+files:
+  - gtk-3.0/gtk.css
+  - gtk-4.0/gtk.css
+  - gnome-shell/gnome-shell.css
+~~~
+
+Adaptez le format à l'outillage réel du projet. Le manifeste ne doit pas prétendre inclure un fichier qui n'est pas présent dans l'archive.
+
+Pour les liens symboliques, indiquez leur cible attendue et vérifiez qu'elle reste dans le périmètre du paquet. Le manifeste doit pouvoir être utilisé pour contrôler une installation et pour préparer une désinstallation ciblée.
+
+## 32. Désinstaller sans effacer les données de l'utilisateur
+
+La désinstallation doit retirer les fichiers installés par le paquet et rétablir les préférences modifiées avec son accord.
+
+Elle ne doit pas :
+- supprimer tout le dossier de thèmes de l'utilisateur ;
+- retirer les icônes partagées avec d'autres thèmes ;
+- supprimer des polices qui étaient déjà présentes ;
+- effacer des images personnelles ;
+- réinitialiser toutes les préférences GNOME ;
+- supprimer les extensions tierces non installées par le paquet.
+
+Si l'installateur modifie une préférence, enregistrez sa valeur initiale et la valeur appliquée. À la désinstallation, ne restaurez la valeur initiale que si la préférence contient encore la valeur définie par l'installateur. Si l'utilisateur l'a modifiée entre-temps, demandez confirmation ou laissez-la intacte.
+
+Fournissez une commande de désinstallation documentée et une méthode manuelle de secours.
+
+## 33. Tester dans un compte utilisateur vierge
+
+Le dossier de développement peut masquer des dépendances manquantes. Testez l'archive dans un compte de démonstration ou une machine virtuelle qui ne contient pas les fichiers du dépôt.
+
+Le test doit couvrir :
+1. téléchargement ou récupération de l'archive ;
+2. vérification de l'empreinte ;
+3. inspection du contenu ;
+4. extraction ;
+5. lecture des instructions ;
+6. installation de chaque composant annoncé ;
+7. sélection du thème ;
+8. ouverture de plusieurs applications ;
+9. déconnexion et reconnexion si nécessaire ;
+10. désinstallation ;
+11. retour au thème précédent.
+
+Répétez le test avec une installation partielle : par exemple, GTK uniquement, puis Shell uniquement. Les dépendances et limites doivent être clairement annoncées.
+
+## 34. Vérifier la reproductibilité de la publication
+
+Deux constructions issues du même commit devraient produire un contenu équivalent. Les horodatages et métadonnées d'archive peuvent empêcher l'identité binaire si le processus ne les normalise pas.
+
+Pour rendre les publications comparables :
+- construisez depuis un commit identifié ;
+- utilisez une arborescence propre ;
+- fixez l'ordre des fichiers ;
+- normalisez les dates lorsque l'outil le permet ;
+- excluez les fichiers temporaires ;
+- conservez la version des outils ;
+- calculez une empreinte SHA-256 ;
+- archivez le manifeste et le journal de construction.
+
+Si les archives ne sont pas bit à bit identiques, comparez leur contenu extrait et expliquez les différences de métadonnées. N'annoncez pas une construction reproductible sans avoir effectué une comparaison réelle.
+
+## 35. Rédiger des notes de version utiles
+
+Chaque version doit indiquer ce qui a changé et ce qui peut affecter l'utilisateur.
+
+Incluez :
+- version précédente ;
+- version publiée ;
+- composants ajoutés ;
+- composants modifiés ;
+- composants retirés ;
+- compatibilité GNOME/GTK testée ;
+- changements de dépendances ;
+- modifications des préférences ;
+- défauts connus ;
+- procédure de mise à jour ;
+- procédure de retour arrière.
+
+Évitez les mentions vagues comme « améliorations diverses ». Une personne qui met à jour doit pouvoir identifier les changements visuels et fonctionnels avant l'installation.
+
+## 36. Contrôle final avant diffusion
+
+Utilisez cette liste de contrôle avant de publier une archive :
+
+~~~text
+Version et commit source identifiés :
+Arborescence propre :
+Composants annoncés présents :
+Fichiers temporaires exclus :
+Manifeste vérifié :
+Chemins et liens symboliques contrôlés :
+Licences et attributions vérifiées :
+Archive inspectée avant extraction :
+Empreinte calculée :
+Installation testée depuis l'archive :
+Installation partielle testée :
+Applications réelles vérifiées :
+Wayland et X11 testés selon le périmètre annoncé :
+Désinstallation testée :
+Préférences initiales restaurées sans écrasement :
+Notes de version publiées :
+Limites connues documentées :
+Artefacts archivés :
+Conclusion : prêt / prêt avec limites / bloqué
+~~~
+
+La publication n'est prête que lorsque l'archive réellement distribuée a été installée et désinstallée dans un environnement indépendant du dossier de développement. Une compilation réussie ne remplace pas ce test utilisateur.
