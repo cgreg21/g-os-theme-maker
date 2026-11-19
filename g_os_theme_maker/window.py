@@ -21,6 +21,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         self.tokens = self.document.tokens
         self.project_path: Path | None = None
         self.selected_widget: Gtk.Widget | None = None
+        self.selected_component: str | None = None
         self.shell = NestedShellController()
         self._provider = Gtk.CssProvider()
         self._build_ui()
@@ -117,7 +118,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         top.append(Gtk.Box(hexpand=True))
         top.append(Gtk.Label(label="19:42"))
         top.add_css_class("preview-topbar")
-        self._make_selectable(top, "Barre supérieure")
+        self._make_selectable(top, "Barre supérieure", "topbar")
         canvas.append(top)
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -127,17 +128,17 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         card.set_halign(Gtk.Align.CENTER)
         card.set_size_request(420, -1)
         card.add_css_class("preview-card")
-        self._make_selectable(card, "Carte")
+        self._make_selectable(card, "Carte", "card")
         card.append(Gtk.Label(label="Paramètres", css_classes=["title-2"]))
         card.append(Gtk.Label(label="Personnalisez l'apparence de votre environnement.", wrap=True))
         action = Gtk.Button(label="Bouton principal")
         action.add_css_class("suggested-action")
         action.set_halign(Gtk.Align.START)
-        self._make_selectable(action, "Bouton principal")
+        self._make_selectable(action, "Bouton principal", "primary_button")
         card.append(action)
         secondary = Gtk.Button(label="Action secondaire")
         secondary.set_halign(Gtk.Align.START)
-        self._make_selectable(secondary, "Bouton secondaire")
+        self._make_selectable(secondary, "Bouton secondaire", "secondary_button")
         card.append(secondary)
         canvas.append(card)
         area.append(canvas)
@@ -156,17 +157,23 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         self._number_field(panel, "Arrondi", "radius", 0, 48)
         self._number_field(panel, "Espacement", "spacing", 0, 32)
         self._number_field(panel, "Taille du texte", "font_size", 8, 32)
+        panel.append(Gtk.Separator())
         self.selection_label = Gtk.Label(label="Sélection : aucune", xalign=0)
         self.selection_label.set_wrap(True)
-        panel.append(Gtk.Separator())
         panel.append(self.selection_label)
+        self.component_properties = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        self.component_properties.set_visible(False)
+        panel.append(self.component_properties)
+        self.component_fields: dict[str, Gtk.SpinButton] = {}
+        self._component_number_field("Arrondi du composant", "radius", 0, 48)
+        self._component_number_field("Espacement du composant", "spacing", 0, 32)
         return panel
 
-    def _make_selectable(self, widget: Gtk.Widget, name: str) -> None:
+    def _make_selectable(self, widget: Gtk.Widget, name: str, component: str) -> None:
         widget.add_css_class("preview-selectable")
         gesture = Gtk.GestureClick()
         gesture.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
-        gesture.connect("pressed", self._on_preview_component_pressed, widget, name)
+        gesture.connect("pressed", self._on_preview_component_pressed, widget, name, component)
         widget.add_controller(gesture)
 
     def _on_preview_component_pressed(
@@ -177,12 +184,35 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         _y: float,
         widget: Gtk.Widget,
         name: str,
+        component: str,
     ) -> None:
         if self.selected_widget is not None:
             self.selected_widget.remove_css_class("preview-selected")
         self.selected_widget = widget
         widget.add_css_class("preview-selected")
+        self.selected_component = component
         self.selection_label.set_text(f"Sélection : {name}")
+        self.component_properties.set_visible(True)
+        values = self.tokens.component_overrides.get(component, {})
+        for key, spin in self.component_fields.items():
+            spin.set_value(values.get(key, getattr(self.tokens, key)))
+
+    def _component_number_field(self, label: str, key: str, low: int, high: int) -> None:
+        row = Gtk.Box(spacing=8)
+        row.append(Gtk.Label(label=label, xalign=0, hexpand=True))
+        spin = Gtk.SpinButton.new_with_range(low, high, 1)
+        spin.set_value(getattr(self.tokens, key))
+        spin.connect("value-changed", self._on_component_number_changed, key)
+        row.append(spin)
+        self.component_properties.append(row)
+        self.component_fields[key] = spin
+
+    def _on_component_number_changed(self, spin: Gtk.SpinButton, key: str) -> None:
+        if self.selected_component is None:
+            return
+        values = self.tokens.component_overrides.setdefault(self.selected_component, {})
+        values[key] = spin.get_value_as_int()
+        self._apply_preview()
 
     def _color_field(self, panel: Gtk.Box, label: str, key: str) -> None:
         row = Gtk.Box(spacing=8)
@@ -218,10 +248,15 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             self.tokens.validate()
         except ValueError:
             return
+        overrides = self.tokens.component_overrides
+        topbar = overrides.get("topbar", {})
+        card = overrides.get("card", {})
+        primary = overrides.get("primary_button", {})
+        secondary = overrides.get("secondary_button", {})
         css = f"""
         .preview-canvas {{ background: {self.tokens.background}; color: {self.tokens.foreground}; }}
         .preview-topbar {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; padding: {self.tokens.spacing}px; border-radius: {self.tokens.radius}px; }}
-        .preview-card {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; border: 1px solid {self.tokens.border}; border-radius: {self.tokens.radius}px; padding: {self.tokens.spacing * 2}px; font-size: {self.tokens.font_size}px; }}
+        .preview-card {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; border: 1px solid {self.tokens.border}; border-radius: {card.get("radius", self.tokens.radius)}px; padding: {card.get("spacing", self.tokens.spacing) * 2}px; font-size: {self.tokens.font_size}px; }}
         .preview-card button {{ border-radius: {self.tokens.radius}px; padding: {self.tokens.spacing}px; }}
         .preview-card button.suggested-action {{ background: {self.tokens.accent}; color: white; }}
         '''
