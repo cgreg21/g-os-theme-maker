@@ -53,6 +53,7 @@ SOURCE_FILES=(
   docs/gnome-51/38-applications-qt-electron.md
   docs/gnome-51/39-thematisation-extensions-shell.md
   docs/gnome-51/40-glossaire-technique.md
+  docs/gnome-51/41-versions-compatibilite.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
