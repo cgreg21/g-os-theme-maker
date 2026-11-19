@@ -498,3 +498,243 @@ Procédez par petites étapes :
 
 Dans le compte rendu, indiquez la version exacte de GNOME Shell, le contexte testé, les classes confirmées, les états vérifiés et les éventuels conflits d'extensions. Une capture avant/après doit être prise à résolution, échelle, langue et état d'interface identiques.
 
+## 16. Inventaire complet des éléments natifs et conditionnels
+
+Cette section complète la description visuelle par l'inventaire de l'implémentation **GNOME Shell 51.0**. Elle distingue les rôles qui peuvent occuper une zone du panneau, les indicateurs d'état intégrés au bouton Réglages rapides et les commandes visibles seulement dans le menu déroulant.
+
+Il faut distinguer trois notions :
+
+- **Instancié** : le code crée l'acteur ou l'indicateur.
+- **Présent dans la session** : le mode de session place son rôle dans la zone gauche, centrale ou droite.
+- **Visible** : l'état du matériel, du service ou de l'application rend effectivement l'icône ou la commande visible.
+
+Un indicateur peut donc être instancié sans être affiché. Une commande peut être présente dans le menu Réglages rapides sans produire d'icône permanente dans la barre.
+
+### 16.1 Les trois conteneurs du panneau
+
+Le code `panel.js` crée trois conteneurs St :
+
+- `#panelLeft` : zone gauche ;
+- `#panelCenter` : zone centrale ;
+- `#panelRight` : zone droite.
+
+Le panneau porte l'identifiant `#panel`. Le contenu de chaque zone est déterminé par le mode de session, et non par une règle CSS. Le mode utilisateur standard place Activités à gauche, l'horloge au centre et les indicateurs de capture, de partage, d'accessibilité, de saisie et les réglages rapides à droite.
+
+Les rôles natifs connus de GNOME Shell 51.0 dans `PANEL_ITEM_IMPLEMENTATIONS` sont :
+
+- `activities` : bouton Activités et indicateurs des espaces de travail ;
+- `dateMenu` : horloge et ouverture du calendrier ;
+- `quickSettings` : bouton Réglages rapides et icônes d'état ;
+- `a11y` : menu d'accessibilité ;
+- `keyboard` : indicateur de source de saisie ;
+- `dwellClick` : indicateur de clic par maintien ;
+- `screenRecording` : indicateur de capture d'écran avec durée et action d'arrêt ;
+- `screenSharing` : indicateur de partage d'écran avec action d'arrêt.
+
+Il n'existe pas de rôle natif `appMenu` dans cette liste de GNOME Shell 51.0. Ne documentez donc pas un menu applicatif global comme un élément garanti du panneau standard 51.
+
+### 16.2 Variantes selon le mode de session
+
+Les listes suivantes proviennent de `js/ui/sessionMode.js`. Elles décrivent les modes natifs, avant toute personnalisation par une distribution ou un mode externe.
+
+**Session utilisateur (`user`)**
+
+- Gauche : `activities`.
+- Centre : `dateMenu`.
+- Droite : `screenRecording`, `screenSharing`, `dwellClick`, `a11y`, `keyboard`, `quickSettings`.
+
+**Écran de connexion GDM (`gdm`)**
+
+- Gauche : aucun élément.
+- Centre : `dateMenu`.
+- Droite : `dwellClick`, `keyboard`, `quickSettings`.
+
+L'écran de connexion ne reprend donc pas le panneau de la session utilisateur. Le menu d'accessibilité et les indicateurs de capture/partage ne figurent pas dans cette liste de rôles GDM.
+
+**Écran de verrouillage (`unlock-dialog`)**
+
+- Gauche : aucun élément.
+- Centre : aucun élément.
+- Droite : `dwellClick`, `a11y`, `keyboard`, `quickSettings`.
+
+**Mode restrictif**
+
+- Gauche, centre et droite : aucun élément.
+
+Des modes de session supplémentaires peuvent être fournis par la distribution. Il faut alors lire leur définition effective : ne déduisez pas leur panneau à partir de la session utilisateur.
+
+### 16.3 Éléments et états conditionnels dans la barre
+
+**Activités et espaces de travail**
+
+- Bouton Activités : présent dans la session utilisateur standard.
+- État coché : lorsque la vue d'ensemble est ouverte.
+- Points d'espaces de travail (`.workspace-dot`) : un point par espace de travail géré ; leur nombre évolue avec le nombre d'espaces de travail.
+- Expansion du point actif : le point correspondant à l'espace courant est visuellement agrandi.
+- Coin actif : zone de déclenchement de la vue d'ensemble ; ce n'est pas un bouton supplémentaire ni un indicateur indépendant du panneau.
+
+**Horloge**
+
+- Bouton `.clock-display` et contenu `.clock`.
+- Indicateur de messages Ne pas déranger : `.messages-indicator`, selon l'état correspondant.
+- Calendrier, événements et widgets associés : contenus du menu ouvert, pas des icônes permanentes du panneau.
+- Le format de l'heure, l'affichage de la date et la localisation changent selon les préférences et la locale.
+
+**Accessibilité (`a11y`)**
+
+Le bouton ouvre les fonctions d'accessibilité disponibles dans la session. Selon les réglages et les capacités activées, le menu peut présenter notamment :
+
+- lecteur d'écran ;
+- grossissement ;
+- contraste élevé ;
+- touches rémanentes ;
+- touches lentes ;
+- touches rebond ;
+- touches de souris ;
+- clic secondaire simulé ;
+- clic par maintien ;
+- clavier visuel.
+
+La liste affichée dépend des fonctions prises en charge et de leur état. Le bouton d'accessibilité n'implique pas que toutes ces fonctions sont activées.
+
+**Source de saisie (`keyboard`)**
+
+- Indicateur de la source de saisie courante ;
+- nom ou abréviation de la disposition ;
+- menu de sélection d'une autre source.
+
+Il devient pertinent lorsque plusieurs sources de saisie sont configurées. Son contenu dépend des dispositions et méthodes de saisie installées.
+
+**Clic par maintien (`dwellClick`)**
+
+- Indicateur et menu liés au clic par maintien ;
+- état associé à la fonction d'accessibilité correspondante.
+
+Il ne faut pas le confondre avec le bouton d'accessibilité général. Il peut être absent lorsque le mode de session ne le demande pas ou lorsque la fonction n'est pas disponible.
+
+**Enregistrement (`screenRecording`)**
+
+- bouton d'arrêt de la capture ;
+- compteur de durée au format minutes et secondes ;
+- icône d'arrêt.
+
+Il est affiché pendant un screencast géré par l'interface de capture GNOME Shell. Il n'est pas un indicateur permanent.
+
+**Partage d'écran (`screenSharing`)**
+
+- icône de partage ;
+- commande d'arrêt du partage ;
+- présence liée aux handles de partage distants actifs.
+
+L'indicateur reste visible au moins un court délai après la fin du partage afin d'éviter une disparition trop brusque. Il est distinct de l'indicateur d'enregistrement.
+
+### 16.4 Icônes d'état intégrées à Réglages rapides
+
+Le bouton `quickSettings` contient le groupe `.panel-status-indicators-box`. Dans `panel.js`, GNOME Shell 51.0 construit les familles d'indicateurs suivantes :
+
+- **Accès distant et enregistrement** : indicateur de confidentialité lorsque des captures ou sessions distantes correspondantes sont actives.
+- **Caméra** : activité de caméra détectée.
+- **Entrée audio** : microphone en cours d'utilisation ou état associé.
+- **Localisation** : service de localisation en cours d'utilisation.
+- **Luminosité** : état associé au contrôle de luminosité.
+- **Thunderbolt** : périphériques ou autorisations Thunderbolt nécessitant un indicateur.
+- **Lumière nocturne** : état de la fonction.
+- **Réseau** : état réseau, si NetworkManager est disponible à la compilation.
+- **Mode sombre** : état du mode sombre.
+- **Ne pas déranger** : état du filtrage des notifications.
+- **Rétroéclairage** : état du rétroéclairage de clavier, si le matériel le permet.
+- **Bluetooth** : état Bluetooth, si le support est disponible à la compilation.
+- **Radio / blocage RF (`rfkill`)** : état des radios sans fil et de leur blocage.
+- **Rotation automatique** : état du verrouillage ou de la rotation automatique, si le capteur et le service sont disponibles.
+- **Volume de sortie** : périphérique et état audio de sortie.
+- **Mode non sécurisé** : indicateur lié au mode de sécurité du Shell, uniquement lorsque ce mode est actif.
+- **Profil d'alimentation** : profil énergétique actif et disponibilité des profils.
+- **État système** : notamment alimentation et batterie lorsqu'elles sont présentes.
+
+Les indicateurs de confidentialité sont insérés avant les autres indicateurs. Les autres sont ajoutés dans un ordre défini par le code. Leur ordre n'est pas une promesse d'API publique.
+
+### 16.5 Commandes disponibles dans le menu Réglages rapides
+
+Les indicateurs ci-dessus ne sont pas tous des tuiles. Le menu contient des commandes et des curseurs distincts, ajoutés par les modules de statut :
+
+- **Système** : commandes et informations système, dont alimentation et batterie selon le matériel.
+- **Sortie audio** : curseur de volume, périphérique de sortie et commandes audio.
+- **Entrée audio** : contrôle du microphone et de ses périphériques lorsque disponible.
+- **Luminosité** : curseur d'écran lorsque le matériel expose ce contrôle.
+- **Caméra** : état de confidentialité lié à la caméra.
+- **Accès distant** : état des sessions de capture et de partage.
+- **Thunderbolt** : périphériques et demandes d'autorisation.
+- **Localisation** : état et contrôle des services de localisation.
+- **Réseau** : Wi-Fi, Ethernet, connexions disponibles, état de connexion et VPN selon NetworkManager et la configuration.
+- **Bluetooth** : activation, appareils connus et connexions lorsque le support est présent.
+- **Profils d'alimentation** : choix du profil si le service expose plusieurs possibilités.
+- **Lumière nocturne** : activation et état.
+- **Mode sombre** : bascule du schéma sombre.
+- **Ne pas déranger** : bascule de suppression des notifications.
+- **Rétroéclairage du clavier** : curseur ou contrôle si le matériel le permet.
+- **Blocage radio** : états associés à `rfkill`.
+- **Rotation automatique** : commande si le matériel le prend en charge.
+- **Applications en arrière-plan** : liste des applications connues comme actives sans fenêtre, avec accès à l'application et commande de fermeture.
+
+La tuile **Applications en arrière-plan** est masquée lorsqu'il n'y a aucune application concernée. Elle n'est pas affichée dans une session verrouillée. Le menu peut toutefois la conserver visible pendant qu'il est ouvert pour éviter un déplacement brutal de son contenu.
+
+### 16.6 Éléments qui ne sont pas garantis par le panneau natif
+
+Ne présentez pas les éléments suivants comme des indicateurs natifs systématiques de GNOME Shell 51 :
+
+- menu global de l'application active ;
+- icône indépendante permanente pour chaque périphérique audio ;
+- icône permanente pour chaque réseau Wi-Fi ;
+- icône permanente pour chaque VPN ;
+- météo dans la barre supérieure ;
+- horloges mondiales dans la barre supérieure ;
+- jauge CPU, mémoire ou température ;
+- débit réseau ;
+- presse-papiers ;
+- lecteur multimédia ou titre musical ;
+- menu de batterie distinct du groupe système.
+
+Certains contenus peuvent apparaître dans un menu, être fournis par une application ou une extension, ou dépendre d'une distribution. Les horloges mondiales, la météo et les événements, lorsqu'ils sont disponibles, appartiennent au contenu du menu date/heure et non à des boutons supplémentaires de la barre.
+
+### 16.7 Inventaire des éléments ajoutés par les extensions
+
+Les extensions peuvent ajouter des indicateurs au moyen de `Main.panel.addToStatusArea()` ou d'autres mécanismes d'intégration. Elles peuvent choisir la zone gauche, centrale ou droite, insérer un bouton, un menu ou un ensemble d'icônes, et définir leurs propres classes CSS.
+
+Exemples d'éléments d'extension possibles :
+
+- indicateur de processeur, mémoire, GPU ou température ;
+- débit réseau et trafic par interface ;
+- espace disque et activité de stockage ;
+- ventilateurs et capteurs ;
+- météo ;
+- presse-papiers ;
+- lecteur multimédia ;
+- horloges supplémentaires ;
+- raccourcis et lanceurs ;
+- indicateurs de mise à jour ;
+- menu de fenêtres ou de bureaux ;
+- contrôles propres à une application.
+
+Cette liste est illustrative et non exhaustive : il n'existe pas d'inventaire fermé des extensions. Pour chaque extension, relevez le rôle, la zone, le nom de classe, les états et les dépendances directement dans son code.
+
+### 16.8 Méthode de vérification exhaustive sur une machine
+
+Pour inventorier ce qui est réellement présent dans une installation donnée :
+
+1. Relevez la version avec `gnome-shell --version`.
+2. Consultez `js/ui/sessionMode.js` pour connaître les rôles de la session.
+3. Consultez `js/ui/panel.js` et la table `PANEL_ITEM_IMPLEMENTATIONS` pour les composants du panneau.
+4. Consultez chaque module `js/ui/status/*.js` pour les indicateurs, conditions de visibilité et commandes associées.
+5. Consultez `js/ui/quickSettings.js` pour les composants génériques des tuiles et curseurs.
+6. Ouvrez chaque menu dans la session de test et relevez les classes réellement créées.
+7. Répétez les tests avec et sans périphériques, services, sources de saisie et extensions.
+8. Répétez en session utilisateur, écran verrouillé et GDM.
+
+Ne concluez jamais qu'un élément n'existe pas parce qu'il est invisible dans une capture. Vérifiez son rôle, sa condition de visibilité et le mode de session qui le construit.
+
+Sources amont GNOME Shell 51.0 :
+
+- [`panel.js` — rôles, zones et indicateurs du panneau](https://github.com/GNOME/gnome-shell/blob/51.0/js/ui/panel.js)
+- [`sessionMode.js` — contenu par mode de session](https://github.com/GNOME/gnome-shell/blob/51.0/js/ui/sessionMode.js)
+- [`quickSettings.js` — tuiles, curseurs et menu](https://github.com/GNOME/gnome-shell/blob/51.0/js/ui/quickSettings.js)
+- [`js/ui/status/` — modules d'indicateurs natifs](https://github.com/GNOME/gnome-shell/tree/51.0/js/ui/status)
