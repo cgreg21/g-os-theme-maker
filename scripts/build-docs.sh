@@ -54,6 +54,7 @@ SOURCE_FILES=(
   docs/gnome-51/39-thematisation-extensions-shell.md
   docs/gnome-51/40-glossaire-technique.md
   docs/gnome-51/41-versions-compatibilite.md
+  docs/gnome-51/42-gtk-css-variables-requetes-media.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
