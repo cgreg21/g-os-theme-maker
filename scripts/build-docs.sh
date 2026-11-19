@@ -56,8 +56,11 @@ pandoc "${SOURCE_FILES[@]}" --resource-path=docs/gnome-51 --from=gfm --to=epub3 
   --metadata title="Manuel complet de personnalisation GNOME 51" \
   --metadata lang=fr --metadata author="G-OS Theme Maker" \
   --toc --toc-depth=3 --output=docs/guide-theme-gnome.epub
+HTML_OUTPUT="docs/gnome-51/.guide-theme-gnome.html"
 pandoc "${SOURCE_FILES[@]}" --resource-path=docs/gnome-51 --from=gfm --to=html5 --standalone \
   --metadata title="Manuel complet de personnalisation GNOME 51" \
-  --metadata lang=fr --css=docs/guide.css --toc --toc-depth=3 \
-  --pdf-engine=weasyprint --output=docs/guide-theme-gnome.pdf
+  --metadata lang=fr --css=../guide.css --toc --toc-depth=3 \
+  --output="$HTML_OUTPUT"
+weasyprint "$HTML_OUTPUT" docs/guide-theme-gnome.pdf
+rm -f "$HTML_OUTPUT"
 echo "Documentation générée : ${#SOURCE_FILES[@]} sources incluses."
