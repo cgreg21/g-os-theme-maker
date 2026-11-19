@@ -30,10 +30,30 @@ class NestedShellControllerTests(unittest.TestCase):
             self.assertTrue((extension / "extension.js").is_file())
             self.assertIn("enabled-extensions", command[4])
             self.assertIn("--devkit", command[4])
+            extension_js = (extension / "extension.js").read_text()
+            self.assertIn("monitor_directory", extension_js)
+            self.assertIn("_reloadStylesheet", extension_js)
             self.assertTrue(Path(env["DCONF_PROFILE"]).is_file())
         finally:
             controller.stop()
         process.terminate.assert_called_once()
+
+
+    @patch("g_os_theme_maker.mutter.subprocess.Popen")
+    @patch("g_os_theme_maker.mutter.shutil.which", return_value="/usr/bin/fake")
+    @patch("g_os_theme_maker.mutter.subprocess.run")
+    def test_updates_running_theme_atomically(self, run, _which, popen):
+        run.return_value.stdout = "GNOME Shell 50.0"
+        popen.return_value.poll.return_value = None
+        controller = NestedShellController()
+        controller.start("old css")
+        try:
+            stylesheet = controller._stylesheet_path
+            controller.update_theme("new css")
+            self.assertEqual(stylesheet.read_text(), "new css")
+            self.assertFalse(stylesheet.with_suffix(".css.tmp").exists())
+        finally:
+            controller.stop()
 
 
 if __name__ == "__main__":
