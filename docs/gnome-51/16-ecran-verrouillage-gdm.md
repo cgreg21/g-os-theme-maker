@@ -76,10 +76,6 @@ Les tailles sont des exemples et non les valeurs natives. Testez plusieurs réso
   spacing: 8px;
 }
 
-.unlock-dialog-notifications-container {
-  spacing: 8px;
-}
-
 .unlock-dialog-notification-label {
   color: #ffffff;
 }
@@ -226,7 +222,51 @@ Personnalisez le champ et les boutons de déverrouillage. Vérifiez le focus cla
 
 Comparez le verrouillage de votre session et le greeter GDM. Notez ce qui change après connexion : utilisateur, session, extensions, paramètres et thème.
 
-## 10. Sources officielles
+
+## 10. Sauvegarder et restaurer les réglages du verrouillage
+
+Avant de modifier le fond ou les paramètres dconf, relevez les valeurs initiales. Cette précaution permet de revenir à la configuration précédente sans deviner le chemin ou la valeur d'origine.
+
+Afficher les clés du schéma :
+
+~~~bash
+gsettings list-keys org.gnome.desktop.screensaver
+~~~
+
+Consulter une valeur précise :
+
+~~~bash
+gsettings get org.gnome.desktop.screensaver picture-uri
+gsettings get org.gnome.desktop.screensaver picture-uri-dark
+~~~
+
+Pour restaurer le comportement par défaut d'une clé, utilisez `reset` plutôt qu'une valeur copiée depuis un autre ordinateur :
+
+~~~bash
+gsettings reset org.gnome.desktop.screensaver picture-uri
+gsettings reset org.gnome.desktop.screensaver picture-uri-dark
+~~~
+
+Cette réinitialisation concerne uniquement les clés indiquées. Elle ne restaure ni un thème Shell modifié, ni les réglages du greeter GDM. Pour ces derniers, appliquez la procédure documentée par votre distribution et conservez une copie de la configuration avant toute intervention.
+
+Ne placez pas de mot de passe, de secret d'authentification ou de donnée personnelle dans un script de test. Les commandes ci-dessus ne nécessitent aucune élévation de privilèges pour le compte courant.
+
+## 11. Vérifier les cas limites du verrouillage
+
+Un contrôle visuel limité à l'écran verrouillé au repos ne suffit pas. Répétez les vérifications dans les situations suivantes :
+
+- verrouillage immédiatement après ouverture de session ;
+- verrouillage après une longue période d'inactivité ;
+- arrivée d'une notification pendant le verrouillage ;
+- plusieurs notifications et libellés longs ;
+- clavier avec Verr. Maj. activé pendant la saisie ;
+- affichage avec facteur d'échelle différent ;
+- écran externe connecté ou déconnecté pendant la session ;
+- retour au bureau après authentification réussie.
+
+Pour chaque cas, vérifiez que le texte reste lisible, que les actions restent accessibles au clavier et que le dialogue ne masque pas un message essentiel. Les notifications peuvent révéler des informations privées : leur visibilité doit être testée avec les paramètres de confidentialité réellement choisis par l'utilisateur.
+
+## 12. Sources officielles
 
 - [GNOME Shell 51.0 — screenShield.js](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/51.0/js/ui/screenShield.js)
 - [GNOME Shell 51.0 — unlockDialog.js](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/51.0/js/ui/unlockDialog.js)
