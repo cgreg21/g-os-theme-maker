@@ -119,7 +119,7 @@ La règle de base définit l'apparence claire. La règle conditionnelle ne s'app
 
 La requête CSS ne remplace pas la logique de préférence de l'application. Dans Libadwaita, le choix final dépend notamment de `AdwStyleManager:color-scheme` et de la préférence système. Une application peut préférer le clair, préférer le sombre ou forcer un mode.
 
-Depuis Libadwaita 1.9, les ressources séparées `style-dark.css`, `style-hc.css` et `style-hc-dark.css` sont dépréciées. Pour les nouvelles applications, conservez une ressource `style.css` et utilisez les requêtes `prefers-color-scheme` et `prefers-contrast`. Les anciens fichiers conditionnels ne doivent être maintenus que pour la compatibilité avec une application existante qui les utilise encore.
+Libadwaita 1.10 prend également en charge les ressources conditionnelles `style-dark.css`, `style-hc.css` et `style-hc-dark.css` via `AdwApplication`. Pour une nouvelle application, la documentation recommande toutefois une feuille `style.css` unique et des requêtes `prefers-color-scheme` et `prefers-contrast`, qui rendent les variantes plus faciles à maintenir. Ces ressources séparées restent utiles pour comprendre et maintenir les applications qui les utilisent.
 
 Pour un thème d'application, privilégiez les variables sémantiques Libadwaita lorsqu'elles sont disponibles. Les valeurs codées en dur dans l'exemple servent uniquement à montrer la structure d'une requête.
 
