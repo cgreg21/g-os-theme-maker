@@ -59,6 +59,7 @@ SOURCE_FILES=(
   docs/gnome-51/50-reference-libadwaita-110.md
   docs/gnome-51/51-effets-visuels-avances.md
   docs/gnome-51/52-architecture-rendu-shaders-gsk-clutter.md
+  docs/gnome-51/53-atelier-pratique-shaders-clutter.md
   docs/gnome-51/25-creer-installer-publier-theme.md
   docs/gnome-51/28-tests-visuels-regression-maintenance.md
   docs/gnome-51/04-reference-css.md
