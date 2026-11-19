@@ -98,6 +98,7 @@ Un thème doit être testé séparément sur chaque moteur qu'il annonce prendre
 - [Construction, installation et validation](09-construction-validation.md)
 - [Sources officielles et inventaire](10-sources-et-inventaire.md)
 - [Glossaire technique](40-glossaire-technique.md)
+- [Cible de versions et compatibilité GNOME 51](41-versions-compatibilite.md)
 
 ## 8. Captures de GNOME standard
 
