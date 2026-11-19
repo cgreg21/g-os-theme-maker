@@ -327,7 +327,38 @@ Augmentez l'espacement entre les éléments sans masquer les aperçus. Testez av
 
 Modifiez le contour de sélection et vérifiez que la zone choisie reste évidente sur des fonds clairs et sombres.
 
-## 11. Sources amont GNOME Shell 51.0
+
+## 11. Préparer les tests des interfaces éphémères
+
+Les OSD et certains dialogues disparaissent rapidement. Préparez donc le scénario avant de recharger le thème :
+
+1. Gardez le terminal ou Looking Glass accessible sur un autre espace de travail.
+2. Préparez la règle CSS dans le fichier de développement, sans déclencher l'action système.
+3. Rechargez le thème selon la méthode de test de votre session.
+4. Déclenchez une seule action : volume, luminosité, branchement audio ou dialogue.
+5. Prenez une capture immédiatement, puis répétez avec un autre état.
+6. Retirez la règle si elle rend le contrôle difficile à fermer.
+
+Pour comparer deux versions, gardez le même écran, la même résolution, le même facteur d'échelle, le même niveau de volume et le même nombre de fenêtres. Une capture prise à un instant différent peut montrer un OSD à un niveau différent et fausser la comparaison.
+
+## 12. Contrôler les interfaces au clavier et en situation réelle
+
+La validation ne doit pas se limiter à l'apparence statique. Pour chaque dialogue et sélecteur, effectuez les contrôles suivants :
+
+- ouvrir et fermer l'interface sans souris ;
+- parcourir tous les choix au clavier ;
+- repérer visuellement le focus courant ;
+- vérifier qu'une action destructive est identifiable ;
+- tester les libellés longs et les traductions ;
+- vérifier le contraste sur les surfaces translucides ;
+- confirmer que l'interface reste utilisable à l'échelle d'affichage habituelle ;
+- vérifier que le pointeur et les poignées de sélection restent visibles.
+
+Pour Alt-Tab, vérifiez également la distinction entre fenêtre sélectionnée et fenêtres simplement visibles. Pour la capture, vérifiez que le contour, le voile et les poignées ne se confondent pas avec le contenu capturé.
+
+Une règle qui améliore une capture mais masque le focus, le bouton de fermeture ou l'état sélectionné doit être considérée comme une régression.
+
+## 13. Sources amont GNOME Shell 51.0
 
 - [OSD — osdWindow.js](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/51.0/js/ui/osdWindow.js)
 - [Capture — screenshot.js](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/51.0/js/ui/screenshot.js)
