@@ -6,7 +6,7 @@ from pathlib import Path
 import gi
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gdk, Gio, GLib, Gtk
+from gi.repository import Gdk, Gio, Gtk
 
 from .exporter import export_css
 from .model import ThemeDocument, ThemeTokens
@@ -20,6 +20,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         self.document = ThemeDocument()
         self.tokens = self.document.tokens
         self.project_path: Path | None = None
+        self.selected_widget: Gtk.Widget | None = None
         self.shell = NestedShellController()
         self._provider = Gtk.CssProvider()
         self._build_ui()
@@ -116,6 +117,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         top.append(Gtk.Box(hexpand=True))
         top.append(Gtk.Label(label="19:42"))
         top.add_css_class("preview-topbar")
+        self._make_selectable(top, "Barre supérieure")
         canvas.append(top)
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -125,14 +127,17 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         card.set_halign(Gtk.Align.CENTER)
         card.set_size_request(420, -1)
         card.add_css_class("preview-card")
+        self._make_selectable(card, "Carte")
         card.append(Gtk.Label(label="Paramètres", css_classes=["title-2"]))
         card.append(Gtk.Label(label="Personnalisez l'apparence de votre environnement.", wrap=True))
         action = Gtk.Button(label="Bouton principal")
         action.add_css_class("suggested-action")
         action.set_halign(Gtk.Align.START)
+        self._make_selectable(action, "Bouton principal")
         card.append(action)
         secondary = Gtk.Button(label="Action secondaire")
         secondary.set_halign(Gtk.Align.START)
+        self._make_selectable(secondary, "Bouton secondaire")
         card.append(secondary)
         canvas.append(card)
         area.append(canvas)
@@ -151,8 +156,33 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         self._number_field(panel, "Arrondi", "radius", 0, 48)
         self._number_field(panel, "Espacement", "spacing", 0, 32)
         self._number_field(panel, "Taille du texte", "font_size", 8, 32)
-        panel.append(Gtk.Label(label="Sélection : carte d'aperçu", xalign=0))
+        self.selection_label = Gtk.Label(label="Sélection : aucune", xalign=0)
+        self.selection_label.set_wrap(True)
+        panel.append(Gtk.Separator())
+        panel.append(self.selection_label)
         return panel
+
+    def _make_selectable(self, widget: Gtk.Widget, name: str) -> None:
+        widget.add_css_class("preview-selectable")
+        gesture = Gtk.GestureClick()
+        gesture.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+        gesture.connect("pressed", self._on_preview_component_pressed, widget, name)
+        widget.add_controller(gesture)
+
+    def _on_preview_component_pressed(
+        self,
+        _gesture: Gtk.GestureClick,
+        _press_count: int,
+        _x: float,
+        _y: float,
+        widget: Gtk.Widget,
+        name: str,
+    ) -> None:
+        if self.selected_widget is not None:
+            self.selected_widget.remove_css_class("preview-selected")
+        self.selected_widget = widget
+        widget.add_css_class("preview-selected")
+        self.selection_label.set_text(f"Sélection : {name}")
 
     def _color_field(self, panel: Gtk.Box, label: str, key: str) -> None:
         row = Gtk.Box(spacing=8)
@@ -195,6 +225,10 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         .preview-card button {{ border-radius: {self.tokens.radius}px; padding: {self.tokens.spacing}px; }}
         .preview-card button.suggested-action {{ background: {self.tokens.accent}; color: white; }}
         '''
+        css += f"""
+        .preview-selectable {{ transition: outline-color 120ms ease; }}
+        .preview-selected {{ outline: 2px solid {self.tokens.accent}; outline-offset: 3px; }}
+        """
         self._provider.load_from_data(css.encode())
         display = Gdk.Display.get_default()
         if display:
