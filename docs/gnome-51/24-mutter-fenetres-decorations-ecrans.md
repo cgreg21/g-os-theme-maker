@@ -1,6 +1,6 @@
 # Mutter, fenêtres, décorations et écrans
 
-![Fenêtre d'application illustrée avec la palette Adwaita](images/fenetre-adwaita.svg)
+![Capture officielle GNOME des espaces de travail, utile pour comprendre la relation entre fenêtres et compositeur](images/official/shell-workspaces.png)
 
 Mutter est le compositeur et gestionnaire de fenêtres utilisé par GNOME Shell. Il gère les fenêtres, leur placement, les espaces de travail, les écrans et la composition graphique. Le thème GNOME Shell ne contrôle pas tout ce qui apparaît autour d'une fenêtre.
 

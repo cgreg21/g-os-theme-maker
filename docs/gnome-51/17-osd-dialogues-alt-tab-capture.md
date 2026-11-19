@@ -1,5 +1,9 @@
 # OSD, dialogues système, sélecteurs de fenêtres et capture d'écran
 
+![Outil de capture d’écran officiel de GNOME 51](images/official/screenshot-tool.png)
+
+Cette capture issue de GNOME User Documentation 51 sert de référence visuelle pour l’interface de capture ; les OSD et dialogues décrits plus loin sont d’autres composants.
+
 Ce chapitre couvre les petites interfaces qui apparaissent au-dessus du bureau : indicateurs de volume et de luminosité, boîtes de dialogue, fenêtre d'exécution, sélecteur Alt-Tab et outil de capture. Elles sont parfois visibles quelques secondes seulement, mais elles font partie du thème GNOME Shell.
 
 Les sélecteurs cités sont issus de l'inventaire GNOME Shell 51.0. Ils ne sont pas une API stable. Vérifiez toujours les sources de la version installée.

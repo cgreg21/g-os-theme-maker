@@ -1,3 +1,12 @@
-# Visuels de la documentation GNOME 51
+# Captures officielles intégrées
 
-Ces fichiers SVG sont des illustrations originales, autonomes et versionnées avec la documentation. Elles reprennent des conventions visuelles du thème Adwaita (palette, surfaces, arrondis et hiérarchie) pour expliquer les zones d'interface. Ce ne sont pas des captures d'écran GNOME réelles ni des ressources officielles GNOME. Aucun fichier ne charge d'image, de police ou de feuille de style depuis un serveur externe.
+Les images de ce dossier sont des captures PNG copiées depuis la branche `gnome-51` du dépôt officiel [GNOME User Documentation](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures).
+
+Le fichier `COPYING` de cette branche indique la licence **Creative Commons Attribution 3.0 Unported (CC BY 3.0)**. Les captures sont conservées sans retouche, dans leur format PNG d’origine. Les noms de fichiers correspondent aux ressources amont.
+
+Sources :
+- [Dépôt GNOME User Documentation, branche gnome-51](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures)
+- [Licence amont COPYING](https://github.com/GNOME/gnome-user-docs/blob/gnome-51/COPYING)
+- [Texte de la licence CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+
+Les captures sont fournies pour illustrer le comportement visuel du bureau GNOME. Elles ne constituent pas une garantie de compatibilité des sélecteurs CSS avec d’autres versions.

@@ -1,6 +1,5 @@
 # Construire, installer, tester et publier un thème GNOME complet
 
-![Illustration locale du fond Adwaita](images/fond-adwaita.svg)
 
 Ce dernier atelier relie les chapitres spécialisés pour produire un thème utilisateur cohérent, testable et réversible. Il ne remplace pas les références techniques : il fournit une procédure reproductible.
 
