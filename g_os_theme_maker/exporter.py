@@ -39,7 +39,7 @@ def export_css(tokens: ThemeTokens) -> str:
 .gom-topbar {{
   color: {topbar.get("foreground", tokens.foreground)};
   background-color: {topbar.get("background", tokens.surface)};
-  border-radius: {topbar.get("radius", tokens.radius)}px;
+  border-color: {topbar.get("border", tokens.border)};\n  border-radius: {topbar.get("radius", tokens.radius)}px;
   padding: {topbar.get("spacing", tokens.spacing)}px;
 }}
 .gom-card {{
@@ -52,7 +52,7 @@ def export_css(tokens: ThemeTokens) -> str:
 .gom-primary-button {{
   color: {primary.get("foreground", "#ffffff")};
   background-color: {primary.get("background", tokens.accent)};
-  border-radius: {primary.get("radius", tokens.radius)}px;
+  border-color: {primary.get("border", tokens.border)};\n  border-radius: {primary.get("radius", tokens.radius)}px;
   padding: {primary.get("spacing", tokens.spacing)}px;
 }}
 .gom-primary-button:hover {{ background-color: {primary.get("hover", tokens.accent)}; }}
@@ -60,7 +60,7 @@ def export_css(tokens: ThemeTokens) -> str:
 .gom-secondary-button {{
   color: {secondary.get("foreground", tokens.foreground)};
   background-color: {secondary.get("background", tokens.surface)};
-  border-radius: {secondary.get("radius", tokens.radius)}px;
+  border-color: {secondary.get("border", tokens.border)};\n  border-radius: {secondary.get("radius", tokens.radius)}px;
   padding: {secondary.get("spacing", tokens.spacing)}px;
 }}
 .gom-secondary-button:hover {{ background-color: {secondary.get("hover", tokens.accent)}; }}
