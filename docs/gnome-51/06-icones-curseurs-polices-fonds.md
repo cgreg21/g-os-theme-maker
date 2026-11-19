@@ -16,21 +16,21 @@ Inherits=Adwaita,hicolor
 Directories=scalable/apps,scalable/actions,scalable/status
 
 [scalable/apps]
-Size= scalable
+Size=48
 Type=Scalable
 MinSize=16
 MaxSize=256
 Context=Applications
 
 [scalable/actions]
-Size=scalable
+Size=48
 Type=Scalable
 MinSize=16
 MaxSize=256
 Context=Actions
 
 [scalable/status]
-Size=scalable
+Size=48
 Type=Scalable
 MinSize=16
 MaxSize=256
