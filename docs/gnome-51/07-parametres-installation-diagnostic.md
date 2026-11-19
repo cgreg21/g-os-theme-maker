@@ -72,8 +72,8 @@ Ne restaurez pas un dump global sans comprendre son contenu. Il peut écraser de
 Les chemins reconnus dépendent du type de ressource, des répertoires XDG, du moteur et de la distribution. Commencez par identifier le répertoire de données utilisateur :
 
 ```sh
-printf 'XDG_DATA_HOME=%s\\n' "${XDG_DATA_HOME:-$HOME/.local/share}"
-printf 'XDG_DATA_DIRS=%s\\n' "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+printf 'XDG_DATA_HOME=%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}"
+printf 'XDG_DATA_DIRS=%s\n' "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 ```
 
 Emplacements courants :
