@@ -306,3 +306,204 @@ Ajustez les coins, les marges et les boutons. Envoyez plusieurs notifications de
 Les classes décrites ici correspondent à GNOME Shell 51.0. Une extension peut remplacer un menu ou ajouter des classes spécifiques. Les contenus et actions sont pilotés par le Shell et les services associés ; le thème ne doit pas les masquer ni prétendre les contrôler.
 
 Avant de porter le thème vers une autre version de GNOME, comparez les fichiers SCSS et JavaScript amont et vérifiez chaque sélecteur dans l'interface réelle.
+
+
+## 11. Préparer un environnement de validation
+
+Les menus du panneau ne montrent pas toujours les mêmes contrôles. Leur contenu dépend des périphériques, des services, des préférences et des applications actives. Un menu réseau sur une machine portable avec Wi-Fi et VPN ne présente pas nécessairement les mêmes éléments qu'une machine fixe connectée en Ethernet.
+
+Avant de modifier les styles, notez :
+- version exacte de GNOME Shell ;
+- session et distribution ;
+- résolution et facteur d'échelle ;
+- thème Shell chargé ;
+- périphériques et services disponibles ;
+- extensions qui ajoutent des indicateurs ;
+- langue et sens de lecture ;
+- état clair, sombre ou contraste élevé.
+
+Préparez des états représentatifs : Wi-Fi connecté et déconnecté, Bluetooth activé et désactivé, volume faible et élevé, mode Ne pas déranger actif et inactif, alimentation secteur et batterie si disponibles. N'essayez pas de simuler un état de sécurité uniquement avec du CSS.
+
+## 12. Tester les réglages rapides comme des contrôles interactifs
+
+Une tuile de réglage rapide peut comporter une action principale et une action secondaire ouvrant un panneau détaillé. Il faut vérifier chaque zone séparément.
+
+Pour chaque tuile :
+1. Vérifiez son état initial et son libellé.
+2. Survolez la zone principale.
+3. Activez-la au clic.
+4. Activez-la au clavier.
+5. Vérifiez le changement de style de l'état actif.
+6. Ouvrez le menu secondaire, s'il existe.
+7. Revenez en arrière et vérifiez que le focus est cohérent.
+8. Testez le contrôle quand la fonction est indisponible.
+
+Sur les tuiles doubles, le séparateur ne doit pas disparaître au point de rendre les deux actions indiscernables. Ne faites pas porter le même style à la tuile entière et au bouton secondaire si cela rend leur fonction ambiguë.
+
+### Réseau et Bluetooth
+
+Testez le menu réseau avec les cas réellement disponibles :
+- Wi-Fi activé et connecté ;
+- Wi-Fi activé sans réseau ;
+- Wi-Fi désactivé ;
+- réseau filaire connecté ;
+- VPN connecté et déconnecté si configuré ;
+- liste de réseaux longue avec noms longs.
+
+Pour Bluetooth, testez l'état activé, désactivé, la présence d'appareils connus et l'absence de périphérique détecté. Vérifiez que les noms longs ne débordent pas sur les contrôles d'action.
+
+Ne masquez pas les libellés d'état et ne réduisez pas les icônes à un point de couleur : le contrôle doit rester compréhensible sans se fier uniquement à la couleur.
+
+### Son et alimentation
+
+Pour le son, contrôlez le curseur, son focus, les boutons de sortie et la liste des périphériques lorsqu'elle est disponible. La zone de saisie doit rester confortable et le niveau doit être identifiable.
+
+Pour l'alimentation, testez sur batterie et sur secteur si le matériel le permet. Vérifiez les états faibles et les avertissements. Ne neutralisez jamais les couleurs ou indicateurs qui signalent un niveau critique.
+
+## 13. Tester le calendrier et les événements
+
+Le calendrier doit rester utilisable avec des configurations linguistiques et des données variées.
+
+Testez :
+- premier et dernier jour du mois ;
+- mois qui commence en début et en fin de semaine ;
+- dates du mois précédent et suivant affichées dans la grille ;
+- changement de mois ;
+- date du jour ;
+- jours avec événements et sans événements ;
+- événements avec titres longs ;
+- plusieurs événements le même jour ;
+- semaine contenant un changement d'année ;
+- formats de date et de temps différents.
+
+Vérifiez que le jour courant, le jour sélectionné et les jours avec événements ne sont pas identifiés par la même seule couleur. Le focus clavier doit rester distinct de la sélection. Les boutons de navigation du mois doivent garder une zone interactive suffisante.
+
+La première journée de la semaine dépend de la locale. Ne supposez pas que le calendrier commence toujours le dimanche ou toujours le lundi. Testez au moins une locale différente de celle utilisée pour le développement si le thème vise plusieurs régions.
+
+## 14. Tester horloges mondiales et météo
+
+Les blocs d'horloges mondiales et de météo ne sont présents que si les services et préférences correspondants fournissent des données.
+
+Pour les horloges :
+- testez une ville avec un nom court et une autre avec un nom long ;
+- vérifiez l'alignement de l'heure et du fuseau ;
+- observez le passage entre deux dates ;
+- vérifiez les heures proches du changement d'heure saisonnier.
+
+Pour la météo :
+- testez une description courte et une description longue ;
+- vérifiez l'alignement de l'icône, de la température et du libellé ;
+- contrôlez la lisibilité des prévisions multiples ;
+- vérifiez le rendu sans données disponibles.
+
+Ne créez pas de faux contenu météo ou de fausses heures dans le thème. Le CSS doit présenter correctement les données réelles et rester acceptable lorsque certains blocs ne sont pas disponibles.
+
+## 15. Tester les notifications et leurs actions
+
+Les notifications peuvent contenir un titre, un corps de texte, une icône, une image, une ou plusieurs actions et parfois des réponses. Le contenu dépend de l'application émettrice.
+
+Préparez plusieurs notifications de test :
+- titre court et corps court ;
+- titre long et corps multiligne ;
+- notification avec icône ;
+- notification sans icône ;
+- notification avec plusieurs actions ;
+- notification avec réponse textuelle si l'application le permet ;
+- notification répétée ou regroupée ;
+- notification urgente ;
+- notification pendant Ne pas déranger.
+
+Vérifiez que :
+- le texte ne passe pas sous les boutons ;
+- les actions restent visibles et cliquables ;
+- le focus clavier est visible ;
+- les boutons ne deviennent pas trop petits ;
+- la bannière reste lisible sur des fonds de bureau clairs et sombres ;
+- les notifications empilées ne se recouvrent pas ;
+- la fermeture ne masque pas une action.
+
+Le thème ne doit pas supprimer les informations essentielles ni rendre une notification urgente visuellement identique à une notification ordinaire.
+
+## 16. Contrôler le comportement des menus longs et des sous-menus
+
+Les menus peuvent contenir plus d'éléments que l'espace vertical disponible. Vérifiez le comportement lorsque la liste est longue, lorsque plusieurs sections sont présentes et lorsque des sous-menus s'ouvrent près du bord de l'écran.
+
+Testez :
+- ouverture depuis chaque côté du panneau si la configuration le permet ;
+- menu avec peu d'éléments ;
+- menu avec beaucoup d'éléments ;
+- sous-menu ouvert vers la gauche ou vers la droite ;
+- navigation au clavier entre les lignes ;
+- retour du sous-menu vers le menu parent ;
+- fermeture par Échap ;
+- fermeture après activation d'une commande.
+
+Ne forcez pas une hauteur fixe sur tous les menus. Le Shell calcule leur position et leur taille en fonction de l'écran et du contenu. Une règle qui semble bonne sur un menu court peut couper un menu long.
+
+## 17. Diagnostic : le menu ne correspond pas au sélecteur
+
+Procédez méthodiquement :
+
+1. Ouvrez le menu et identifiez son origine : panneau, calendrier, notification ou extension.
+2. Vérifiez le conteneur principal et les enfants dans Looking Glass.
+3. Relevez la classe exacte de la ligne ou du contrôle.
+4. Vérifiez si l'acteur est construit par le Shell ou par une extension.
+5. Ajoutez une règle de contour temporaire sur un seul niveau.
+6. Vérifiez la règle gagnante et les propriétés St utilisées.
+7. Testez les états normaux et interactifs.
+8. Retirez les règles de diagnostic.
+
+Un contrôle qui ressemble à un bouton peut être composé de plusieurs acteurs. Appliquer le fond au parent peut colorer toute la ligne, alors que le thème natif ne colore que l'icône ou la zone principale.
+
+## 18. Diagnostic : une tuile est visuellement active mais la fonction est inactive
+
+Le style ne doit pas être utilisé pour inventer un état. Si une tuile paraît activée alors que la fonction est désactivée, vérifiez d'abord le code et les classes d'état réellement appliquées par le Shell.
+
+- Comparez l'état réel dans le système avec l'apparence.
+- Vérifiez la pseudo-classe et les classes de l'acteur.
+- Recherchez une règle trop générale qui applique le fond actif à toutes les tuiles.
+- Vérifiez les sélecteurs de la zone principale et du bouton secondaire.
+- Testez l'état indisponible ou désactivé.
+
+Ne corrigez pas une incohérence fonctionnelle en changeant uniquement la couleur. Le style doit refléter l'état réel du contrôle.
+
+## 19. Vérifier les langues et le sens de lecture
+
+Les menus du Shell peuvent être affichés dans une langue avec des libellés plus longs ou un sens de lecture droite-à-gauche. Les marges fixes gauche/droite sont susceptibles de casser l'alignement.
+
+Contrôlez :
+- libellés traduits plus longs ;
+- noms de périphériques longs ;
+- textes avec accents et caractères non latins ;
+- sens RTL ;
+- icônes directionnelles ;
+- sous-menus et flèches ;
+- alignement des valeurs et des boutons secondaires.
+
+Privilégiez les sélecteurs et propriétés directionnels pris en charge par le moteur plutôt que de supposer que la gauche est toujours le début de la ligne. Vérifiez les règles amont pour la version exacte du Shell.
+
+## 20. Fiche de validation des menus et notifications
+
+~~~text
+GNOME Shell :
+Distribution et session :
+Résolution et échelle :
+Langue et sens de lecture :
+Thème Shell :
+Extensions actives :
+Menu testé :
+État du périphérique ou du service :
+États normaux et interactifs :
+Navigation clavier :
+Menus longs et sous-menus :
+Libellés longs :
+Notifications testées :
+Actions de notification :
+Mode Ne pas déranger :
+Contraste et focus :
+Anomalies :
+Sélecteurs modifiés :
+Conclusion : validé / partiel / à corriger
+~~~
+
+Validez séparément chaque famille de menus. Un menu réseau fonctionnel ne prouve pas que le calendrier ou les notifications sont correctement stylés : leurs acteurs, contenus et états sont différents.
