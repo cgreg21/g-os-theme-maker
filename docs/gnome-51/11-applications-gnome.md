@@ -232,3 +232,173 @@ Créez un fichier `nautilus.md` contenant :
 7. Les limites rencontrées.
 
 Cet exercice est terminé lorsque vous pouvez expliquer pourquoi chaque règle touche le composant visé et démontrer qu'elle ne dégrade pas les autres zones de la fenêtre.
+
+
+## 11. Relever l'environnement d'une application avant les essais
+
+Le nom affiché dans le menu ne suffit pas à identifier le binaire, le paquet et le toolkit. Relevez ces informations avant d'interpréter un résultat :
+
+```sh
+app_pid="$(pgrep -n nautilus || true)"
+if [[ -n "$app_pid" ]]; then
+  printf 'PID : %s\n' "$app_pid"
+  printf 'Exécutable : '
+  readlink -f "/proc/$app_pid/exe"
+  printf '\nBibliothèques graphiques :\n'
+  grep -E '/lib(gtk|adwaita)' "/proc/$app_pid/maps" \
+    | sed -E 's/.*(\/[^ ]+\.so[^ ]*).*/\1/' \
+    | sort -u
+else
+  printf 'Nautilus ne semble pas être lancé.\n'
+fi
+```
+
+Adaptez `nautilus` au nom réel du processus. Cette méthode observe les bibliothèques mappées par un processus natif. Elle ne donne pas toujours une réponse complète pour les applications sandboxées, les bibliothèques chargées tardivement ou les processus auxiliaires.
+
+Pour un paquet Flatpak, identifiez d'abord l'application :
+
+```sh
+flatpak list --app
+flatpak info org.gnome.Nautilus
+```
+
+Le second identifiant est un exemple courant ; utilisez l'identifiant réellement retourné par votre système. Les bibliothèques embarquées dans le runtime Flatpak peuvent différer des bibliothèques de l'hôte. Ne mélangez pas les conclusions d'un test Flatpak et d'un test natif.
+
+## 12. Lancer une application de test sans réutiliser un processus existant
+
+Une variable d'environnement passée à une commande ne modifie pas nécessairement un processus déjà lancé. Si l'application transmet la demande à une instance existante, l'inspecteur peut ne pas être activé sur cette instance.
+
+Pour un test natif, fermez d'abord l'application et vérifiez qu'aucun processus concerné ne reste actif. Puis lancez-la depuis un terminal :
+
+```sh
+GTK_DEBUG=interactive nautilus --new-window
+```
+
+Les options disponibles varient selon l'application. Si elle ne propose pas de nouvelle fenêtre, démarrez-la depuis un compte de test ou utilisez le mécanisme documenté par son projet. Ne terminez pas brutalement un processus qui pourrait être en train d'écrire des données.
+
+Pour un Flatpak, l'environnement doit être transmis à l'intérieur du sandbox. Par exemple :
+
+```sh
+flatpak run --env=GTK_DEBUG=interactive org.gnome.Nautilus
+```
+
+Vérifiez que l'identifiant existe avec `flatpak list --app`. L'inspecteur peut être absent du runtime ou désactivé dans la construction de l'application ; un échec n'indique pas que le thème CSS est incorrect.
+
+## 13. Distinguer défaut de thème et défaut de données
+
+Une interface GNOME varie selon son contenu. Avant de conclure qu'une règle est défectueuse, reproduisez l'état avec un jeu de données contrôlé.
+
+Pour une liste de fichiers, préparez par exemple :
+- un nom court et un nom très long ;
+- des fichiers avec et sans miniature ;
+- un dossier vide et un dossier contenant de nombreux éléments ;
+- des noms avec accents et caractères non latins ;
+- un fichier caché ;
+- des éléments sélectionnés et non sélectionnés.
+
+Pour les pages de préférences, testez un contrôle activé, désactivé, indisponible et en erreur. Pour un calendrier, utilisez des événements qui se chevauchent et des événements couvrant plusieurs jours. Pour une application de terminal, utilisez une sortie avec couleurs ANSI, une sélection, une ligne longue et un curseur dans chaque forme disponible.
+
+Cette variation permet de distinguer une vraie régression CSS d'une différence de contenu, de traduction, de taille de fenêtre ou de configuration utilisateur.
+
+## 14. Exemples de parcours de vérification par application
+
+Les parcours ci-dessous décrivent des comportements à tester, pas des sélecteurs CSS garantis. Les libellés et fonctions peuvent évoluer selon la version installée.
+
+### Fichiers
+
+- Ouvrir un dossier local, un emplacement réseau si disponible et un périphérique amovible.
+- Basculer entre les vues grille et liste.
+- Tester sélection simple, sélection multiple, survol, focus et menu contextuel.
+- Afficher les propriétés d'un fichier et le dialogue de renommage.
+- Vérifier l'affichage pendant le chargement des miniatures et en cas d'accès refusé.
+
+Le thème ne doit pas rendre indiscernables la sélection, le focus clavier et le survol. Le menu contextuel doit rester lisible lorsqu'il est ouvert sur une ligne sélectionnée.
+
+### Paramètres
+
+- Ouvrir plusieurs catégories qui utilisent des contrôles différents.
+- Modifier un réglage réversible dans le compte de test, puis le restaurer.
+- Vérifier les lignes de préférence avec description, interrupteur, bouton secondaire et avertissement.
+- Tester les pages qui affichent des périphériques absents ou des services indisponibles.
+
+Un thème ne doit pas donner l'apparence d'un réglage activé lorsque sa valeur réelle est désactivée. Le CSS ne doit jamais servir à simuler l'état fonctionnel d'un contrôle.
+
+### Calendrier
+
+- Changer de mois, de semaine et de jour.
+- Afficher plusieurs calendriers et masquer l'un d'eux.
+- Créer puis supprimer un événement de test.
+- Vérifier les événements longs, chevauchants et sur plusieurs jours.
+- Tester les couleurs personnalisées et le contraste du texte.
+
+Les couleurs de calendrier sont des données de l'utilisateur. Le thème doit préserver leur sens et leur lisibilité plutôt que forcer une palette uniforme.
+
+### Logiciels
+
+- Examiner les vues découverte, recherche, détails et mises à jour.
+- Vérifier les cartes avec et sans capture d'écran.
+- Observer les boutons installer, annuler, lancer et supprimer selon les actions disponibles.
+- Tester la progression, l'échec réseau et les sources désactivées si l'environnement le permet.
+
+Ne réalisez pas d'installation ou de suppression de logiciel sur un environnement de production uniquement pour tester un état visuel. Utilisez une machine virtuelle ou un compte de test.
+
+### Éditeur de texte
+
+- Ouvrir un fichier court puis un fichier volumineux.
+- Activer et désactiver la coloration syntaxique.
+- Afficher la recherche, le remplacement, les onglets et les dialogues.
+- Vérifier la sélection, le curseur, les numéros de ligne et les messages d'erreur.
+
+La zone de texte peut être rendue par un composant spécialisé. Les couleurs de syntaxe et le curseur ne sont pas nécessairement contrôlés par le CSS global GTK.
+
+### Terminal
+
+- Vérifier la palette ANSI et les couleurs à fort contraste.
+- Tester la sélection et le texte sélectionné.
+- Afficher une ligne plus large que la fenêtre et faire défiler l'historique.
+- Tester les états du curseur et la police monospace.
+- Ouvrir et fermer les préférences de profil.
+
+La palette du terminal doit être configurée dans l'application. N'utilisez pas le CSS de la fenêtre pour prétendre contrôler le rendu du terminal lui-même.
+
+## 15. Tester les applications après une mise à jour
+
+Une mise à jour peut changer le toolkit, la version de Libadwaita, les classes CSS ou la hiérarchie des widgets sans modifier fortement l'apparence par défaut. Après chaque mise à jour importante :
+
+1. relevez la nouvelle version du paquet ;
+2. vérifiez les bibliothèques réellement chargées ;
+3. réinspectez les composants dont le thème dépend ;
+4. vérifiez que les sélecteurs ciblés existent toujours ;
+5. rejouez les états interactifs et les variantes ;
+6. comparez les captures à taille et facteur d'échelle identiques ;
+7. retirez les règles devenues inutiles ou trop larges ;
+8. consignez les changements de compatibilité.
+
+Ne conservez pas un sélecteur simplement parce qu'il n'émet aucune erreur : une règle sans correspondance peut être silencieusement ignorée. La validation doit confirmer que le composant ciblé reçoit réellement le style attendu.
+
+## 16. Modèle de compte rendu d'essai
+
+Copiez ce modèle dans le dossier de tests du thème et remplissez-le pour chaque application réellement couverte :
+
+```text
+Application :
+Identifiant paquet :
+Version :
+Origine : paquet système / Flatpak / autre
+Session : Wayland / X11
+GTK chargé :
+Libadwaita chargée :
+Taille de fenêtre :
+Facteur d'échelle :
+Variante : clair / sombre / contraste renforcé
+Composants parcourus :
+États vérifiés :
+Sélecteurs confirmés :
+Propriétés vérifiées :
+Défauts :
+Limites :
+Résultat : réussi / partiel / échec / non testé
+Date et environnement :
+```
+
+Ne transformez pas un modèle vide en déclaration de compatibilité. Une application est « prise en charge » uniquement si le compte rendu contient une version précise, des composants identifiés et des essais réellement réalisés.
