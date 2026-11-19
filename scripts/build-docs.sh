@@ -19,6 +19,7 @@ SOURCE_FILES=(
   docs/gnome-51/12-inspection-et-diagnostic-css.md
   docs/gnome-51/13-panneau-superieur-shell.md
   docs/gnome-51/14-vue-activites-overview.md
+  docs/gnome-51/15-menus-reglages-notifications.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md

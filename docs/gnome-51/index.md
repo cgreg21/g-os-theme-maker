@@ -18,12 +18,15 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 10. [Personnaliser les applications GNOME](11-applications-gnome.md)
 11. [Personnaliser le panneau supérieur](13-panneau-superieur-shell.md)
 12. [Personnaliser la vue Activités](14-vue-activites-overview.md)
+13. [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
 
 ## Guides illustrés
 
 - [Anatomie du panneau supérieur](images/panneau-superieur.svg)
 - [Anatomie de la vue Activités](images/vue-activites.svg)
 - [Anatomie d'une application GNOME](images/application-gnome.svg)
+- [Menus et réglages rapides](images/menus-reglages-rapides.svg)
+- [Calendrier et notifications](images/calendrier-notifications.svg)
 
 Les schémas sont des illustrations pédagogiques de l'interface et non des captures d'écran exactes. Les sélecteurs et structures décrits dans les chapitres sont, eux, contrôlés dans les sources GNOME Shell 51.0.
 
@@ -33,6 +36,7 @@ Les schémas sont des illustrations pédagogiques de l'interface et non des capt
 - [Inspection et diagnostic CSS](12-inspection-et-diagnostic-css.md)
 - [Panneau supérieur](13-panneau-superieur-shell.md)
 - [Vue Activités](14-vue-activites-overview.md)
+- [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
 
 ## Référence technique
 
