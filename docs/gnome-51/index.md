@@ -37,6 +37,7 @@ Réalisez les exercices dans un dossier utilisateur de test. Ne remplacez pas le
 - [Clavier virtuel, IBus et accessibilité](18-clavier-ibus-accessibilite.md)
 - [Composants Shell spécialisés](23-composants-shell-specialises.md)
 - [Inventaire technique GNOME Shell 51](02-gnome-shell.md)
+- [Catalogue pratique des composants](08-catalogue-pratique-composants.md)
 
 Le Shell utilise St et Clutter, pas GTK. Pour un sélecteur, confirmez toujours le nœud et la classe dans GNOME Shell 51.0. Les noms internes ne sont pas une API stable.
 
@@ -69,6 +70,7 @@ GTK 3, GTK 4 et Libadwaita ne sont pas interchangeables. Une application peut ch
 ## 5. Configuration, extensions et session
 
 - [Paramètres GNOME, GSettings et dconf](05-parametres-gnome.md)
+- [Installation, paramètres et dépannage](07-parametres-installation-diagnostic.md)
 - [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
 - [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
 - [Mutter 51 : réglages, fenêtres et diagnostic avancé](44-mutter-reglages-fenetres-diagnostic.md)
