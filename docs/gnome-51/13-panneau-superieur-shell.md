@@ -382,7 +382,7 @@ Suivez cette séquence :
 
 Ne tentez pas de redémarrer le Shell sur une session de travail simplement pour forcer le rechargement. Utilisez la session imbriquée ou la machine virtuelle prévue pour les tests.
 
-## 16. Exercices progressifs
+## 13. Exercices progressifs
 
 ### Exercice A — panneau minimal
 
