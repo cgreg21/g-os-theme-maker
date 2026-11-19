@@ -249,3 +249,184 @@ Activez le contraste élevé et vérifiez que les textes, icônes et contours re
 - [Thème Shell — widgets SCSS](https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/51.0/data/theme/gnome-shell-sass/widgets)
 - [Accessibilité GNOME](https://help.gnome.org/users/gnome-help/stable/a11y.html)
 - [Documentation St](https://gnome.pages.gitlab.gnome.org/gnome-shell/st/)
+
+
+## 10. Organiser une validation clavier complète
+
+Un test visuel à la souris ne suffit pas pour les composants de saisie. Préparez une session de test distincte et notez les options d'accessibilité activées, la disposition clavier, les méthodes IBus et la langue de l'interface.
+
+Parcourez les interfaces sans souris :
+1. Ouvrez les réglages rapides et atteignez le sélecteur de méthode de saisie.
+2. Changez de méthode de saisie.
+3. Ouvrez un champ de texte.
+4. Déplacez le curseur, sélectionnez du texte et utilisez les touches de correction.
+5. Ouvrez le clavier virtuel si cette fonction est activée.
+6. Parcourez les touches avec les mécanismes clavier disponibles.
+7. Ouvrez les variantes d'une touche et choisissez-en une.
+8. Déclenchez les suggestions et parcourez-les.
+9. Fermez les panneaux avec le clavier.
+10. Vérifiez que le focus revient au composant attendu.
+
+Le focus visuel doit suivre le focus fonctionnel. Si le focus change sans que le style change, inspectez l'état du widget et la pseudo-classe réellement appliquée avant de modifier le CSS.
+
+## 11. Vérifier les dispositions et les compositions de caractères
+
+Testez plus d'une disposition. Une disposition française AZERTY, une disposition anglaise QWERTY et une méthode de composition ne sollicitent pas les mêmes touches ni les mêmes libellés.
+
+Vérifiez :
+- touches alphabétiques et numériques ;
+- touches mortes et caractères accentués ;
+- AltGr et combinaisons ;
+- changement de casse ;
+- verrouillage majuscule ;
+- ponctuation et symboles ;
+- touches de navigation et de correction ;
+- variantes accessibles par appui prolongé ;
+- caractères non latins si la langue cible les utilise.
+
+Le clavier virtuel doit représenter la disposition active et non une image décorative figée. Si la légende d'une touche ne correspond pas au caractère saisi, recherchez d'abord un problème de disposition ou de méthode de saisie.
+
+## 12. Tester les suggestions et les variantes
+
+Les suggestions sont dynamiques et leur contenu dépend de la langue, du texte saisi et du service qui les fournit.
+
+Préparez des cas :
+- aucun texte saisi ;
+- mot court ;
+- mot avec accent ;
+- mot long ;
+- correction proposée ;
+- plusieurs suggestions ;
+- aucune suggestion ;
+- saisie dans une langue avec alphabet différent.
+
+Vérifiez que les suggestions ne se chevauchent pas avec le clavier, restent visibles à l'échelle élevée et peuvent être parcourues sans ambiguïté. Ne supposez pas que le contenu ou le nombre de suggestions sera constant d'une session à l'autre.
+
+Pour les variantes de touches, testez un appui prolongé sur plusieurs touches qui proposent des caractères alternatifs. Vérifiez le positionnement du panneau, sa fermeture après sélection et le contraste du caractère choisi.
+
+## 13. Configurer et tester IBus de manière contrôlée
+
+IBus doit être configuré dans la session de test. Les noms et les étapes d'installation d'une méthode de saisie dépendent de la distribution et des paquets disponibles.
+
+Procédure générale :
+1. Ouvrez les paramètres Clavier.
+2. Ajoutez une source de saisie ou une méthode IBus prise en charge.
+3. Vérifiez qu'elle apparaît dans le sélecteur du panneau.
+4. Basculez vers cette méthode.
+5. Ouvrez une application de texte.
+6. Saisissez une séquence qui affiche les candidats.
+7. Parcourez les candidats et les pages au clavier.
+8. Validez un candidat.
+9. Revenez à la méthode précédente.
+10. Vérifiez que le texte final et le focus du champ sont corrects.
+
+Si le popup n'apparaît pas, vérifiez d'abord que la méthode IBus est active et que la séquence saisie déclenche effectivement une composition. Le thème ne peut pas faire apparaître un candidat que le moteur de saisie ne fournit pas.
+
+### États du popup de candidats
+
+Contrôlez les états suivants :
+- candidat normal ;
+- candidat sélectionné ;
+- candidat survolé ;
+- candidat ciblé au clavier ;
+- index du candidat ;
+- pagination précédente et suivante ;
+- liste longue ;
+- libellé ou caractère non latin ;
+- popup près du bord de l'écran.
+
+Ne réduisez pas la taille du texte ou des cellules au point de rendre les candidats difficiles à distinguer. Les index sont utiles à la sélection rapide et doivent rester lisibles.
+
+## 14. Vérifier les technologies d'assistance
+
+Les styles visuels ne garantissent pas l'accessibilité sémantique. Utilisez les outils d'accessibilité disponibles dans la distribution pour vérifier l'arbre exposé par l'application ou le Shell.
+
+Questions à contrôler :
+- le composant a-t-il un rôle accessible cohérent ?
+- son nom accessible décrit-il sa fonction ?
+- son état sélectionné ou désactivé est-il exposé ?
+- les changements de suggestions sont-ils annoncés ?
+- l'ordre de parcours est-il logique ?
+- le focus clavier correspond-il à l'élément annoncé ?
+- le texte d'aide est-il associé au champ ?
+
+Orca permet de tester l'expérience avec un lecteur d'écran. Activez-le dans une session de test et parcourez les composants concernés. N'essayez pas de déduire les annonces vocales à partir de la seule apparence.
+
+Si un contrôle n'est pas annoncé ou possède un nom incorrect, identifiez le composant qui construit son arbre accessible. Une règle CSS ne peut pas ajouter un nom accessible ou corriger le rôle exposé par AT-SPI.
+
+## 15. Contraste élevé, grossissement et taille du texte
+
+Testez les réglages d'accessibilité réels de GNOME plutôt que d'ajouter une classe CSS fictive.
+
+Scénarios :
+- contraste élevé activé ;
+- texte agrandi ;
+- zoom de la loupe ;
+- pointeur agrandi ;
+- indicateur de position du pointeur ;
+- clavier virtuel actif ;
+- affichage avec résolution réduite.
+
+Vérifiez que les contours de focus restent visibles, que les touches restent assez grandes et que les panneaux ne sont pas coupés. Les textes longs ne doivent pas recouvrir les boutons de navigation ou de fermeture.
+
+La loupe agrandit une région de l'écran ; elle peut donc révéler des défauts d'alignement ou de contraste invisibles à taille normale. Inspectez les bordures et les glyphes à fort grossissement.
+
+## 16. Tester les animations et les transitions
+
+Les transitions du clavier virtuel, des panneaux IBus et des suggestions doivent rester lisibles et ne pas retarder l'interaction.
+
+Comparez le comportement avec les préférences d'animation disponibles dans GNOME. Ne transposez pas automatiquement la media query web prefers-reduced-motion dans St : vérifiez le mécanisme pris en charge par le Shell et la version ciblée.
+
+Une animation doit accompagner l'ouverture ou la fermeture d'un panneau, pas cacher son état ni ralentir la sélection d'un candidat. Si le mouvement gêne l'utilisation, identifiez si le réglage relève du Shell, de l'extension ou du composant.
+
+## 17. Diagnostic des problèmes de saisie
+
+### Le clavier virtuel ne s'affiche pas
+
+Vérifiez que la fonction est activée dans les paramètres d'accessibilité, que la session prend en charge le clavier à l'écran et que le Shell crée effectivement l'acteur. Une règle CSS ne peut pas activer cette fonction.
+
+### Les touches affichent les mauvais caractères
+
+Vérifiez la disposition active, la méthode de saisie, les touches mortes et la configuration de la langue. Ne corrigez pas les libellés par des pseudo-éléments CSS : cela masquerait la discordance entre affichage et saisie réelle.
+
+### Le popup IBus est absent
+
+Vérifiez que la méthode est active, que le moteur reçoit la séquence de composition et qu'une liste de candidats est produite. Consultez les journaux de session si nécessaire. Ne concluez pas à un défaut CSS avant d'avoir observé un popup natif.
+
+### Le focus est difficile à voir
+
+Inspectez le nœud réellement focalisé, son état St et la cascade. Vérifiez que la règle ne cible pas uniquement le survol. Testez avec le clavier, pas seulement avec le pointeur.
+
+### Orca n'annonce pas le contrôle
+
+Vérifiez le nom, le rôle, l'état et l'arbre d'accessibilité exposés. Le CSS ne corrige pas ces informations. Signalez le défaut dans le composant ou l'application concernée.
+
+## 18. Fiche de validation saisie et accessibilité
+
+~~~text
+Version GNOME Shell :
+Distribution et session :
+Langue de l'interface :
+Disposition clavier :
+Méthodes IBus configurées :
+Clavier virtuel :
+Suggestions testées :
+Variantes de touches :
+Caractères accentués :
+Caractères non latins :
+Navigation clavier :
+Focus visible :
+Lecteur d'écran :
+Rôles et noms accessibles :
+Contraste élevé :
+Texte agrandi et loupe :
+Pointeur agrandi :
+Animations :
+Résolution et facteur d'échelle :
+Extensions actives :
+Sélecteurs modifiés :
+Anomalies :
+Conclusion : validé / partiel / à corriger
+~~~
+
+Une validation complète associe une vérification visuelle, une navigation clavier réelle et un contrôle de l'arbre accessible. Ne déclarez pas une interface accessible uniquement parce que ses couleurs et ses contours semblent lisibles.
