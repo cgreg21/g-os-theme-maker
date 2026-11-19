@@ -41,4 +41,4 @@ Projects are JSON documents with a versioned schema. The GNOME Shell export crea
 
 ## Documentation
 
-Le guide français décrit GNOME Shell 51, GTK 3.24, GTK 4, Libadwaita, les icônes, les curseurs et les limites de compatibilité. Formats disponibles : [Markdown](docs/guide-theme-gnome.md), [EPUB](docs/guide-theme-gnome.epub) et [PDF](docs/guide-theme-gnome.pdf). Les deux formats téléchargeables sont régénérés automatiquement à chaque modification du guide. Pour les construire localement : `bash scripts/build-docs.sh` (Pandoc et WeasyPrint requis).
+Le guide français décrit GNOME Shell 51, GTK 3.24, GTK 4, Libadwaita, les icônes, les curseurs et les limites de compatibilité. Formats disponibles : [Markdown](docs/guide-theme-gnome.md), [EPUB](docs/guide-theme-gnome.epub) et [PDF](docs/guide-theme-gnome.pdf). Les deux formats téléchargeables sont générés automatiquement et versionnés dans le dépôt à chaque modification du guide. Pour les construire localement : `bash scripts/build-docs.sh` (Pandoc et WeasyPrint requis).
