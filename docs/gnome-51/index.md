@@ -78,6 +78,8 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
 - [Thèmes de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
 - [Fontconfig et typographie](34-fontconfig-typographie-detail.md)
+- [Thèmes et applications Flatpak](37-flatpak-themes-sandbox.md)
+- [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
 
 ## Référence technique
 
@@ -100,7 +102,7 @@ Chaque exemple est un point de départ. Un sélecteur CSS peut être valide sans
 
 ## Couverture et limites
 
-Le manuel vise les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que les ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
+Le manuel vise les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, les applications Flatpak et les frontières de personnalisation des applications Qt et Electron, ainsi que les ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
 
 ## Formats exportés
 
