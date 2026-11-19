@@ -19,16 +19,14 @@ Confirmer les sous-commandes avec `gnome-extensions --help`. Ne pas désactiver 
 
 ## 7.3 Thème ou extension ?
 
-| Besoin | Mécanisme |
-|---|---|
-| couleur, bordure, rayon, typographie | CSS |
-| icône ou curseur | thème de ressources |
-| ajouter indicateur ou menu | extension |
-| nouveau comportement | extension |
-| raccourci standard | GSettings |
-| résolution / écran | Paramètres et Mutter |
-| widget privé d'une application | API / préférences applicatives |
-| écran GDM | configuration système distincte |
+- **Besoin** : couleur, bordure, rayon, typographie ; **Mécanisme** : CSS
+- **Besoin** : icône ou curseur ; **Mécanisme** : thème de ressources
+- **Besoin** : ajouter indicateur ou menu ; **Mécanisme** : extension
+- **Besoin** : nouveau comportement ; **Mécanisme** : extension
+- **Besoin** : raccourci standard ; **Mécanisme** : GSettings
+- **Besoin** : résolution / écran ; **Mécanisme** : Paramètres et Mutter
+- **Besoin** : widget privé d'une application ; **Mécanisme** : API / préférences applicatives
+- **Besoin** : écran GDM ; **Mécanisme** : configuration système distincte
 
 ## 7.4 Mutter
 

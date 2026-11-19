@@ -42,25 +42,23 @@ Un répertoire vide n’est pas une ressource de thème terminée. L’export do
 
 ## 11. Matrice de tests obligatoire
 
-| Zone | Contrôles minimum |
-|---|---|
-| Panneau | horloge, activités, indicateurs, confidentialité |
-| Activités | recherche, résultats, grille, dossiers, pages |
-| Dock | lancement, application active, séparateur, glisser-déposer |
-| Espaces | miniatures, sélection, aperçu de fenêtre |
-| Menus | menu simple, sous-menu, case, interrupteur, séparateur |
-| Réglages rapides | réseau, Bluetooth, son, luminosité, alimentation, périphériques |
-| Calendrier | mois, jour courant, événements, horloges, météo |
-| Notifications | carte, groupe, actions, média, ne pas déranger |
-| Dialogues | confirmation, erreur, mot de passe, polkit, fin de session |
-| Verrouillage | horloge, saisie, utilisateur, notifications |
-| Saisie | clavier virtuel, emoji, IBus, suggestions |
-| OSD | volume, luminosité, capture, sélection écran |
-| GTK 3 | fenêtre, headerbar, bouton, champ, liste, menu, arbre, onglet |
-| GTK 4 | fenêtre, headerbar, boutons, saisie, listes, popovers, défilement |
-| Libadwaita | navigation, préférences, lignes, dialogues, bannières, toasts |
-| Ressources | icônes manquantes, curseurs, polices, fonds |
-| Accessibilité | clavier, focus, contraste élevé, RTL, HiDPI |
+- **Zone** : Panneau ; **Contrôles minimum** : horloge, activités, indicateurs, confidentialité
+- **Zone** : Activités ; **Contrôles minimum** : recherche, résultats, grille, dossiers, pages
+- **Zone** : Dock ; **Contrôles minimum** : lancement, application active, séparateur, glisser-déposer
+- **Zone** : Espaces ; **Contrôles minimum** : miniatures, sélection, aperçu de fenêtre
+- **Zone** : Menus ; **Contrôles minimum** : menu simple, sous-menu, case, interrupteur, séparateur
+- **Zone** : Réglages rapides ; **Contrôles minimum** : réseau, Bluetooth, son, luminosité, alimentation, périphériques
+- **Zone** : Calendrier ; **Contrôles minimum** : mois, jour courant, événements, horloges, météo
+- **Zone** : Notifications ; **Contrôles minimum** : carte, groupe, actions, média, ne pas déranger
+- **Zone** : Dialogues ; **Contrôles minimum** : confirmation, erreur, mot de passe, polkit, fin de session
+- **Zone** : Verrouillage ; **Contrôles minimum** : horloge, saisie, utilisateur, notifications
+- **Zone** : Saisie ; **Contrôles minimum** : clavier virtuel, emoji, IBus, suggestions
+- **Zone** : OSD ; **Contrôles minimum** : volume, luminosité, capture, sélection écran
+- **Zone** : GTK 3 ; **Contrôles minimum** : fenêtre, headerbar, bouton, champ, liste, menu, arbre, onglet
+- **Zone** : GTK 4 ; **Contrôles minimum** : fenêtre, headerbar, boutons, saisie, listes, popovers, défilement
+- **Zone** : Libadwaita ; **Contrôles minimum** : navigation, préférences, lignes, dialogues, bannières, toasts
+- **Zone** : Ressources ; **Contrôles minimum** : icônes manquantes, curseurs, polices, fonds
+- **Zone** : Accessibilité ; **Contrôles minimum** : clavier, focus, contraste élevé, RTL, HiDPI
 
 Tester chaque zone en clair, sombre et contraste élevé. Valider la syntaxe CSS avec les outils GTK correspondants et utiliser une session GNOME Shell imbriquée pour les tests Shell. Un aperçu statique ne remplace pas un test réel.
 
@@ -77,7 +75,6 @@ Le catalogue doit guider l’organisation de l’application :
 7. **Compatibilité** : afficher la version cible et les limites connues.
 
 Ne pas présenter une propriété comme modifiable si le moteur ne l’expose pas. Les composants ajoutés par les extensions doivent être identifiés comme tels.
-
 
 ## 9.1 Installation utilisateur
 
@@ -110,14 +107,12 @@ Les commandes dépendent de la distribution.
 
 ## 9.4 Matrice de test
 
-| Zone | Clair | Sombre | Contraste | Clavier | HiDPI | RTL |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Shell panneau/menus | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Activités/dash/recherche | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Réglages/notifications/OSD | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Dialogues/verrouillage | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| GTK3/GTK4/Adw | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Icônes/curseurs/polices/fonds | ✓ | ✓ | ✓ | — | ✓ | ✓ |
+- **Zone** : Shell panneau/menus ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
+- **Zone** : Activités/dash/recherche ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
+- **Zone** : Réglages/notifications/OSD ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
+- **Zone** : Dialogues/verrouillage ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
+- **Zone** : GTK3/GTK4/Adw ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
+- **Zone** : Icônes/curseurs/polices/fonds ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : — ; **HiDPI** : ✓ ; **RTL** : ✓
 
 Ajouter hover, pressed, selected, disabled, loading, empty, error, warning, backdrop et drag/drop.
 

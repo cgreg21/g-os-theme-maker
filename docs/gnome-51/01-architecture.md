@@ -1,6 +1,5 @@
 # 1. Architecture et périmètre
 
-
 Ce guide est le catalogue de référence de G-OS Theme Maker. Il décrit les familles d’éléments visuels qu’un thème peut couvrir, les moteurs qui les dessinent, les états à prévoir et les limites de compatibilité.
 
 La référence GNOME Shell est **GNOME Shell 51.0** (sources amont). Les applications sont séparées selon **GTK 3**, **GTK 4** et **Libadwaita**. Ce catalogue distingue les éléments réellement stylables des éléments dont l’apparence est contrôlée par le système, l’application ou une extension.
@@ -11,32 +10,27 @@ La référence GNOME Shell est **GNOME Shell 51.0** (sources amont). Les applica
 
 Un bureau GNOME n’a pas un moteur de thème unique. Il faut produire et tester plusieurs feuilles indépendantes.
 
-| Cible | Technologie | Ressource principale | Éléments couverts |
-|---|---|---|---|
-| GNOME Shell 51 | St / Clutter | `gnome-shell.css` | panneau, vue Activités, dash, menus système, notifications, verrouillage, OSD |
-| GTK 3.24 | GTK CSS | `gtk-3.0/gtk.css` | widgets GTK 3 et anciennes applications |
-| GTK 4 | GTK CSS | `gtk-4.0/gtk.css` | widgets GTK 4 |
-| Libadwaita | GTK 4 + styles Adwaita | CSS de l’application / CSS utilisateur | fenêtres et composants Adwaita |
-| Icônes | Freedesktop Icon Theme | `index.theme` + ressources | applications, actions, appareils, fichiers |
-| Curseurs | Xcursor | `index.theme` + fichiers curseurs | pointeurs et curseurs de saisie |
-| Polices | Fontconfig / paramètres GNOME | fichiers de police et réglages | familles, graisse, taille et rendu |
-| Fond d’écran | GNOME Background / URI | image + métadonnées | fond du bureau et écran de verrouillage |
+- **Cible** : GNOME Shell 51 ; **Technologie** : St / Clutter ; **Ressource principale** : `gnome-shell.css` ; **Éléments couverts** : panneau, vue Activités, dash, menus système, notifications, verrouillage, OSD
+- **Cible** : GTK 3.24 ; **Technologie** : GTK CSS ; **Ressource principale** : `gtk-3.0/gtk.css` ; **Éléments couverts** : widgets GTK 3 et anciennes applications
+- **Cible** : GTK 4 ; **Technologie** : GTK CSS ; **Ressource principale** : `gtk-4.0/gtk.css` ; **Éléments couverts** : widgets GTK 4
+- **Cible** : Libadwaita ; **Technologie** : GTK 4 + styles Adwaita ; **Ressource principale** : CSS de l’application / CSS utilisateur ; **Éléments couverts** : fenêtres et composants Adwaita
+- **Cible** : Icônes ; **Technologie** : Freedesktop Icon Theme ; **Ressource principale** : `index.theme` + ressources ; **Éléments couverts** : applications, actions, appareils, fichiers
+- **Cible** : Curseurs ; **Technologie** : Xcursor ; **Ressource principale** : `index.theme` + fichiers curseurs ; **Éléments couverts** : pointeurs et curseurs de saisie
+- **Cible** : Polices ; **Technologie** : Fontconfig / paramètres GNOME ; **Ressource principale** : fichiers de police et réglages ; **Éléments couverts** : familles, graisse, taille et rendu
+- **Cible** : Fond d’écran ; **Technologie** : GNOME Background / URI ; **Ressource principale** : image + métadonnées ; **Éléments couverts** : fond du bureau et écran de verrouillage
 
 Les thèmes Shell, GTK, icônes et curseurs sont des paquets distincts. Les paramètres de police et le fond d’écran ne sont pas des feuilles CSS.
 
-
 ## 1.1 Couches du bureau
 
-| Couche | Composant | Contrôle | Mécanisme |
-|---|---|---|---|
-| Compositeur | Mutter | fenêtres, espaces, écrans, échelle, capture | paramètres / GSettings |
-| Shell | GNOME Shell / St | panneau, Activités, menus, dash, OSD, verrouillage | thème, extensions, préférences |
-| Widgets historiques | GTK 3 | widgets GTK 3 | thème GTK 3, CSS applicatif |
-| Widgets modernes | GTK 4 | widgets GTK 4 | thème GTK 4, CSS applicatif |
-| Design GNOME | Libadwaita | composants Adw et couleurs sémantiques | styles et API applicative |
-| Préférences | Control Center / GSettings | comportement, apparence, périphériques | Paramètres, gsettings |
-| Ressources | Freedesktop / Fontconfig | icônes, curseurs, fontes, sons | paquets de ressources |
-| Connexion | GDM | écran de connexion | configuration système |
+- **Couche** : Compositeur ; **Composant** : Mutter ; **Contrôle** : fenêtres, espaces, écrans, échelle, capture ; **Mécanisme** : paramètres / GSettings
+- **Couche** : Shell ; **Composant** : GNOME Shell / St ; **Contrôle** : panneau, Activités, menus, dash, OSD, verrouillage ; **Mécanisme** : thème, extensions, préférences
+- **Couche** : Widgets historiques ; **Composant** : GTK 3 ; **Contrôle** : widgets GTK 3 ; **Mécanisme** : thème GTK 3, CSS applicatif
+- **Couche** : Widgets modernes ; **Composant** : GTK 4 ; **Contrôle** : widgets GTK 4 ; **Mécanisme** : thème GTK 4, CSS applicatif
+- **Couche** : Design GNOME ; **Composant** : Libadwaita ; **Contrôle** : composants Adw et couleurs sémantiques ; **Mécanisme** : styles et API applicative
+- **Couche** : Préférences ; **Composant** : Control Center / GSettings ; **Contrôle** : comportement, apparence, périphériques ; **Mécanisme** : Paramètres, gsettings
+- **Couche** : Ressources ; **Composant** : Freedesktop / Fontconfig ; **Contrôle** : icônes, curseurs, fontes, sons ; **Mécanisme** : paquets de ressources
+- **Couche** : Connexion ; **Composant** : GDM ; **Contrôle** : écran de connexion ; **Mécanisme** : configuration système
 
 ## 1.2 Niveaux de prise en charge
 

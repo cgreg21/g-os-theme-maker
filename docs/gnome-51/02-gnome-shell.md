@@ -6,17 +6,15 @@ Les noms ci-dessous proviennent de l’organisation des sources SCSS de GNOME Sh
 
 ### 2.1 Panneau supérieur et indicateurs
 
-| Élément | Sélecteurs / classes repères | Ce qui doit être personnalisable |
-|---|---|---|
-| Panneau supérieur | `#panel` | fond, hauteur, bordure, typographie, ombre |
-| Boutons du panneau | `.panel-button` | fond, texte, marges, padding, rayon |
-| Activités | `#panelActivities` | libellé, points d’espaces de travail |
-| Horloge | `.clock-display`, `.clock-display-box`, `.clock` | texte, espacement, survol |
-| Indicateurs système | `.system-status-icon`, `.panel-status-indicators-box` | taille et couleur des icônes |
-| Notifications du panneau | `.messages-indicator` | icône et état actif |
-| Enregistrement écran | `.screen-recording-indicator` | indicateur de confidentialité |
-| Partage écran | `.screen-sharing-indicator` | indicateur de confidentialité |
-| Confidentialité | `.privacy-indicator` | couleur d’avertissement |
+- **Élément** : Panneau supérieur ; **Sélecteurs / classes repères** : `#panel` ; **Ce qui doit être personnalisable** : fond, hauteur, bordure, typographie, ombre
+- **Élément** : Boutons du panneau ; **Sélecteurs / classes repères** : `.panel-button` ; **Ce qui doit être personnalisable** : fond, texte, marges, padding, rayon
+- **Élément** : Activités ; **Sélecteurs / classes repères** : `#panelActivities` ; **Ce qui doit être personnalisable** : libellé, points d’espaces de travail
+- **Élément** : Horloge ; **Sélecteurs / classes repères** : `.clock-display`, `.clock-display-box`, `.clock` ; **Ce qui doit être personnalisable** : texte, espacement, survol
+- **Élément** : Indicateurs système ; **Sélecteurs / classes repères** : `.system-status-icon`, `.panel-status-indicators-box` ; **Ce qui doit être personnalisable** : taille et couleur des icônes
+- **Élément** : Notifications du panneau ; **Sélecteurs / classes repères** : `.messages-indicator` ; **Ce qui doit être personnalisable** : icône et état actif
+- **Élément** : Enregistrement écran ; **Sélecteurs / classes repères** : `.screen-recording-indicator` ; **Ce qui doit être personnalisable** : indicateur de confidentialité
+- **Élément** : Partage écran ; **Sélecteurs / classes repères** : `.screen-sharing-indicator` ; **Ce qui doit être personnalisable** : indicateur de confidentialité
+- **Élément** : Confidentialité ; **Sélecteurs / classes repères** : `.privacy-indicator` ; **Ce qui doit être personnalisable** : couleur d’avertissement
 
 Exemple :
 
@@ -29,41 +27,37 @@ Exemple :
 
 ### 2.2 Vue Activités, recherche et navigation
 
-| Élément | Sélecteurs / classes repères | Couverture visuelle |
-|---|---|---|
-| Fond de la vue Activités | `#overviewGroup`, `#overview` selon version | fond, voile, contraste |
-| Conteneur des résultats | `#searchResults`, `#searchResultsContent` | largeur, marges |
-| Section de recherche | `.search-section`, `.search-section-content`, `.search-section-separator` | panneaux et séparateurs |
-| Champ de recherche | `.search-entry`, `.search-entry-icon` | saisie, icône, focus |
-| État de recherche | `.search-statusbox`, `.search-statustext` | chargement, aucun résultat |
-| Résultats en grille | `.grid-search-results`, `.grid-search-result` | tuiles et espacement |
-| Résultats en liste | `.list-search-results`, `.list-search-result` | lignes, titres, descriptions |
-| Fournisseurs de recherche | `.search-provider-icon`, `.list-search-provider-content` | icône et métadonnées |
-| Aperçu des fenêtres | `.window-picker`, `.window-icon`, `.window-caption` | espacement, icône, légende |
-| Bouton fermer une fenêtre | `.window-close` | taille, forme, états |
-| Fond d’espace de travail | `.workspace-background` | fond et ombre |
-| Prévisualisation de mosaïque | `.tile-preview` | contour et couleur d’accent |
-| Écrans secondaires | `.secondary-monitor-workspaces` | espacement |
+- **Élément** : Fond de la vue Activités ; **Sélecteurs / classes repères** : `#overviewGroup`, `#overview` selon version ; **Couverture visuelle** : fond, voile, contraste
+- **Élément** : Conteneur des résultats ; **Sélecteurs / classes repères** : `#searchResults`, `#searchResultsContent` ; **Couverture visuelle** : largeur, marges
+- **Élément** : Section de recherche ; **Sélecteurs / classes repères** : `.search-section`, `.search-section-content`, `.search-section-separator` ; **Couverture visuelle** : panneaux et séparateurs
+- **Élément** : Champ de recherche ; **Sélecteurs / classes repères** : `.search-entry`, `.search-entry-icon` ; **Couverture visuelle** : saisie, icône, focus
+- **Élément** : État de recherche ; **Sélecteurs / classes repères** : `.search-statusbox`, `.search-statustext` ; **Couverture visuelle** : chargement, aucun résultat
+- **Élément** : Résultats en grille ; **Sélecteurs / classes repères** : `.grid-search-results`, `.grid-search-result` ; **Couverture visuelle** : tuiles et espacement
+- **Élément** : Résultats en liste ; **Sélecteurs / classes repères** : `.list-search-results`, `.list-search-result` ; **Couverture visuelle** : lignes, titres, descriptions
+- **Élément** : Fournisseurs de recherche ; **Sélecteurs / classes repères** : `.search-provider-icon`, `.list-search-provider-content` ; **Couverture visuelle** : icône et métadonnées
+- **Élément** : Aperçu des fenêtres ; **Sélecteurs / classes repères** : `.window-picker`, `.window-icon`, `.window-caption` ; **Couverture visuelle** : espacement, icône, légende
+- **Élément** : Bouton fermer une fenêtre ; **Sélecteurs / classes repères** : `.window-close` ; **Couverture visuelle** : taille, forme, états
+- **Élément** : Fond d’espace de travail ; **Sélecteurs / classes repères** : `.workspace-background` ; **Couverture visuelle** : fond et ombre
+- **Élément** : Prévisualisation de mosaïque ; **Sélecteurs / classes repères** : `.tile-preview` ; **Couverture visuelle** : contour et couleur d’accent
+- **Élément** : Écrans secondaires ; **Sélecteurs / classes repères** : `.secondary-monitor-workspaces` ; **Couverture visuelle** : espacement
 
 ### 2.3 Grille d’applications et dock
 
-| Élément | Sélecteurs / classes repères | Couverture visuelle |
-|---|---|---|
-| Grille | `.icon-grid`, `.apps-scroll-view` | espacements et marges |
-| Tuile d’application | `.overview-tile`, `.overview-icon` | fond, rayon, padding |
-| Icône et libellé | `.overview-icon-with-label` | taille, typographie, écart |
-| Indicateur application active | `.app-grid-running-dot` | taille et couleur |
-| Dossier d’applications | `.app-folder`, `.app-folder-dialog` | panneau, grille, bordure |
-| Nom du dossier | `.folder-name-container`, `.folder-name-entry` | titre et champ de saisie |
-| Boutons du dossier | `.icon-button` | icônes et états |
-| Pagination | `.page-indicator`, `.page-indicator-icon` | points et sélection |
-| Navigation entre pages | `.page-navigation-arrow`, `.page-navigation-hint` | flèches et zones de transition |
-| Actions système de la grille | `.system-action-icon` | arrêt et autres actions |
-| Dock | `#dash`, `.dash-background` | panneau, fond, rayon |
-| Éléments du dock | `.dash-item-container`, `.show-apps`, `.overview-tile` | icônes, focus, survol |
-| Séparateur du dock | `.dash-separator` | épaisseur et couleur |
-| Emplacement de glisser-déposer | `.placeholder`, `.empty-dash-drop-target` | taille et état cible |
-| Infobulle du dock | `.dash-label` | fond, texte, ombre |
+- **Élément** : Grille ; **Sélecteurs / classes repères** : `.icon-grid`, `.apps-scroll-view` ; **Couverture visuelle** : espacements et marges
+- **Élément** : Tuile d’application ; **Sélecteurs / classes repères** : `.overview-tile`, `.overview-icon` ; **Couverture visuelle** : fond, rayon, padding
+- **Élément** : Icône et libellé ; **Sélecteurs / classes repères** : `.overview-icon-with-label` ; **Couverture visuelle** : taille, typographie, écart
+- **Élément** : Indicateur application active ; **Sélecteurs / classes repères** : `.app-grid-running-dot` ; **Couverture visuelle** : taille et couleur
+- **Élément** : Dossier d’applications ; **Sélecteurs / classes repères** : `.app-folder`, `.app-folder-dialog` ; **Couverture visuelle** : panneau, grille, bordure
+- **Élément** : Nom du dossier ; **Sélecteurs / classes repères** : `.folder-name-container`, `.folder-name-entry` ; **Couverture visuelle** : titre et champ de saisie
+- **Élément** : Boutons du dossier ; **Sélecteurs / classes repères** : `.icon-button` ; **Couverture visuelle** : icônes et états
+- **Élément** : Pagination ; **Sélecteurs / classes repères** : `.page-indicator`, `.page-indicator-icon` ; **Couverture visuelle** : points et sélection
+- **Élément** : Navigation entre pages ; **Sélecteurs / classes repères** : `.page-navigation-arrow`, `.page-navigation-hint` ; **Couverture visuelle** : flèches et zones de transition
+- **Élément** : Actions système de la grille ; **Sélecteurs / classes repères** : `.system-action-icon` ; **Couverture visuelle** : arrêt et autres actions
+- **Élément** : Dock ; **Sélecteurs / classes repères** : `#dash`, `.dash-background` ; **Couverture visuelle** : panneau, fond, rayon
+- **Élément** : Éléments du dock ; **Sélecteurs / classes repères** : `.dash-item-container`, `.show-apps`, `.overview-tile` ; **Couverture visuelle** : icônes, focus, survol
+- **Élément** : Séparateur du dock ; **Sélecteurs / classes repères** : `.dash-separator` ; **Couverture visuelle** : épaisseur et couleur
+- **Élément** : Emplacement de glisser-déposer ; **Sélecteurs / classes repères** : `.placeholder`, `.empty-dash-drop-target` ; **Couverture visuelle** : taille et état cible
+- **Élément** : Infobulle du dock ; **Sélecteurs / classes repères** : `.dash-label` ; **Couverture visuelle** : fond, texte, ombre
 
 ### 2.4 Espaces de travail et changement de fenêtre
 
@@ -80,19 +74,17 @@ Exemple :
 
 ### 2.5 Menus, popovers et menus contextuels
 
-| Élément | Sélecteurs / classes repères |
-|---|---|
-| Conteneur du menu | `.popup-menu`, `.popup-menu-content` |
-| Flèche du popover | `.popup-menu-boxpointer` |
-| Élément de menu | `.popup-menu-item` |
-| Élément inactif | `.popup-inactive-menu-item` |
-| Élément ornementé | `.popup-ornamented-menu-item`, `.popup-menu-ornament` |
-| Icône et flèche | `.popup-menu-icon`, `.popup-menu-arrow` |
-| Sous-menu | `.popup-sub-menu` |
-| Séparateur | `.popup-separator-menu-item`, `.popup-separator-menu-item-separator` |
-| Menu d’application | `.app-menu` |
-| Menu contextuel du fond | `.background-menu` |
-| Cases et interrupteurs | `.check-box`, `.toggle-switch` |
+- **Élément** : Conteneur du menu ; **Sélecteurs / classes repères** : `.popup-menu`, `.popup-menu-content`
+- **Élément** : Flèche du popover ; **Sélecteurs / classes repères** : `.popup-menu-boxpointer`
+- **Élément** : Élément de menu ; **Sélecteurs / classes repères** : `.popup-menu-item`
+- **Élément** : Élément inactif ; **Sélecteurs / classes repères** : `.popup-inactive-menu-item`
+- **Élément** : Élément ornementé ; **Sélecteurs / classes repères** : `.popup-ornamented-menu-item`, `.popup-menu-ornament`
+- **Élément** : Icône et flèche ; **Sélecteurs / classes repères** : `.popup-menu-icon`, `.popup-menu-arrow`
+- **Élément** : Sous-menu ; **Sélecteurs / classes repères** : `.popup-sub-menu`
+- **Élément** : Séparateur ; **Sélecteurs / classes repères** : `.popup-separator-menu-item`, `.popup-separator-menu-item-separator`
+- **Élément** : Menu d’application ; **Sélecteurs / classes repères** : `.app-menu`
+- **Élément** : Menu contextuel du fond ; **Sélecteurs / classes repères** : `.background-menu`
+- **Élément** : Cases et interrupteurs ; **Sélecteurs / classes repères** : `.check-box`, `.toggle-switch`
 
 Ne pas supposer que le style d’un élément parent suffit : les sous-menus, ornements, cases, séparateurs et éléments désactivés possèdent leurs propres états.
 
@@ -229,7 +221,6 @@ Les fichiers `_buttons.scss`, `_check-box.scss`, `_entries.scss`, `_slider.scss`
 - lien `.shell-link` ;
 - infobulle (style partagé `%tooltip`) ;
 - barre de défilement `StScrollBar`.
-
 
 ## 2.1 Sources et variantes
 

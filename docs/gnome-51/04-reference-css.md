@@ -10,84 +10,72 @@ Ce glossaire indique les propriétés utiles à la création de thèmes et leur 
 
 ### Propriétés de couleur et de surface
 
-| Propriété | Rôle | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|---|:---:|:---:|:---:|:---:|
-| `color` | Couleur du texte et des éléments de premier plan | Oui | Oui | Oui | Oui |
-| `background-color` | Couleur de fond | Oui | Oui | Oui | Oui |
-| `background` | Raccourci de fond | Partiel | Oui | Oui | Oui |
-| `opacity` | Transparence de l’élément | Oui | Oui | Oui | Oui |
-| `box-shadow` | Ombre portée | Partiel | Oui | Oui | Oui |
-| `text-shadow` | Ombre du texte | Partiel | Oui | Oui | Oui |
-| `background-image` | Image ou dégradé de fond | Partiel | Partiel | Partiel | Partiel |
+- **Propriété** : `color` ; **Rôle** : Couleur du texte et des éléments de premier plan ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `background-color` ; **Rôle** : Couleur de fond ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `background` ; **Rôle** : Raccourci de fond ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `opacity` ; **Rôle** : Transparence de l’élément ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `box-shadow` ; **Rôle** : Ombre portée ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `text-shadow` ; **Rôle** : Ombre du texte ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `background-image` ; **Rôle** : Image ou dégradé de fond ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
 
 Pour les dégradés, vérifier la syntaxe du moteur : les fonctions CSS disponibles et les formes de dégradé ne sont pas identiques partout. GNOME Shell expose aussi des mécanismes de dégradé propres à St. Préférer une couleur unie si le même rendu doit fonctionner sur toutes les cibles.
 
 ### Bordures et contours
 
-| Propriété | Rôle | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|---|:---:|:---:|:---:|:---:|
-| `border-color` | Couleur de bordure | Oui | Oui | Oui | Oui |
-| `border-width` | Épaisseur de bordure | Oui | Oui | Oui | Oui |
-| `border-style` | Style de bordure | Partiel | Oui | Oui | Oui |
-| `border-radius` | Arrondi des angles | Oui | Oui | Oui | Oui |
-| `border` | Raccourci de bordure | Partiel | Oui | Oui | Oui |
-| `outline-color` | Couleur du contour de focus | Partiel | Oui | Oui | Oui |
-| `outline-style` | Style du contour de focus | Partiel | Oui | Oui | Oui |
-| `outline-width` | Épaisseur du contour de focus | Partiel | Oui | Oui | Oui |
+- **Propriété** : `border-color` ; **Rôle** : Couleur de bordure ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `border-width` ; **Rôle** : Épaisseur de bordure ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `border-style` ; **Rôle** : Style de bordure ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `border-radius` ; **Rôle** : Arrondi des angles ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `border` ; **Rôle** : Raccourci de bordure ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `outline-color` ; **Rôle** : Couleur du contour de focus ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `outline-style` ; **Rôle** : Style du contour de focus ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `outline-width` ; **Rôle** : Épaisseur du contour de focus ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
 
 Un contour de focus doit rester visible au clavier. Ne pas le supprimer sans fournir un indicateur de remplacement suffisamment contrasté.
 
 ### Dimensions, espacements et disposition
 
-| Propriété | Rôle | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|---|:---:|:---:|:---:|:---:|
-| `width`, `height` | Dimensions | Partiel | Partiel | Partiel | Partiel |
-| `min-width`, `min-height` | Dimensions minimales | Oui | Oui | Oui | Oui |
-| `max-width`, `max-height` | Dimensions maximales | Partiel | Oui | Oui | Oui |
-| `margin` et variantes | Marge extérieure | Oui | Oui | Oui | Oui |
-| `padding` et variantes | Espace intérieur | Oui | Oui | Oui | Oui |
-| `spacing` | Écart entre enfants dans certains conteneurs | Partiel | Partiel | Partiel | Partiel |
+- **Propriété** : `width`, `height` ; **Rôle** : Dimensions ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
+- **Propriété** : `min-width`, `min-height` ; **Rôle** : Dimensions minimales ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `max-width`, `max-height` ; **Rôle** : Dimensions maximales ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `margin` et variantes ; **Rôle** : Marge extérieure ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `padding` et variantes ; **Rôle** : Espace intérieur ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `spacing` ; **Rôle** : Écart entre enfants dans certains conteneurs ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
 
 Les dimensions CSS ne remplacent pas les propriétés de mise en page du widget. GTK et St déterminent souvent la taille finale à partir de la mesure du contenu, des contraintes du conteneur et de l’échelle d’affichage.
 
 ### Typographie
 
-| Propriété | Rôle | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|---|:---:|:---:|:---:|:---:|
-| `font-family` | Famille de police | Oui | Oui | Oui | Oui |
-| `font-size` | Taille du texte | Oui | Oui | Oui | Oui |
-| `font-weight` | Graisse | Oui | Oui | Oui | Oui |
-| `font-style` | Normal ou italique | Oui | Oui | Oui | Oui |
-| `line-height` | Hauteur de ligne | Partiel | Partiel | Partiel | Partiel |
-| `text-decoration` | Soulignement et décoration | Partiel | Oui | Oui | Oui |
-| `text-align` | Alignement du texte | Partiel | Partiel | Partiel | Partiel |
+- **Propriété** : `font-family` ; **Rôle** : Famille de police ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `font-size` ; **Rôle** : Taille du texte ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `font-weight` ; **Rôle** : Graisse ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `font-style` ; **Rôle** : Normal ou italique ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `line-height` ; **Rôle** : Hauteur de ligne ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
+- **Propriété** : `text-decoration` ; **Rôle** : Soulignement et décoration ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété** : `text-align` ; **Rôle** : Alignement du texte ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
 
 Les noms de polices doivent être disponibles sur le système. La taille effective dépend également du facteur d’échelle et des paramètres d’accessibilité.
 
 ### États et transitions
 
-| Propriété / pseudo-classe | Rôle | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|---|:---:|:---:|:---:|:---:|
-| `:hover` | Pointeur au-dessus | Oui | Oui | Oui | Oui |
-| `:focus` | Élément ayant le focus | Oui | Oui | Oui | Oui |
-| `:active` | Élément pressé / actif | Oui | Oui | Oui | Oui |
-| `:checked` | Contrôle sélectionné | Partiel | Oui | Oui | Oui |
-| `:disabled` / `:insensitive` | Élément indisponible | Partiel | Oui | Oui | Oui |
-| `:selected` | Élément sélectionné | Partiel | Partiel | Partiel | Partiel |
-| `:backdrop` | Fenêtre inactive | Partiel | Oui | Oui | Oui |
-| `transition` | Transition animée de propriétés | Non garanti | Partiel | Partiel | Partiel |
+- **Propriété / pseudo-classe** : `:hover` ; **Rôle** : Pointeur au-dessus ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `:focus` ; **Rôle** : Élément ayant le focus ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `:active` ; **Rôle** : Élément pressé / actif ; **Shell 51** : Oui ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `:checked` ; **Rôle** : Contrôle sélectionné ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `:disabled` / `:insensitive` ; **Rôle** : Élément indisponible ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `:selected` ; **Rôle** : Élément sélectionné ; **Shell 51** : Partiel ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
+- **Propriété / pseudo-classe** : `:backdrop` ; **Rôle** : Fenêtre inactive ; **Shell 51** : Partiel ; **GTK 3** : Oui ; **GTK 4** : Oui ; **Libadwaita** : Oui
+- **Propriété / pseudo-classe** : `transition` ; **Rôle** : Transition animée de propriétés ; **Shell 51** : Non garanti ; **GTK 3** : Partiel ; **GTK 4** : Partiel ; **Libadwaita** : Partiel
 
 Les pseudo-classes ne s’appliquent qu’aux nœuds qui exposent l’état correspondant. Dans GTK, l’état désactivé est fréquemment exprimé par `:disabled` ou `:insensitive` selon le moteur et le nœud ; vérifier l’arbre CSS réel du widget.
 
 ### Variables et directives CSS
 
-| Fonction | Shell 51 | GTK 3 | GTK 4 | Libadwaita |
-|---|:---:|:---:|:---:|:---:|
-| Variables personnalisées `--nom` et `var()` | Non garanti | Non | GTK 4.16+ | Selon GTK 4.16+ |
-| `@define-color` / `@color` | Non | Oui | Ancien mécanisme, déprécié dans les versions récentes | À éviter |
-| `:root` | Non garanti | Non | GTK 4.16+ | Oui avec versions compatibles |
-| `@media` | Non garanti | Non | Non garanti | Non garanti |
-| `@import` | À éviter | Oui, selon contexte | Oui, selon contexte | Selon contexte |
+- **Fonction** : Variables personnalisées `--nom` et `var()` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : GTK 4.16+ ; **Libadwaita** : Selon GTK 4.16+
+- **Fonction** : `@define-color` / `@color` ; **Shell 51** : Non ; **GTK 3** : Oui ; **GTK 4** : Ancien mécanisme, déprécié dans les versions récentes ; **Libadwaita** : À éviter
+- **Fonction** : `:root` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : GTK 4.16+ ; **Libadwaita** : Oui avec versions compatibles
+- **Fonction** : `@media` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : Non garanti ; **Libadwaita** : Non garanti
+- **Fonction** : `@import` ; **Shell 51** : À éviter ; **GTK 3** : Oui, selon contexte ; **GTK 4** : Oui, selon contexte ; **Libadwaita** : Selon contexte
 
 Les variables Libadwaita telles que `--window-bg-color`, `--view-bg-color`, `--headerbar-bg-color`, `--card-bg-color`, `--popover-bg-color`, `--accent-bg-color` et `--accent-fg-color` sont des variables sémantiques. Leur présence et leur valeur par défaut dépendent de la version Libadwaita. Ne pas les confondre avec une garantie que toutes les applications acceptent un CSS utilisateur.
 
@@ -112,7 +100,6 @@ Références techniques :
 - [GTK 4 — CSS Overview](https://gnome.pages.gitlab.gnome.org/gtk/gtk4/css-overview.html)
 - [GTK 4 — CSS Properties](https://gnome.pages.gitlab.gnome.org/gtk/gtk4/css-properties.html)
 - [Libadwaita — CSS Variables](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/css-variables.html)
-
 
 ## 4.1 Sélecteurs GTK
 

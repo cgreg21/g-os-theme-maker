@@ -40,7 +40,6 @@ Documenter famille, graisse, taille, hauteur de ligne et rendu. Les polices sont
 
 Le fond du bureau et celui de l’écran verrouillé sont des ressources d’arrière-plan gérées par GNOME, non des widgets CSS. Le paquet doit documenter les images, leur format, leur résolution et leur licence.
 
-
 ## 6.1 Contextes d'icônes
 
 Prévoir Applications, Actions, Devices, Places, Status, MimeTypes, Emblems, Categories et éventuellement Panel. Respecter noms Freedesktop, contextes, tailles, types et héritages. Déclarer `hicolor` comme repli. Contrôler icônes manquantes et licences.
