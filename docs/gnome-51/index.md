@@ -51,6 +51,7 @@ Le Shell utilise St et Clutter, pas GTK. Pour un sélecteur, confirmez toujours 
 - [CSS applicatif et ressources GResource](30-css-applications-gresource.md)
 - [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
 - [Référence des widgets GTK et composants Libadwaita](03-gtk-libadwaita.md)
+- [GTK 4.23 : variables CSS, requêtes de média et variantes d'interface](42-gtk-css-variables-requetes-media.md)
 
 GTK 3, GTK 4 et Libadwaita ne sont pas interchangeables. Une application peut charger ses propres styles ou dessiner certains composants sans exposer de sélecteur utilisable par un thème global.
 
