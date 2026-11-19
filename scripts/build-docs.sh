@@ -56,7 +56,7 @@ SOURCE_FILES=(
   docs/gnome-51/47-reference-proprietes-css-st-51.md
   docs/gnome-51/48-reference-css-gtk-423-comparaison-st.md
   docs/gnome-51/49-reference-css-gtk3-324.md
-  docs/gnome-51/50-reference-libadwaita-110.md
+  docs/gnome-51/50-reference-libadwaita-110.md\n  docs/gnome-51/51-effets-visuels-avances.md
   docs/gnome-51/25-creer-installer-publier-theme.md
   docs/gnome-51/28-tests-visuels-regression-maintenance.md
   docs/gnome-51/04-reference-css.md

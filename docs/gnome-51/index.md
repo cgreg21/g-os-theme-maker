@@ -90,7 +90,7 @@ Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuve
 
 Pour les extensions, suivez un ordre progressif : le chapitre 07 présente leur rôle, leur cycle de vie et leur diagnostic ; le chapitre 29 détaille le développement d'une extension complète ; le chapitre 39 traite spécifiquement de la thématisation des extensions existantes. Ces trois chapitres sont complémentaires et ne décrivent pas trois mécanismes concurrents.
 
-## 6. Construire et maintenir un thème
+## 6. Effets visuels avancés et rendu\n\n- [Effets visuels avancés : flou, transparence, ombres et animations](51-effets-visuels-avances.md)\n\nCe chapitre distingue les effets CSS des effets de rendu Clutter et des fonctions du compositeur Mutter. Un effet disponible dans GTK n'est pas automatiquement disponible dans GNOME Shell.\n\n## 7. Construire et maintenir un thème
 
 - [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
 - [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
@@ -104,7 +104,7 @@ Pour les extensions, suivez un ordre progressif : le chapitre 07 présente leur 
 
 Un thème doit être testé séparément sur chaque moteur qu'il annonce prendre en charge. Un CSS accepté par le parseur n'est pas une preuve que le sélecteur correspond ou que le rendu est correct.
 
-## 7. Références techniques
+## 8. Références techniques
 
 - [Architecture et périmètre](01-architecture.md)
 - [Inventaire GNOME Shell 51](02-gnome-shell.md)
@@ -119,7 +119,7 @@ Un thème doit être testé séparément sur chaque moteur qu'il annonce prendre
 - [Glossaire technique](40-glossaire-technique.md)
 - [Cible de versions et compatibilité GNOME 51](41-versions-compatibilite.md)
 
-## 8. Captures de GNOME standard
+## 9. Captures de GNOME standard
 
 Les images suivantes sont des captures PNG locales copiées depuis le dépôt officiel [GNOME User Documentation, branche gnome-51](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures). Leur provenance et leur licence sont décrites dans [le dossier des images](images/README.md). Elles illustrent l'interface standard et ne garantissent pas la présence d'un sélecteur CSS particulier.
 
@@ -135,7 +135,7 @@ Les images suivantes sont des captures PNG locales copiées depuis le dépôt of
 - ![Paramètres de gestion des couleurs](images/official/color-display.png)
 - ![Espace colorimétrique](images/official/color-space.png)
 
-## 9. Périmètre et limites
+## 10. Périmètre et limites
 
 Le manuel couvre les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que les ressources visuelles, paramètres GNOME, extensions et principales frontières avec les autres moteurs.
 
