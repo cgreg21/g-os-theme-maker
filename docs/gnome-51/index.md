@@ -95,6 +95,7 @@ Pour les extensions, suivez un ordre progressif : le chapitre 07 présente leur 
 - [Effets visuels avancés : flou, transparence, ombres et animations](51-effets-visuels-avances.md)
 - [Architecture de rendu avancée : GSK, Clutter, shaders et GPU](52-architecture-rendu-shaders-gsk-clutter.md)
 - [Atelier pratique : créer des effets GPU pour GNOME Shell 51](53-atelier-pratique-shaders-clutter.md)
+- [Atelier avancé : verre dépoli, distorsion et rendu CRT](54-atelier-effets-verre-depoli-distortion-crt.md)
 
 Ce chapitre distingue les effets CSS des effets de rendu Clutter et des fonctions du compositeur Mutter. Un effet disponible dans GTK n'est pas automatiquement disponible dans GNOME Shell.
 
