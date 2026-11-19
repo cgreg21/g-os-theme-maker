@@ -134,6 +134,8 @@ GTK 3.24 prend en charge `calc()` pour les types compatibles. Le calcul ne peut 
 
 Les unités physiques utilisent la résolution GTK configurée, notamment via `-gtk-dpi`. La conversion ne doit pas être supposée identique à celle d'un navigateur.
 
+La propriété GTK spécifique `-gtk-dpi` définit la résolution utilisée pour convertir les unités physiques. Sa valeur est un nombre représentant les points par pouce ; sa valeur initiale correspond à la résolution de l'écran. Elle est héritée et animable dans la référence GTK 3.24.52. Elle n'est pas une propriété CSS Web.
+
 ## 5. Couleurs nommées et expressions GTK
 
 GTK 3 utilise les couleurs nommées avec `@define-color`. C'est la méthode historique pour partager une palette.
