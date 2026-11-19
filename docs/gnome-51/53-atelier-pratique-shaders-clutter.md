@@ -134,7 +134,7 @@ export default class ShaderLabExtension extends Extension {
 
         this._actor.set_position(80, 140);
 
-        this._snippet = new Cogl.Snippet(
+        this._snippet = Cogl.Snippet.new(
             Cogl.SnippetHook.FRAGMENT,
             null,
             null
@@ -247,22 +247,35 @@ Ces fragments sont des remplacements alternatifs : ne les collez pas tous les un
 
 ## 8. Ajouter un uniforme dynamique
 
-Un uniforme permet de changer une valeur sans reconstruire le code GLSL. Par exemple, une intensité de mélange peut être déclarée ainsi :
+Un uniforme permet de changer une valeur sans reconstruire le code GLSL. Pour rendre l'exemple concret, remplacez la construction du snippet de la section 5 par cette variante. La déclaration GLSL doit être placée dans le champ `declarations`, pas dans le corps du fragment :
 
-~~~glsl
-uniform float intensity;
+~~~javascript
+this._snippet = Cogl.Snippet.new(
+    Cogl.SnippetHook.FRAGMENT,
+    'uniform float intensity;',
+    null
+);
 
-vec3 gray = vec3(dot(cogl_color_in.rgb,
-                     vec3(0.2126, 0.7152, 0.0722)));
-vec3 result = mix(cogl_color_in.rgb, gray, intensity);
-cogl_color_out = vec4(result, cogl_color_in.a);
+this._snippet.set_replace(`
+    vec3 weights = vec3(0.2126, 0.7152, 0.0722);
+    float luminance = dot(cogl_color_in.rgb, weights);
+    vec3 gray = vec3(luminance);
+    vec3 result = mix(
+        cogl_color_in.rgb,
+        gray,
+        clamp(intensity, 0.0, 1.0)
+    );
+    cogl_color_out = vec4(result, cogl_color_in.a);
+`);
+
+this._effect = Clutter.ShaderEffect.new_with_snippet(this._snippet);
+this._effect.set_uniform_float('intensity', 1, 1, [0.75]);
+this._actor.add_effect(this._effect);
 ~~~
 
-Le programme hôte doit fournir une valeur à l'uniforme nommé exactement `intensity`. GNOME Shell 51 expose des méthodes telles que `set_uniform_float()` et `set_uniform_value()` sur Clutter.ShaderEffect.
+La signature introspectée de GNOME 51 est `set_uniform_float(name, n_components, total_count, values)`. Pour un `float` scalaire, le nombre de composantes et le nombre total de flottants valent tous deux 1 ; le dernier argument est un tableau contenant une seule valeur. Pour un `vec3`, utilisez trois composantes, trois valeurs et un tableau de trois flottants.
 
-La méthode `set_uniform_float()` accepte un tableau de valeurs flottantes. Pour un uniforme scalaire, le tableau contient un seul élément. Vérifiez la signature introspectée par GJS dans la version ciblée avant d'intégrer cet appel à un composant complet.
-
-Lorsqu'une valeur change, demandez un nouveau rendu de l'effet. Évitez de modifier l'uniforme en boucle à haute fréquence ; reliez son évolution à l'horloge d'image et arrêtez l'animation lorsque l'acteur n'est plus utilisé.
+Le nom de l'uniforme doit correspondre exactement à sa déclaration GLSL. Les uniformes doivent être mis à jour sur l'effet réellement attaché à l'acteur. Lorsqu'une valeur change, demandez un nouveau rendu de l'effet ; évitez de modifier l'uniforme en boucle à haute fréquence. Reliez son évolution à l'horloge d'image et arrêtez l'animation lorsque l'acteur n'est plus utilisé.
 
 ## 9. Comprendre le coût d'un shader
 

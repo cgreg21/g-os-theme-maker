@@ -54,6 +54,36 @@ def markdown_lines(path: Path):
             f"{path}:{opening_line}: bloc de code non refermé avant la fin du fichier"
         )
 
+
+def code_blocks(path: Path):
+    """Yield fenced code block contents for API-specific example checks."""
+    fence_char = None
+    fence_length = 0
+    block_lines = []
+
+    for line in path.read_text(encoding="utf-8").splitlines():
+        opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if fence_char is None:
+            if opening:
+                marker, _ = opening.groups()
+                fence_char = marker[0]
+                fence_length = len(marker)
+                block_lines = []
+            continue
+
+        closing = re.match(
+            r"^ {0,3}" + re.escape(fence_char) +
+            r"{" + str(fence_length) + r",}[ \\t]*$",
+            line,
+        )
+        if closing:
+            yield "\\n".join(block_lines)
+            fence_char = None
+            fence_length = 0
+            block_lines = []
+        else:
+            block_lines.append(line)
+
 def main() -> int:
     errors = []
     markdown_files = sorted(DOCS.glob("*.md"))
@@ -96,6 +126,17 @@ def main() -> int:
             )
 
     for document in markdown_files:
+        for block in code_blocks(document):
+            if re.search(
+                r"St\\.BoxLayout\\s*\\(\\s*\\{[^}]*\\bvertical\\s*:",
+                block,
+                re.S,
+            ):
+                errors.append(
+                    f"{document.relative_to(ROOT)}: propriété St.BoxLayout.vertical "
+                    "supprimée dans GNOME Shell 51 ; utiliser orientation"
+                )
+
         try:
             visible_lines = list(markdown_lines(document))
         except ValueError as error:
