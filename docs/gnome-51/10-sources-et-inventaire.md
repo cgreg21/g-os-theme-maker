@@ -141,3 +141,139 @@ Remplacez les valeurs d'exemple par les informations réellement vérifiées. Ce
 - Les limites connues et les composants non testés sont indiqués.
 
 Une compatibilité doit toujours préciser son périmètre : par exemple « testé avec GNOME Shell 51.0 et GTK 4.23 », plutôt que « compatible GNOME » sans autre précision.
+
+
+## Figer une source pour qu'une vérification soit reproductible
+
+Un lien vers une branche comme `main`, `master` ou `51.x` peut changer après la rédaction. Pour une affirmation technique importante, notez le tag ou le commit réellement examiné.
+
+Dans un clone du dépôt GNOME Shell :
+
+```sh
+git fetch --tags
+git checkout 51.0
+git rev-parse HEAD
+git status --short
+```
+
+Conservez le résultat de `git rev-parse HEAD` dans la fiche de traçabilité. Le tag identifie une version publiée ; le hash identifie précisément le contenu examiné. Si vous travaillez sur une révision corrigée par une distribution, notez également le paquet et sa révision : son contenu peut différer du tag amont.
+
+Pour consulter l'historique d'un fichier précis :
+
+```sh
+git log --oneline --follow -- data/theme/gnome-shell-sass/widgets/_panel.scss
+git blame -L 1,100 -- data/theme/gnome-shell-sass/widgets/_panel.scss
+```
+
+Adaptez le chemin au fichier réellement présent dans la révision clonée. `git blame` aide à retrouver l'origine d'une ligne, mais ne remplace pas la lecture du commit et de ses changements associés.
+
+## Comparer deux versions de GNOME Shell
+
+Avant de réutiliser une règle d'une ancienne version, comparez les sources des deux versions :
+
+```sh
+git diff 50.0..51.0 -- data/theme/gnome-shell-sass
+git diff --stat 50.0..51.0 -- data/theme/gnome-shell-sass
+```
+
+Cette comparaison met en évidence les fichiers ajoutés, supprimés ou modifiés. Elle ne prouve pas à elle seule qu'un sélecteur est utilisé à l'exécution : remontez jusqu'au widget qui lui correspond et vérifiez le rendu dans une session de test.
+
+Pour rechercher les changements d'un symbole :
+
+```sh
+git log --all -S'quick-settings' --oneline -- data/theme/gnome-shell-sass
+git log --all -G'\.panel|\.quick-settings' --oneline -- data/theme/gnome-shell-sass
+```
+
+La recherche textuelle peut retourner des commentaires, des variables SCSS ou des sélecteurs qui ne sont plus chargés. Inspectez le diff et le contexte d'utilisation.
+
+## Examiner les schémas GSettings sans confondre préférence et style
+
+Les schémas GSettings décrivent des préférences configurables. Ils ne constituent pas un catalogue de propriétés CSS. Une préférence peut modifier un comportement sans exposer de mécanisme de personnalisation visuelle.
+
+Dans le dépôt GNOME Shell :
+
+```sh
+find data -type f -name '*.gschema.xml*' -print
+grep -RIn --include='*.gschema.xml*' \
+  -E '<schema|<key name=|<default>' data
+```
+
+Sur le système installé, interrogez les schémas disponibles plutôt que de supposer leur présence :
+
+```sh
+gsettings list-schemas | grep -E 'org\.gnome\.shell|org\.gnome\.desktop'
+gsettings list-recursively org.gnome.shell
+```
+
+Une clé ne doit être modifiée que si son schéma existe et si sa description confirme son rôle. Pour comprendre une préférence, relevez son type, sa valeur par défaut, sa description et le composant qui la lit. Ne présentez pas une clé interne ou expérimentale comme une interface stable.
+
+## Retrouver l'origine d'une propriété GTK
+
+La documentation des propriétés indique ce que le moteur sait interpréter, pas nécessairement ce qu'un widget utilise. Pour investiguer une propriété :
+
+1. identifiez le moteur GTK réellement chargé par l'application ;
+2. vérifiez que la propriété figure dans la documentation de cette version ;
+3. identifiez le widget et son nœud CSS ;
+4. observez les classes et états du widget avec l'inspecteur ;
+5. appliquez une règle minimale dans un environnement de test ;
+6. vérifiez le rendu et les avertissements du moteur.
+
+Pour GTK 3 et GTK 4, gardez des références séparées. Une propriété ou un sélecteur valide dans une version ne doit pas être transposé à l'autre sans vérification.
+
+Les pages de documentation « latest » sont utiles pour comprendre l'état actuel d'une API, mais elles peuvent décrire une version plus récente que celle installée. Pour un manuel ciblant GNOME 51, associez chaque affirmation à la version effectivement testée et, lorsque possible, à la documentation versionnée.
+
+## Construire un dossier de preuves par composant
+
+Pour éviter les références vagues, créez une fiche pour chaque composant important. Elle peut être conservée dans le dépôt du thème, à côté des tests, ou dans les commentaires des règles concernées.
+
+Exemple de fiche à compléter :
+
+```text
+Composant :
+Application ou service responsable :
+Version du programme :
+Paquet de la distribution et révision :
+Dépôt amont :
+Tag ou commit consulté :
+Fichier source :
+Widget ou classe observée :
+Sélecteur CSS vérifié :
+Propriétés utilisées :
+États vérifiés :
+Environnement de test :
+Résultat :
+Limites et écarts connus :
+Date de vérification :
+```
+
+N'inscrivez pas « vérifié » si seule la documentation a été lue. Distinguez clairement une propriété documentée, un sélecteur retrouvé dans les sources, un nœud observé à l'exécution et un rendu réellement testé : ce sont quatre niveaux de preuve différents.
+
+## Qualifier le niveau de confiance d'une information
+
+Dans vos notes, utilisez des formulations précises :
+
+- **Documenté** : l'information figure dans la documentation officielle de la version ciblée.
+- **Présent dans les sources** : l'implémentation existe dans le tag ou commit examiné.
+- **Observé à l'exécution** : le widget, la classe ou la préférence a été constaté dans le programme lancé.
+- **Testé visuellement** : le changement a été appliqué et contrôlé dans le moteur concerné.
+- **Non vérifié** : la preuve manque ou l'environnement requis n'est pas disponible.
+
+Ces niveaux ne sont pas interchangeables. Un sélecteur présent dans les sources peut ne jamais être utilisé dans le contexte testé ; un rendu correct sur une machine ne garantit pas le même résultat avec une autre révision de bibliothèque.
+
+## Mettre à jour l'inventaire lors d'une nouvelle version
+
+À chaque nouvelle version majeure ou mise à jour importante :
+
+1. récupérez les tags et commits officiels ;
+2. identifiez les versions réellement livrées par la distribution cible ;
+3. comparez les fichiers SCSS, UI et schémas GSettings ;
+4. comparez les propriétés CSS et variables GTK/Libadwaita ;
+5. recherchez les sélecteurs supprimés, renommés ou déplacés ;
+6. refaites les observations à l'exécution ;
+7. rejouez les tests visuels des composants concernés ;
+8. actualisez les fiches de preuve et les limites de compatibilité.
+
+Ne supprimez pas une règle uniquement parce qu'elle n'apparaît plus dans un fichier portant le même nom : le code peut avoir été déplacé. Recherchez le symbole dans l'ensemble du dépôt et suivez son usage avant de conclure.
+
+L'inventaire de ce manuel est un point de départ pour l'investigation, pas une API contractuelle. Les sources versionnées, l'environnement observé et les essais reproductibles restent les éléments qui permettent de justifier une compatibilité.
