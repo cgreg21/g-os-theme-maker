@@ -90,7 +90,13 @@ Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuve
 
 Pour les extensions, suivez un ordre progressif : le chapitre 07 présente leur rôle, leur cycle de vie et leur diagnostic ; le chapitre 29 détaille le développement d'une extension complète ; le chapitre 39 traite spécifiquement de la thématisation des extensions existantes. Ces trois chapitres sont complémentaires et ne décrivent pas trois mécanismes concurrents.
 
-## 6. Effets visuels avancés et rendu\n\n- [Effets visuels avancés : flou, transparence, ombres et animations](51-effets-visuels-avances.md)\n\nCe chapitre distingue les effets CSS des effets de rendu Clutter et des fonctions du compositeur Mutter. Un effet disponible dans GTK n'est pas automatiquement disponible dans GNOME Shell.\n\n## 7. Construire et maintenir un thème
+## 6. Effets visuels avancés et rendu
+
+- [Effets visuels avancés : flou, transparence, ombres et animations](51-effets-visuels-avances.md)
+
+Ce chapitre distingue les effets CSS des effets de rendu Clutter et des fonctions du compositeur Mutter. Un effet disponible dans GTK n'est pas automatiquement disponible dans GNOME Shell.
+
+## 7. Construire et maintenir un thème
 
 - [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
 - [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
