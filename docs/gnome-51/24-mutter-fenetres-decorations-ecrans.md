@@ -156,9 +156,9 @@ Les outils disponibles varient selon la session. Sous X11, des utilitaires comme
 Pour relever l'environnement sans modifier la configuration :
 
 ```sh
-printf 'Session : %s\\n' "$XDG_SESSION_TYPE"
-printf 'Type de bureau : %s\\n' "$XDG_CURRENT_DESKTOP"
-printf 'Écran :\\n'
+printf 'Session : %s\n' "$XDG_SESSION_TYPE"
+printf 'Type de bureau : %s\n' "$XDG_CURRENT_DESKTOP"
+printf 'Écran :\n'
 gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null || true
 ```
 
