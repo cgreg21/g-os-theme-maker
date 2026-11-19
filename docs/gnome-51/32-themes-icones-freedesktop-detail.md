@@ -222,7 +222,7 @@ find . -mindepth 1 -maxdepth 1 -type d -print
 
 # Lister les fichiers dont le nom contient des espaces ou caractères inhabituels
 find . -type f -print0 | while IFS= read -r -d '' f; do
-    printf '%q\\n' "$f"
+    printf '%q\n' "$f"
 done
 ```
 
