@@ -4,9 +4,9 @@ Ce chapitre explique comment aborder les applications GNOME une par une. Il comp
 
 L'objectif est de savoir **ce qui peut être personnalisé**, **où chercher l'implémentation**, **comment tester une règle** et **comment documenter une limite**. Aucun sélecteur présenté ici ne doit être supposé universel : il faut toujours le confirmer dans la version de l'application installée.
 
-![Capture d'une application GNOME utilisant le thème standard : barre d'en-tête, navigation, contenu, cartes et contrôles](https://release.gnome.org/51/papers-signature-screenshot.webp)
+![Illustration locale d'une fenêtre GNOME dans le style Adwaita : barre d'en-tête, navigation, contenu et contrôles](images/fenetre-adwaita.svg)
 
-Cette capture montre une application GNOME utilisant GTK 4 et Libadwaita, pas le gabarit obligatoire de toutes les applications. Certaines applications n'ont pas de barre latérale, utilisent une barre d'outils différente ou dessinent leur contenu avec des composants spécialisés.
+Cette illustration représente un exemple pédagogique de fenêtre GTK 4/Libadwaita ; elle ne constitue pas une capture d'écran réelle ni le gabarit obligatoire de toutes les applications. Certaines applications n'ont pas de barre latérale, utilisent une barre d'outils différente ou dessinent leur contenu avec des composants spécialisés.
 
 ## 1. Comprendre les couches d'une application
 
