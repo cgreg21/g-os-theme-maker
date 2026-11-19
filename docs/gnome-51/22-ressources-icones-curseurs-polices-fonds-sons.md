@@ -4,7 +4,6 @@ Un thème GNOME ne se limite pas au CSS. Les icônes, les curseurs, les polices,
 
 Ce chapitre montre comment les organiser, les installer et les vérifier sans modifier inutilement les fichiers système.
 
-![Illustration locale d'un fond d'écran dans le style Adwaita](images/fond-adwaita.svg)
 
 ## 1. Organiser les ressources
 
