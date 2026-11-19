@@ -58,6 +58,7 @@ SOURCE_FILES=(
   docs/gnome-51/43-inventaire-selecteurs-shell-51.md
   docs/gnome-51/44-mutter-reglages-fenetres-diagnostic.md
   docs/gnome-51/45-decorations-csd-ssd-wayland-x11.md
+  docs/gnome-51/46-moteur-css-st-cascade-diagnostic.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
