@@ -23,25 +23,33 @@ Pour connaître les valeurs possibles d'une clé :
 gsettings range org.gnome.desktop.interface color-scheme
 ```
 
-Pour modifier une préférence, identifiez d'abord la clé, sauvegardez sa valeur et expliquez à l'utilisateur comment revenir en arrière.
+Pour modifier une préférence, identifiez d'abord la clé, sauvegardez sa valeur exacte et expliquez à l'utilisateur comment restaurer cette valeur. Revenir à la valeur par défaut et revenir à la valeur précédente sont deux opérations différentes.
 
-## 2. Exemple : lire puis modifier une préférence
+## 2. Exemple : lire, sauvegarder, modifier et restaurer une préférence
+
+L'exemple suivant sauvegarde la valeur GVariant exacte dans un fichier privé avant de modifier la clé. Il suppose que la clé existe et que la plage de valeurs autorise `prefer-dark`.
 
 ```sh
-# Lire la valeur actuelle
-gsettings get org.gnome.desktop.interface color-scheme
+umask 077
+SCHEMA=org.gnome.desktop.interface
+KEY=color-scheme
+BACKUP="$HOME/color-scheme.before.txt"
 
-# Lire les valeurs autorisées
-gsettings range org.gnome.desktop.interface color-scheme
+# Vérifier la clé et les valeurs possibles
+gsettings range "$SCHEMA" "$KEY"
+gsettings writable "$SCHEMA" "$KEY"
 
-# Exemple de modification, seulement si cette valeur est proposée
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# Enregistrer la valeur exacte avant modification
+gsettings get "$SCHEMA" "$KEY" > "$BACKUP"
 
-# Restaurer la valeur précédente connue
-gsettings set org.gnome.desktop.interface color-scheme 'default'
+# Appliquer une valeur uniquement si elle est autorisée
+gsettings set "$SCHEMA" "$KEY" 'prefer-dark'
+
+# Restaurer exactement la valeur sauvegardée
+gsettings set "$SCHEMA" "$KEY" "$(cat "$BACKUP")"
 ```
 
-Ne copiez pas aveuglément la dernière commande : la valeur initiale de la machine peut être différente. Le bon retour arrière consiste à restaurer la valeur sauvegardée.
+Le fichier de sauvegarde contient la représentation GVariant renvoyée par `gsettings get`. Gardez-le privé et supprimez-le seulement après avoir vérifié le retour à l'état initial. Si votre objectif est au contraire d'effacer la surcharge utilisateur et de reprendre la valeur par défaut du schéma, utilisez `gsettings reset "$SCHEMA" "$KEY"`. Cette dernière commande ne restaure pas nécessairement la valeur précédente.
 
 ## 3. Sauvegarder dconf
 
@@ -61,14 +69,23 @@ Ne restaurez pas un dump global sans comprendre son contenu. Il peut écraser de
 
 ## 4. Installer un thème utilisateur
 
-Les chemins reconnus peuvent varier selon la distribution et les spécifications XDG. Les emplacements usuels incluent :
-- `~/.themes/MonTheme` pour certains thèmes GTK/Shell ;
-- `~/.local/share/icons/MonTheme` pour les icônes ;
-- `~/.icons/MonCurseur` pour certains thèmes de curseurs historiques ;
-- `~/.local/share/fonts` pour les polices ;
-- `~/.local/share/backgrounds` pour les fonds.
+Les chemins reconnus dépendent du type de ressource, des répertoires XDG, du moteur et de la distribution. Commencez par identifier le répertoire de données utilisateur :
 
-Créez les dossiers nécessaires, copiez uniquement les fichiers du paquet et vérifiez les permissions. L'activation du thème Shell peut demander une extension ou un réglage distinct. Le support des thèmes GTK externes par Libadwaita est limité et dépend de l'application.
+```sh
+printf 'XDG_DATA_HOME=%s\\n' "${XDG_DATA_HOME:-$HOME/.local/share}"
+printf 'XDG_DATA_DIRS=%s\\n' "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+```
+
+Emplacements courants :
+- `~/.local/share/themes/MonTheme` pour les thèmes GTK utilisateur ; `~/.themes/MonTheme` reste utilisé par certains composants et outils comme chemin historique ;
+- `~/.local/share/icons/MonTheme` pour les thèmes d'icônes ;
+- `~/.local/share/icons/MonCurseur` pour les thèmes de curseurs, qui utilisent le format Xcursor ;
+- `~/.local/share/fonts/` pour les polices utilisateur ;
+- `~/.local/share/backgrounds/` pour organiser des fonds d'écran personnels, sans que ce dossier soit à lui seul un mécanisme d'activation universel.
+
+Le thème GNOME Shell est un cas distinct : il est généralement fourni sous `gnome-shell/` dans un thème et son activation dépend de la prise en charge des thèmes utilisateur, notamment de l'extension User Themes et de la session. La présence du fichier `gnome-shell.css` ne signifie pas que le Shell le charge. Les icônes, curseurs et polices ont également leurs propres préférences d'activation.
+
+Créez les dossiers nécessaires, copiez uniquement les fichiers du paquet et vérifiez les permissions. Ne copiez pas un dossier complet dans un emplacement système par habitude. Le support des thèmes GTK externes par Libadwaita est limité et dépend de l'application ; il ne faut pas promettre qu'un thème GTK personnalisé modifiera toutes les applications Libadwaita.
 
 ## 5. Désinstaller sans casser la configuration
 
