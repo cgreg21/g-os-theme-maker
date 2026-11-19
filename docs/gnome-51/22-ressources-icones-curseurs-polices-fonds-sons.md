@@ -322,3 +322,291 @@ Créez un thème sonore minimal et vérifiez qu'il n'altère pas les préférenc
 - [Fontconfig — guide utilisateur](https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html)
 - [Spécification des thèmes sonores](https://www.freedesktop.org/wiki/Specifications/sound-theme-spec/)
 - [Notes de version GNOME 51](https://release.gnome.org/51/)
+
+
+## 10. Comprendre la résolution et l'héritage des icônes
+
+Quand une application demande une icône, le thème recherche le nom demandé dans les répertoires déclarés, puis dans la chaîne d'héritage. Le résultat dépend du nom, du contexte, de la taille et du format disponibles.
+
+Si une icône manque :
+1. Relevez le nom exact demandé par l'application.
+2. Vérifiez l'orthographe et la casse du nom de fichier.
+3. Vérifiez que le répertoire est déclaré dans index.theme.
+4. Vérifiez le contexte et les tailles déclarées.
+5. Vérifiez la chaîne Inherits.
+6. Vérifiez que le thème parent est installé.
+7. Comparez avec le thème hicolor.
+8. Redémarrez l'application si elle conserve les icônes en cache.
+
+Ne créez pas un fichier de remplacement sous un nom supposé. Identifiez d'abord le nom d'icône réellement utilisé par l'application ou le composant.
+
+### Noms alternatifs et compatibilité
+
+Certains noms d'icônes ont des alias historiques ou plusieurs variantes. Préservez les noms Freedesktop et évitez de remplacer un nom standard par un nom propre au thème.
+
+Si vous fournissez plusieurs noms pour le même dessin, utilisez des liens ou copies maîtrisés et documentez leur rôle. Ne dupliquez pas des centaines de fichiers sans raison : l'héritage et les alias évitent les répétitions.
+
+## 11. Valider les icônes symboliques
+
+Une icône symbolique est conçue pour être affichée dans une couleur fournie par l'interface. Son dessin doit rester reconnaissable à petite taille.
+
+Contrôlez :
+- silhouette à 16 px ;
+- lisibilité à 24 px ;
+- alignement optique ;
+- épaisseur des traits ;
+- espace intérieur ;
+- zones transparentes ;
+- rendu sur fond clair ;
+- rendu sur fond sombre ;
+- recoloration par le composant ;
+- direction des symboles en RTL.
+
+N'utilisez pas une icône symbolique pour un logo ou une illustration dont les couleurs sont essentielles. Inversement, une icône multicolore détaillée peut devenir illisible lorsqu'elle est réduite dans une barre d'outils.
+
+Les fichiers SVG symboliques doivent utiliser des couleurs compatibles avec le mécanisme de recoloration prévu par l'environnement. Vérifiez le résultat dans l'application réelle : un SVG affiché directement comme image peut ne pas être recoloré de la même façon qu'une icône symbolique chargée par le thème.
+
+## 12. Contrôler les formats et les tailles d'icônes
+
+Un thème peut fournir des images raster, des SVG ou les deux. Le format adapté dépend du contexte, du moteur et de la taille.
+
+Préparez une série de tests à plusieurs tailles :
+- petites icônes de barre d'outils ;
+- icônes de liste ;
+- icônes d'application ;
+- icônes de dialogue ;
+- icônes de bureau ;
+- icônes de menu.
+
+Un SVG ne garantit pas automatiquement un bon rendu. Vérifiez les traits très fins, les filtres, les masques, les dégradés et les effets qui peuvent être interprétés différemment selon le moteur.
+
+Pour les ressources raster, fournissez des tailles adaptées plutôt que d'agrandir une petite image. Les images HiDPI doivent conserver une netteté suffisante à l'échelle prévue.
+
+## 13. Installer et diagnostiquer un thème d'icônes
+
+Installez le thème dans le dossier utilisateur :
+
+~~~bash
+mkdir -p ~/.local/share/icons
+cp -a MonTheme ~/.local/share/icons/
+gsettings get org.gnome.desktop.interface icon-theme
+gsettings set org.gnome.desktop.interface icon-theme 'MonTheme'
+~~~
+
+La clé GSettings peut ne pas être disponible ou modifiable dans toutes les sessions. Préférez les paramètres GNOME lorsque la configuration est gérée par la distribution ou l'environnement.
+
+Pour diagnostiquer :
+- vérifiez le chemin du thème ;
+- vérifiez index.theme ;
+- contrôlez les permissions de lecture ;
+- vérifiez la chaîne d'héritage ;
+- recherchez le nom exact de l'icône ;
+- testez dans une nouvelle application ;
+- comparez avec Adwaita.
+
+Ne supprimez pas les thèmes système pour forcer le repli. Un thème incomplet doit hériter proprement des ressources manquantes.
+
+## 14. Concevoir un thème Xcursor cohérent
+
+Un thème de curseurs doit couvrir les rôles courants et les situations d'interaction. Il ne suffit pas de fournir une flèche personnalisée.
+
+Prévoyez notamment :
+- pointeur normal ;
+- pointeur d'aide ;
+- curseur texte ;
+- main sur lien ;
+- attente ;
+- chargement ;
+- déplacement ;
+- précision ;
+- redimensionnement horizontal ;
+- redimensionnement vertical ;
+- redimensionnement diagonal ;
+- indisponible.
+
+Les noms exacts sont des identifiants attendus par les applications et les toolkits. Conservez les alias nécessaires pour les noms courants. Un thème incomplet peut afficher des curseurs différents selon l'application.
+
+### Contrôler les hotspots
+
+Le hotspot est le point actif du curseur. Il doit correspondre à l'endroit où l'utilisateur pense cliquer.
+
+Pour une flèche, le hotspot se trouve généralement près de la pointe. Pour une croix de précision, il se trouve généralement au centre. Pour une main, vérifiez la position du doigt indicateur.
+
+Testez chaque curseur sur une cible précise et observez si le clic correspond au point visuel attendu. Une image esthétique avec un hotspot incorrect est un défaut fonctionnel.
+
+### Animation des curseurs
+
+Un curseur animé doit avoir des images cohérentes, un hotspot stable et des durées adaptées. Vérifiez :
+- ordre des images ;
+- durée de chaque image ;
+- taille identique ;
+- absence de saut de position ;
+- lisibilité à petite taille ;
+- comportement dans les applications ;
+- repli vers un curseur statique si nécessaire.
+
+Une animation ne doit pas gêner la lecture ou détourner l'attention en permanence.
+
+## 15. Installer et diagnostiquer les curseurs
+
+Placez le thème dans le dossier utilisateur prévu pour les thèmes de curseurs, puis sélectionnez-le dans les paramètres ou par la configuration disponible.
+
+Vérifiez que le thème possède un index valide et que le dossier cursors contient les ressources référencées. Un nom de thème correct sans les fichiers attendus ne suffit pas.
+
+Si le curseur ne change pas :
+1. Vérifiez le nom du thème sélectionné.
+2. Vérifiez le chemin d'installation.
+3. Vérifiez le fichier index.theme.
+4. Vérifiez les noms de curseurs.
+5. Vérifiez les formats Xcursor.
+6. Testez dans une autre application.
+7. Fermez et relancez la session si nécessaire.
+
+Wayland et X11 peuvent exposer des chemins et comportements différents. Documentez le type de session et ne concluez pas qu'un thème est universellement compatible à partir d'un seul environnement.
+
+## 16. Gérer les polices sans casser le système
+
+Installez les polices utilisateur dans un répertoire personnel plutôt que dans les répertoires système.
+
+~~~bash
+mkdir -p ~/.local/share/fonts/MonTheme
+cp *.ttf ~/.local/share/fonts/MonTheme/
+fc-cache -f
+fc-list | grep -i 'Nom de la police'
+fc-match sans
+~~~
+
+Ces commandes actualisent le cache et aident à vérifier que Fontconfig connaît la police. Elles ne changent pas automatiquement la police utilisée par GNOME ou par chaque application.
+
+Sélectionnez ensuite la famille souhaitée dans les paramètres ou dans la configuration appropriée. Évitez de remplacer globalement les familles génériques sans avoir vérifié les symboles, les caractères non latins et les métriques.
+
+### Vérifier les variantes et les glyphes
+
+Pour chaque famille, contrôlez :
+- regular ;
+- medium ;
+- semibold ;
+- bold ;
+- italic ;
+- chiffres ;
+- ponctuation ;
+- accents ;
+- caractères non latins nécessaires ;
+- symboles et pictogrammes.
+
+Une police peut être installée correctement mais ne pas contenir les glyphes nécessaires. Fontconfig peut alors utiliser une police de repli pour certains caractères.
+
+Vérifiez les métriques : hauteur de ligne, largeur des caractères, alignement vertical et débordement. Une police plus large peut casser des boutons ou des menus même si elle est lisible.
+
+## 17. Comprendre le repli Fontconfig
+
+Fontconfig sélectionne les polices en fonction des familles demandées, des propriétés et des polices disponibles. Une application peut demander une famille qui n'est pas installée ; le système choisit alors une alternative.
+
+Commandes utiles :
+
+~~~bash
+fc-match sans
+fc-match serif
+fc-match monospace
+fc-match 'Nom de famille'
+fc-list : family style file
+~~~
+
+Si une application n'utilise pas la police attendue, vérifiez la famille réellement résolue avant de modifier le CSS. Le problème peut venir du nom de famille, du poids demandé, du cache ou de l'absence de glyphes.
+
+Ne forcez pas une police de substitution pour tous les caractères. Les scripts non latins et les symboles nécessitent parfois des polices de repli spécifiques.
+
+## 18. Fonds d'écran et écrans multiples
+
+Les fonds GNOME peuvent être utilisés sur le bureau et sur l'écran de verrouillage. Les mécanismes de sélection et les formats de configuration peuvent dépendre de la version et de la distribution.
+
+Préparez plusieurs images :
+- paysage large ;
+- portrait ;
+- image claire ;
+- image sombre ;
+- image à fort contraste ;
+- image avec détails proches des bords.
+
+Vérifiez le cadrage sur plusieurs résolutions et facteurs d'échelle. Une image peut être recadrée différemment selon le rapport d'aspect de l'écran.
+
+Avec plusieurs écrans, contrôlez le fond sur chaque écran et le comportement après déconnexion ou redémarrage. Ne supposez pas que le même fichier est toujours affiché partout.
+
+Une image de verrouillage doit rester suffisamment sobre pour que les éléments d'authentification soient lisibles. Ne placez pas de détails importants sous les champs ou indicateurs.
+
+## 19. Thèmes sonores et respect des préférences
+
+Les sons d'événement sont des ressources optionnelles. Leur présence dans un thème ne signifie pas qu'ils seront joués : l'application, le système sonore et les préférences de l'utilisateur déterminent leur usage.
+
+Testez les sons avec :
+- volume faible ;
+- volume normal ;
+- sons désactivés ;
+- événement répété ;
+- environnement silencieux ;
+- casque et haut-parleurs.
+
+Évitez les sons longs, agressifs ou trop fréquents. Les événements sonores ne doivent pas être le seul moyen de transmettre une information importante.
+
+Vérifiez la licence, le format, la durée et le niveau sonore. Normalisez les fichiers de manière cohérente sans écrêter le signal.
+
+## 20. Inventorier et vérifier les ressources
+
+Un thème distribué doit fournir un inventaire de ses ressources et de leurs licences. Conservez la provenance de chaque fichier et indiquez si une ressource a été modifiée.
+
+Exemple de structure d'inventaire :
+
+~~~text
+resources/
+├── icons/
+│   ├── applications/
+│   └── symbolic/
+├── cursors/
+├── fonts/
+├── backgrounds/
+└── sounds/
+~~~
+
+Pour chaque ressource, notez :
+- chemin dans l'archive ;
+- nom original ;
+- auteur ;
+- source ;
+- licence ;
+- modifications ;
+- format ;
+- dimensions ou durée ;
+- rôle dans le thème.
+
+Vérifiez les fichiers manquants, les chemins déclarés mais absents, les doublons involontaires et les ressources non utilisées. Une ressource inutilisée alourdit l'archive et complique la maintenance.
+
+## 21. Fiche de validation des ressources
+
+~~~text
+Nom et version du thème :
+Session Wayland ou X11 :
+Thème d'icônes sélectionné :
+Chaîne d'héritage :
+Icônes standard :
+Icônes symboliques :
+Tailles et formats :
+Thème Xcursor :
+Rôles de curseur couverts :
+Hotspots :
+Curseurs animés :
+Polices installées :
+Résultats fc-match :
+Glyphes et scripts :
+Métriques et alignements :
+Fonds de bureau :
+Écran de verrouillage :
+Configuration multi-écrans :
+Thème sonore :
+Préférences sonores respectées :
+Inventaire et licences :
+Ressources manquantes :
+Anomalies :
+Conclusion : validé / partiel / à corriger
+~~~
+
+La validation doit être réalisée sur une session réelle. Une ressource présente dans une archive n'est pas nécessairement sélectionnée, chargée ou utilisée par GNOME.
