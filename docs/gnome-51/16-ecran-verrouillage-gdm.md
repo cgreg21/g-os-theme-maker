@@ -8,7 +8,7 @@ Ce chapitre distingue trois interfaces qui se ressemblent mais ne fonctionnent p
 
 Cette distinction est indispensable pour comprendre pourquoi un thème Shell installé dans le dossier personnel ne modifie pas automatiquement l'écran de connexion.
 
-![Fond d'écran Adwaita GNOME 51, référence visuelle de contraste pour le verrouillage](https://release.gnome.org/51/adwaita-thumb.webp)
+![Illustration locale de l'écran de verrouillage dans le style Adwaita](images/ecran-verrouillage-adwaita.svg)
 
 ## 1. Comprendre les trois contextes
 
