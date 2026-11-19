@@ -41,7 +41,11 @@ Projects are JSON documents with a versioned schema. The GNOME Shell export crea
 
 ## Documentation
 
-Le catalogue français couvre les familles d’interface GNOME Shell 51, GTK 3.24, GTK 4 et Libadwaita, leurs états interactifs, ainsi que les icônes, curseurs, polices, fonds et limites de compatibilité. Formats disponibles : [Markdown](docs/guide-theme-gnome.md), [EPUB](docs/guide-theme-gnome.epub) et [PDF](docs/guide-theme-gnome.pdf). Les deux formats téléchargeables sont générés automatiquement et versionnés dans le dépôt à chaque modification du guide. Pour les construire localement : `bash scripts/build-docs.sh` (Pandoc et WeasyPrint requis).
+Manuel français de personnalisation GNOME 51, découpé en chapitres : Shell, GTK, Libadwaita, CSS, GSettings/dconf, ressources, extensions, Mutter, GDM, accessibilité et validation.
 
+- [Sommaire](docs/gnome-51/index.md)
+- [Guide](docs/guide-theme-gnome.md)
+- [EPUB](docs/guide-theme-gnome.epub)
+- [PDF](docs/guide-theme-gnome.pdf)
 
-Le glossaire CSS du guide détaille les propriétés, pseudo-classes, variables et limites de compatibilité entre GNOME Shell 51, GTK 3, GTK 4 et Libadwaita.
+Les sources sont dans `docs/gnome-51/`. PDF et EPUB sont générés automatiquement.
