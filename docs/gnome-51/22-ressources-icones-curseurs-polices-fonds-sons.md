@@ -145,7 +145,7 @@ xcursorgen peut créer un fichier Xcursor depuis des images et un fichier de con
 
 ~~~text
 # Exemple de ligne de configuration xcursorgen
-32 4 4 0 cursor-32.png
+32 4 4 cursor-32.png
 ~~~
 
 Cette ligne est un exemple de structure, pas une configuration universelle. Adaptez les dimensions et le hotspot à votre image. Consultez xcursorgen --help et la documentation installée.
@@ -263,6 +263,8 @@ Exemple de métadonnées :
 Name=MonSon
 Comment=Thème sonore personnel
 Inherits=freedesktop
+
+Directories=stereo
 
 [stereo]
 OutputProfile=stereo

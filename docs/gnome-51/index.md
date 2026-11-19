@@ -26,6 +26,7 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 18. [Personnaliser GTK 4 en détail](20-gtk4-theming-detaille.md)
 19. [Personnaliser Libadwaita en détail](21-libadwaita-theming-detaille.md)
 20. [Créer les ressources d'un thème](22-ressources-icones-curseurs-polices-fonds-sons.md)
+21. [Composants Shell spécialisés](23-composants-shell-specialises.md)
 
 ## Captures de l'interface GNOME standard
 
@@ -33,7 +34,7 @@ Les captures GNOME Shell proviennent de l'aide officielle GNOME. Les captures d'
 
 - [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
 - [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
-- [Anatomie d'une application GNOME](https://release.gnome.org/51/papers-signature-screenshot.webp)
+- [Application GNOME 51 : Papers](https://release.gnome.org/51/papers-signature-screenshot.webp)
 - [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
 - [Calendrier et notifications](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
 
