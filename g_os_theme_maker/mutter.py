@@ -19,6 +19,7 @@ class NestedShellController:
         self.command = list(command) if command is not None else None
         self.process: subprocess.Popen[bytes] | None = None
         self._runtime: tempfile.TemporaryDirectory[str] | None = None
+        self._stylesheet_path: Path | None = None
 
     @property
     def available(self) -> bool:
@@ -55,6 +56,7 @@ class NestedShellController:
             json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
         )
         (extension_dir / "extension.js").write_text(
+            "import Gio from 'gi://Gio';\n"
             "import St from 'gi://St';\n"
             "import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';\n"
             "export default class ThemePreviewExtension extends Extension {\n"
@@ -62,8 +64,19 @@ class NestedShellController:
             "    this._theme = St.ThemeContext.get_for_stage(global.stage).get_theme();\n"
             "    this._stylesheet = this.dir.get_child('gnome-shell.css');\n"
             "    this._theme.load_stylesheet(this._stylesheet);\n"
+            "    this._monitor = this.dir.monitor_directory(Gio.FileMonitorFlags.NONE, null);\n"
+            "    this._monitor.connect('changed', (_monitor, file, _other, event) => {\n"
+            "      if (file?.get_basename() === 'gnome-shell.css' &&\n"
+            "          [Gio.FileMonitorEvent.CHANGES_DONE_HINT, Gio.FileMonitorEvent.CREATED, Gio.FileMonitorEvent.MOVED_IN].includes(event))\n"
+            "        this._reloadStylesheet();\n"
+            "    });\n"
+            "  }\n"
+            "  _reloadStylesheet() {\n"
+            "    this._theme.unload_stylesheet(this._stylesheet);\n"
+            "    this._theme.load_stylesheet(this._stylesheet);\n"
             "  }\n"
             "  disable() {\n"
+            "    this._monitor?.cancel();\n"
             "    if (this._theme && this._stylesheet)\n"
             "      this._theme.unload_stylesheet(this._stylesheet);\n"
             "    this._theme = null;\n"
@@ -72,7 +85,8 @@ class NestedShellController:
             "}\n",
             encoding="utf-8",
         )
-        (extension_dir / "gnome-shell.css").write_text(theme_css or "", encoding="utf-8")
+        self._stylesheet_path = extension_dir / "gnome-shell.css"
+        self._stylesheet_path.write_text(theme_css or "", encoding="utf-8")
 
         env = {
             **os.environ,
@@ -91,6 +105,13 @@ class NestedShellController:
             self._runtime.cleanup()
             self._runtime = None
             raise
+
+    def update_theme(self, theme_css: str) -> None:
+        if not self.running or self._stylesheet_path is None:
+            return
+        temporary_path = self._stylesheet_path.with_suffix(".css.tmp")
+        temporary_path.write_text(theme_css, encoding="utf-8")
+        temporary_path.replace(self._stylesheet_path)
 
     def _shell_command(self) -> list[str]:
         if self.command is not None:
@@ -116,6 +137,7 @@ class NestedShellController:
                 self.process.kill()
                 self.process.wait(timeout=2)
         self.process = None
+        self._stylesheet_path = None
         if self._runtime is not None:
             self._runtime.cleanup()
             self._runtime = None
