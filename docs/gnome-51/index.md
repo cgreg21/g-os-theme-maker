@@ -1,50 +1,107 @@
 # Manuel de création et de personnalisation GNOME 51
 
-Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d’écran officielles GNOME légendées, des méthodes de diagnostic et un catalogue technique.
+Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création, la validation et la maintenance d'un thème GNOME. Il associe un parcours guidé, des ateliers, des références techniques, des exemples et des captures PNG locales.
 
-La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle combine un parcours guidé, des ateliers pratiques, des références de composants et des chapitres avancés pour comprendre les moteurs, construire les thèmes et maintenir leur compatibilité. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
+Les cibles sont distinguées explicitement : GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les applications Qt, Electron et Flatpak sont abordées pour expliquer les frontières de la thématisation. Les sélecteurs internes du Shell et les détails CSS des widgets peuvent changer : les sources de la version testée restent la référence.
 
-## Parcours débutant — à lire dans l'ordre
+## Comment lire ce manuel
+
+Le manuel est organisé par objectifs plutôt que par une seule longue liste de chapitres.
+
+- **Débuter** : comprendre les couches graphiques, installer un thème de test et apprendre les bases du CSS.
+- **Pratiquer** : modifier un composant réel, observer son arbre CSS et valider le résultat.
+- **Approfondir** : étudier les moteurs, les ressources, les extensions et les mécanismes système.
+- **Consulter** : utiliser les inventaires et le glossaire comme références.
+
+Les chapitres courts de synthèse introduisent un domaine. Lorsqu'un chapitre approfondi existe sur le même sujet, ce dernier contient les procédures détaillées et les exercices. Les chapitres de référence ne remplacent pas les ateliers.
+
+## 1. Parcours débutant
 
 1. [Bien démarrer](00-bien-demarrer.md)
-2. [Créer son premier thème complet](01-creer-premier-theme.md)
-3. [Comprendre et écrire du CSS pour GNOME](02-css-debutant.md)
-4. [Atelier pratique : GNOME Shell 51](03-atelier-gnome-shell.md)
-5. [Atelier pratique : GTK 3 et GTK 4](04-atelier-gtk.md)
-6. [Atelier pratique : Libadwaita](05-libadwaita.md)
-7. [Créer et modifier les ressources visuelles](06-icones-curseurs-polices-fonds.md)
-8. [Paramètres GNOME, installation et dépannage](07-parametres-installation-diagnostic.md)
-9. [Catalogue pratique des composants](08-catalogue-pratique-composants.md)
-10. [Personnaliser les applications GNOME](11-applications-gnome.md)
-11. [Personnaliser le panneau supérieur](13-panneau-superieur-shell.md)
-12. [Personnaliser la vue Activités](14-vue-activites-overview.md)
-13. [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
-14. [Écran de verrouillage, déverrouillage et GDM](16-ecran-verrouillage-gdm.md)
-15. [OSD, dialogues, Alt-Tab et capture d'écran](17-osd-dialogues-alt-tab-capture.md)
-16. [Clavier virtuel, saisie, IBus et accessibilité](18-clavier-ibus-accessibilite.md)
-17. [Personnaliser GTK 3 en détail](19-gtk3-theming-detaille.md)
-18. [Personnaliser GTK 4 en détail](20-gtk4-theming-detaille.md)
-19. [Personnaliser Libadwaita en détail](21-libadwaita-theming-detaille.md)
-20. [Créer les ressources d'un thème](22-ressources-icones-curseurs-polices-fonds-sons.md)
-21. [Composants Shell spécialisés](23-composants-shell-specialises.md)
-22. [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
-23. [Construire, installer, tester et publier un thème](25-creer-installer-publier-theme.md)
-24. [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
-25. [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
-26. [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
-27. [Développer une extension GNOME Shell 51](29-developper-extension-shell.md)
-28. [CSS applicatif et ressources GResource](30-css-applications-gresource.md)
-29. [Couleurs, profils d'écran et fidélité du rendu](31-couleurs-profils-ecrans-rendu.md)
-30. [Maîtriser les thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
-31. [Concevoir et diagnostiquer un thème de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
-32. [Maîtriser Fontconfig et la typographie](34-fontconfig-typographie-detail.md)
-33. [Thèmes GNOME et applications Flatpak](37-flatpak-themes-sandbox.md)
-34. [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
-35. [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
+2. [Architecture et périmètre de la personnalisation](01-architecture.md)
+3. [Créer son premier thème complet](01-creer-premier-theme.md)
+4. [Comprendre et écrire du CSS pour GNOME](02-css-debutant.md)
+5. [Inspecter et diagnostiquer le CSS](12-inspection-et-diagnostic-css.md)
+6. [Construire, installer et valider un thème](09-construction-validation.md)
 
-## Captures de l'interface GNOME standard
+Réalisez les exercices dans un dossier utilisateur de test. Ne remplacez pas les fichiers système et conservez toujours une méthode de retour arrière.
 
-Les images sont des captures d’écran PNG provenant du dépôt officiel [GNOME User Documentation](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures), branche `gnome-51`. Elles montrent le bureau GNOME standard et ses composants réels. Les fichiers sont copiés dans le dépôt pour rendre le manuel autonome et consultable hors ligne.
+## 2. GNOME Shell : ateliers et composants
+
+- [Atelier pratique : GNOME Shell 51](03-atelier-gnome-shell.md)
+- [Panneau supérieur et indicateurs](13-panneau-superieur-shell.md)
+- [Vue Activités, recherche et espaces de travail](14-vue-activites-overview.md)
+- [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
+- [Écran de verrouillage et GDM](16-ecran-verrouillage-gdm.md)
+- [OSD, dialogues, Alt-Tab et capture d'écran](17-osd-dialogues-alt-tab-capture.md)
+- [Clavier virtuel, IBus et accessibilité](18-clavier-ibus-accessibilite.md)
+- [Composants Shell spécialisés](23-composants-shell-specialises.md)
+- [Inventaire technique GNOME Shell 51](02-gnome-shell.md)
+
+Le Shell utilise St et Clutter, pas GTK. Pour un sélecteur, confirmez toujours le nœud et la classe dans GNOME Shell 51.0. Les noms internes ne sont pas une API stable.
+
+## 3. GTK, Libadwaita et applications
+
+- [Atelier pratique : GTK 3 et GTK 4](04-atelier-gtk.md)
+- [Atelier pratique : Libadwaita](05-libadwaita.md)
+- [Personnaliser les applications GNOME](11-applications-gnome.md)
+- [GTK 3 en détail](19-gtk3-theming-detaille.md)
+- [GTK 4 en détail](20-gtk4-theming-detaille.md)
+- [Libadwaita en détail](21-libadwaita-theming-detaille.md)
+- [CSS applicatif et ressources GResource](30-css-applications-gresource.md)
+- [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
+- [Référence des widgets GTK et composants Libadwaita](03-gtk-libadwaita.md)
+
+GTK 3, GTK 4 et Libadwaita ne sont pas interchangeables. Une application peut charger ses propres styles ou dessiner certains composants sans exposer de sélecteur utilisable par un thème global.
+
+## 4. Ressources visuelles et rendu
+
+- [Premiers pas avec les icônes, curseurs, polices et fonds](06-icones-curseurs-polices-fonds.md)
+- [Créer et organiser les ressources d'un thème](22-ressources-icones-curseurs-polices-fonds-sons.md)
+- [Thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
+- [Thèmes de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
+- [Fontconfig et typographie](34-fontconfig-typographie-detail.md)
+- [Couleurs, profils d'écran et fidélité du rendu](31-couleurs-profils-ecrans-rendu.md)
+- [Référence des ressources visuelles](06-ressources-visuelles.md)
+
+## 5. Configuration, extensions et session
+
+- [Paramètres GNOME, GSettings et dconf](05-parametres-gnome.md)
+- [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
+- [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
+- [Développer une extension GNOME Shell 51](29-developper-extension-shell.md)
+- [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
+- [Thèmes GNOME et applications Flatpak](37-flatpak-themes-sandbox.md)
+- [Accessibilité, mouvement, langue et densité](08-accessibilite.md)
+
+Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuvent ajouter leurs propres acteurs et feuilles de style. GDM et les décorations système sont des cibles distinctes du thème utilisateur.
+
+## 6. Construire et maintenir un thème
+
+- [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
+- [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
+- [Créer, installer et publier un thème](25-creer-installer-publier-theme.md)
+- [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
+
+Un thème doit être testé séparément sur chaque moteur qu'il annonce prendre en charge. Un CSS accepté par le parseur n'est pas une preuve que le sélecteur correspond ou que le rendu est correct.
+
+## 7. Références techniques
+
+- [Architecture et périmètre](01-architecture.md)
+- [Inventaire GNOME Shell 51](02-gnome-shell.md)
+- [GTK 3, GTK 4 et Libadwaita](03-gtk-libadwaita.md)
+- [Référence CSS et compatibilité](04-reference-css.md)
+- [GSettings et dconf](05-parametres-gnome.md)
+- [Ressources visuelles](06-ressources-visuelles.md)
+- [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
+- [Accessibilité et variantes](08-accessibilite.md)
+- [Construction, installation et validation](09-construction-validation.md)
+- [Sources officielles et inventaire](10-sources-et-inventaire.md)
+- [Glossaire technique](40-glossaire-technique.md)
+
+## 8. Captures de GNOME standard
+
+Les images suivantes sont des captures PNG locales copiées depuis le dépôt officiel [GNOME User Documentation, branche gnome-51](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures). Leur provenance et leur licence sont décrites dans [le dossier des images](images/README.md). Elles illustrent l'interface standard et ne garantissent pas la présence d'un sélecteur CSS particulier.
 
 - ![Barre supérieure GNOME](images/official/shell-top-bar.png)
 - ![Lanceur et vue Activités](images/official/shell-activities-dash.png)
@@ -58,54 +115,12 @@ Les images sont des captures d’écran PNG provenant du dépôt officiel [GNOME
 - ![Paramètres de gestion des couleurs](images/official/color-display.png)
 - ![Espace colorimétrique](images/official/color-space.png)
 
-Les captures ne remplacent pas l’inspection de la version installée : les dimensions, les libellés et les sélecteurs internes peuvent évoluer.
+## 9. Périmètre et limites
 
-## Compléments pédagogiques
+Le manuel couvre les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que les ressources visuelles, paramètres GNOME, extensions et principales frontières avec les autres moteurs.
 
-- [Personnaliser les applications GNOME](11-applications-gnome.md)
-- [Inspection et diagnostic CSS](12-inspection-et-diagnostic-css.md)
-- [Panneau supérieur](13-panneau-superieur-shell.md)
-- [Vue Activités](14-vue-activites-overview.md)
-- [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
-- [Composants Shell spécialisés](23-composants-shell-specialises.md)
-- [Mutter et décorations](24-mutter-fenetres-decorations-ecrans.md)
-- [Publication d'un thème complet](25-creer-installer-publier-theme.md)
-- [Moteurs CSS et cascades](26-comprendre-moteurs-css-gnome.md)
-- [Sources SCSS du thème Shell](27-construire-theme-shell-scss.md)
-- [Tests visuels et maintenance](28-tests-visuels-regression-maintenance.md)
-- [Développer une extension GNOME Shell](29-developper-extension-shell.md)
-- [CSS applicatif et GResource](30-css-applications-gresource.md)
-- [Couleurs et profils d'écran](31-couleurs-profils-ecrans-rendu.md)
-- [Thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
-- [Thèmes de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
-- [Fontconfig et typographie](34-fontconfig-typographie-detail.md)
-- [Thèmes et applications Flatpak](37-flatpak-themes-sandbox.md)
-- [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
-- [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
+Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce. Certains composants sont dessinés par l'application, contrôlés par le compositeur ou protégés dans un contexte système. Ces limites sont indiquées afin de ne pas présenter une prise en charge inexistante comme une fonctionnalité du thème.
 
-## Référence technique
+## 10. Formats exportés
 
-- [Architecture et périmètre](01-architecture.md)
-- [Inventaire GNOME Shell 51](02-gnome-shell.md)
-- [GTK 3, GTK 4 et Libadwaita](03-gtk-libadwaita.md)
-- [Référence CSS](04-reference-css.md)
-- [GSettings et dconf](05-parametres-gnome.md)
-- [Icônes, curseurs, polices, fonds et sons](06-ressources-visuelles.md)
-- [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
-- [Accessibilité, mouvement, langue et densité](08-accessibilite.md)
-- [Construction, installation et validation](09-construction-validation.md)
-- [Sources officielles et inventaire](10-sources-et-inventaire.md)
-
-## Comment utiliser ce manuel
-
-Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Pour un composant précis, consultez son tutoriel, observez la capture, puis vérifiez le sélecteur dans les sources correspondant à la version utilisée.
-
-Chaque exemple est un point de départ. Un sélecteur CSS peut être valide sans correspondre à un composant présent. Une application peut charger son propre style. Les extensions peuvent ajouter des widgets et le thème utilisateur ne contrôle pas tous les moteurs.
-
-## Couverture et limites
-
-Le manuel vise les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, les applications Flatpak et les frontières de personnalisation des applications Qt et Electron, ainsi que les ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
-
-## Formats exportés
-
-Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des captures PNG locales du dépôt. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des captures locales. Le script d'export vérifie la présence des sources déclarées. La CI vérifie également l'intégration des chapitres, les images locales et les règles de formatage.
