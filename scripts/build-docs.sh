@@ -56,6 +56,7 @@ SOURCE_FILES=(
   docs/gnome-51/41-versions-compatibilite.md
   docs/gnome-51/42-gtk-css-variables-requetes-media.md
   docs/gnome-51/43-inventaire-selecteurs-shell-51.md
+  docs/gnome-51/44-mutter-reglages-fenetres-diagnostic.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
