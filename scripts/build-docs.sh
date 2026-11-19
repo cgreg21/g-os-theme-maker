@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Le manuel exporté doit inclure le parcours débutant ET les références.
+# Le manuel exporté inclut le parcours débutant, les chapitres illustrés et les références.
 SOURCE_FILES=(
   docs/gnome-51/index.md
   docs/gnome-51/00-bien-demarrer.md
@@ -18,6 +18,7 @@ SOURCE_FILES=(
   docs/gnome-51/11-applications-gnome.md
   docs/gnome-51/12-inspection-et-diagnostic-css.md
   docs/gnome-51/13-panneau-superieur-shell.md
+  docs/gnome-51/14-vue-activites-overview.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md
@@ -37,11 +38,11 @@ for source in "${SOURCE_FILES[@]}"; do
   fi
 done
 
-pandoc "${SOURCE_FILES[@]}" --from=gfm --to=epub3 \
+pandoc "${SOURCE_FILES[@]}" --resource-path=docs/gnome-51 --from=gfm --to=epub3 \
   --metadata title="Manuel complet de personnalisation GNOME 51" \
   --metadata lang=fr --metadata author="G-OS Theme Maker" \
   --toc --toc-depth=3 --output=docs/guide-theme-gnome.epub
-pandoc "${SOURCE_FILES[@]}" --from=gfm --to=html5 --standalone \
+pandoc "${SOURCE_FILES[@]}" --resource-path=docs/gnome-51 --from=gfm --to=html5 --standalone \
   --metadata title="Manuel complet de personnalisation GNOME 51" \
   --metadata lang=fr --css=docs/guide.css --toc --toc-depth=3 \
   --pdf-engine=weasyprint --output=docs/guide-theme-gnome.pdf
