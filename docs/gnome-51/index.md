@@ -49,6 +49,8 @@ Les images sont des captures d’écran PNG provenant du dépôt officiel [GNOME
 - ![Vue des fichiers et icônes](images/official/nautilus-icons.png)
 - ![Sélecteur de méthode de saisie](images/official/input-methods-switcher.png)
 - ![Ordre des résultats de recherche](images/official/search-results-order.png)
+- ![Paramètres de gestion des couleurs](images/official/color-display.png)
+- ![Espace colorimétrique](images/official/color-space.png)
 
 Les captures ne remplacent pas l’inspection de la version installée : les dimensions, les libellés et les sélecteurs internes peuvent évoluer.
 
