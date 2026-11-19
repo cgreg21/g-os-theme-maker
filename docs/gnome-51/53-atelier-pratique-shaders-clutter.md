@@ -115,7 +115,7 @@ import Cogl from 'gi://Cogl';
 export default class ShaderLabExtension extends Extension {
     enable() {
         this._actor = new St.BoxLayout({
-            vertical: true,
+            orientation: Clutter.Orientation.VERTICAL,
             style_class: 'shader-lab-card',
         });
 

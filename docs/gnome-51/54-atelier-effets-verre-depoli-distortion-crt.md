@@ -69,12 +69,13 @@ import { Extension } from
 import * as Main from
     'resource:///org/gnome/shell/ui/main.js';
 import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
 
 export default class FrostedCardExtension extends Extension {
     enable() {
         this._card = new St.BoxLayout({
-            vertical: true,
+            orientation: Clutter.Orientation.VERTICAL,
             style_class: 'frosted-card',
         });
 
