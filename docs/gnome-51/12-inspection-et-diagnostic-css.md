@@ -150,8 +150,8 @@ Une règle n'est considérée comme vérifiée que lorsque le test est reproduct
 Avant d'ouvrir un inspecteur, décrivez précisément le défaut : écran, composant, état (repos, survol, focus, actif, désactivé ou erreur), propriété concernée et résultat attendu. Relevez les versions et la session :
 
 ```sh
-printf 'Session : %s\\n' "$XDG_SESSION_TYPE"
-printf 'Bureau : %s\\n' "$XDG_CURRENT_DESKTOP"
+printf 'Session : %s\n' "$XDG_SESSION_TYPE"
+printf 'Bureau : %s\n' "$XDG_CURRENT_DESKTOP"
 gnome-shell --version
 pkg-config --modversion gtk+-3.0 2>/dev/null || true
 pkg-config --modversion gtk4 2>/dev/null || true
