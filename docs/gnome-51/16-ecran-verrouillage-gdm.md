@@ -75,12 +75,16 @@ Les tailles sont des exemples et non les valeurs natives. Testez plusieurs réso
   spacing: 8px;
 }
 
-.unlock-dialog-notifications-container .notification,
-.unlock-dialog-notifications-container .screen-shield-notification-source {
-  border-radius: 12px;
-  padding: 12px;
-  background-color: rgba(30, 30, 30, 0.82);
+.unlock-dialog-notifications-container {
+  spacing: 8px;
+}
+
+.unlock-dialog-notification-label {
   color: #ffffff;
+}
+
+.unlock-dialog-notification-count-text {
+  opacity: 0.8;
 }
 ~~~
 

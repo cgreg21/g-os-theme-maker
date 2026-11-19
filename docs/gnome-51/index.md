@@ -2,7 +2,7 @@
 
 Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d'écran légendées, des méthodes de diagnostic et un catalogue technique.
 
-La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
+La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 23 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
 ## Parcours débutant — à lire dans l'ordre
 

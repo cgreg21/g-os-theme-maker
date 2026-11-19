@@ -205,12 +205,9 @@ Exemple :
 }
 
 .switcher-list .item-box {
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
   padding: 8px;
-}
-
-.switcher-list .item-box:outlined {
-  border: 2px solid #78aeed;
 }
 
 .switcher-arrow {
