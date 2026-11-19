@@ -21,8 +21,8 @@ class ThemeModelTests(unittest.TestCase):
 
     def test_css_export_contains_tokens(self):
         css = export_css(ThemeTokens(accent="#123456", radius=16))
-        self.assertIn("--gom-accent: #123456", css)
-        self.assertIn("--gom-radius: 16px", css)
+        self.assertIn("@define-color gom_accent #123456;", css)
+        self.assertIn("border-radius: 16px", css)
 
 
 if __name__ == "__main__":
