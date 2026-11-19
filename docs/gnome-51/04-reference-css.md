@@ -83,16 +83,16 @@ Les variables Libadwaita telles que `--window-bg-color`, `--view-bg-color`, `--h
 
 Les propriétés de navigateur telles que `display: flex`, `display: grid`, `position: absolute`, `z-index`, `transform`, `filter`, `backdrop-filter`, `animation` et les règles de mise en page Web ne constituent pas une base portable pour GNOME Shell, GTK 3 ou GTK 4. Ne pas les proposer dans l’inspecteur comme propriétés communes.
 
-### Règle de compatibilité pour l’éditeur
+### Règle de compatibilité entre moteurs
 
-Chaque propriété affichée dans G-OS Theme Maker doit porter une cible explicite :
+Chaque propriété utilisée dans un thème doit être associée à une cible explicite :
 
 - **Commun** : disponible et vérifiée sur toutes les cibles sélectionnées.
 - **Spécifique** : disponible seulement sur un moteur ou une version donnée.
 - **Partiel** : prise en charge limitée ou dépendante du widget.
 - **Non pris en charge** : ne pas exporter cette propriété pour la cible.
 
-L’exporteur doit générer des feuilles adaptées à chaque moteur au lieu de copier aveuglément le même CSS dans tous les répertoires. Les tableaux ci-dessus sont un guide de conception ; valider les propriétés et sélecteurs avec les versions réelles de GTK et GNOME Shell ciblées avant de les déclarer comme testés.
+L’exporteur doit générer des feuilles adaptées à chaque moteur au lieu de copier aveuglément le même CSS dans tous les répertoires. Les listes ci-dessus sont un guide de conception ; valider les propriétés et sélecteurs avec les versions réelles de GTK et GNOME Shell ciblées avant de les déclarer comme testés.
 
 Références techniques :
 - [GNOME Shell 51 — sources SCSS du thème](https://github.com/GNOME/gnome-shell/tree/51.0/data/theme/gnome-shell-sass)
@@ -117,9 +117,9 @@ Les longueurs peuvent utiliser px, pt, em, ex, rem et unités physiques selon mo
 
 Ne pas proposer comme universels : `display:flex`, `display:grid`, `position:absolute`, `z-index`, `transform`, `filter`, `backdrop-filter`, `@media`, sélecteurs d'attributs et animations Web. Une propriété reconnue par un moteur ne garantit pas son effet sur chaque nœud.
 
-## Métadonnées de compatibilité pour l’éditeur
+## Informations de compatibilité à consigner
 
-Chaque propriété de l'inspecteur doit déclarer moteur, version minimale, type, widgets admissibles, états admissibles, exporteur, statut de validation et référence. Statuts : commun vérifié, spécifique, partiel, non pris en charge. Un parseur sans erreur ne prouve pas le rendu.
+Pour chaque propriété retenue, consignez le moteur, la version minimale, le type de valeur, les widgets concernés, les états concernés, le statut de validation et la référence technique. Statuts : commun vérifié, spécifique, partiel, non pris en charge. Un parseur sans erreur ne prouve pas le rendu.
 
 
 ## Référence de version GNOME 51
