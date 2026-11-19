@@ -52,6 +52,12 @@ def main() -> int:
         if missing:
             errors.append("Chapitres absents des exports PDF/EPUB : " + ", ".join(missing))
 
+    image_directory = DOCS / "images"
+    if image_directory.exists():
+        vector_images = sorted(image_directory.rglob("*.svg"))
+        if vector_images:
+            errors.append("Illustrations SVG interdites : " + ", ".join(str(p.relative_to(ROOT)) for p in vector_images))
+
     for document in markdown_files:
         for number, line in markdown_lines(document):
             if TABLE_SEPARATOR_RE.match(line):

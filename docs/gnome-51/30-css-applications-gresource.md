@@ -209,7 +209,8 @@ Comparez une application native et sa version Flatpak. Relevez le runtime, les v
 ## 11. Références
 
 - [GResource — GLib](https://docs.gtk.org/gio/struct.Resource.html)
-- [glib-compile-resources](https://docs.gtk.org/gio/struct.Resource.html)
+- [Construire une application GTK 4 et compiler ses ressources](https://docs.gtk.org/gtk4/getting_started.html)
+- [Construire une application GTK 3 et compiler ses ressources](https://docs.gtk.org/gtk3/getting_started.html)
 - [GTK 3 — CSS providers](https://docs.gtk.org/gtk3/class.CssProvider.html)
 - [GTK 4 — CSS providers](https://docs.gtk.org/gtk4/class.CssProvider.html)
 - [GTK Inspector](https://developer.gnome.org/documentation/tools/inspector.html)

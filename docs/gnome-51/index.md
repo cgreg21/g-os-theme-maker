@@ -84,12 +84,6 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Construction, installation et validation](09-construction-validation.md)
 - [Sources officielles et inventaire](10-sources-et-inventaire.md)
 
-## Compléments avancés
-
-- [Développer une extension Shell](29-developper-extension-shell.md)
-- [CSS applicatif, providers et GResource](30-css-applications-gresource.md)
-- [Gestion des couleurs et écrans](31-couleurs-profils-ecrans-rendu.md)
-
 ## Comment utiliser ce manuel
 
 Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Pour un composant précis, consultez son tutoriel, observez la capture, puis vérifiez le sélecteur dans les sources correspondant à la version utilisée.
