@@ -32,6 +32,9 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle com
 24. [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
 25. [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
 26. [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
+27. [Développer une extension GNOME Shell 51](29-developper-extension-shell.md)
+28. [CSS applicatif et ressources GResource](30-css-applications-gresource.md)
+29. [Couleurs, profils d'écran et fidélité du rendu](31-couleurs-profils-ecrans-rendu.md)
 
 ## Captures de l'interface GNOME standard
 
@@ -62,6 +65,9 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Moteurs CSS et cascades](26-comprendre-moteurs-css-gnome.md)
 - [Sources SCSS du thème Shell](27-construire-theme-shell-scss.md)
 - [Tests visuels et maintenance](28-tests-visuels-regression-maintenance.md)
+- [Développer une extension GNOME Shell](29-developper-extension-shell.md)
+- [CSS applicatif et GResource](30-css-applications-gresource.md)
+- [Couleurs et profils d'écran](31-couleurs-profils-ecrans-rendu.md)
 
 ## Référence technique
 
@@ -75,6 +81,12 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Accessibilité, mouvement, langue et densité](08-accessibilite.md)
 - [Construction, installation et validation](09-construction-validation.md)
 - [Sources officielles et inventaire](10-sources-et-inventaire.md)
+
+## Compléments avancés
+
+- [Développer une extension Shell](29-developper-extension-shell.md)
+- [CSS applicatif, providers et GResource](30-css-applications-gresource.md)
+- [Gestion des couleurs et écrans](31-couleurs-profils-ecrans-rendu.md)
 
 ## Comment utiliser ce manuel
 
