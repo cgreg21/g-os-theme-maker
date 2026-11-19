@@ -85,6 +85,7 @@ Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuve
 - [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
 - [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
 - [Moteur CSS St : cascade, sélecteurs et diagnostic](46-moteur-css-st-cascade-diagnostic.md)
+- [Référence des propriétés CSS St 51](47-reference-proprietes-css-st-51.md)
 - [Créer, installer et publier un thème](25-creer-installer-publier-theme.md)
 - [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
 
