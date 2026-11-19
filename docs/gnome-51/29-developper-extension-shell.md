@@ -226,7 +226,7 @@ Depuis le dossier parent de l'extension, installez le contenu dans le répertoir
 
 ```sh
 install -d "$HOME/.local/share/gnome-shell/extensions/mon-extension@example.org"
-cp -a org.example.mon-extension/. \
+cp -a mon-extension@example.org/. \
   "$HOME/.local/share/gnome-shell/extensions/mon-extension@example.org/"
 ```
 
