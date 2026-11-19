@@ -44,7 +44,7 @@ class ThemeDocument:
 
     def to_json(self) -> str:
         self.tokens.validate()
-        return json.dumps({"schema_version": self.schema_version, "tokens": asdict(self.tokens)}, indent=2, ensure_ascii=False) + "\\n"
+        return json.dumps({"schema_version": self.schema_version, "tokens": asdict(self.tokens)}, indent=2, ensure_ascii=False) + "\n"
 
     @classmethod
     def from_json(cls, source: str) -> "ThemeDocument":
