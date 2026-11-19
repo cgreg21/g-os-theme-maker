@@ -12,7 +12,7 @@ A visual GTK4 application for creating GNOME Shell themes without writing CSS by
 
 ## Current status
 
-The project is being bootstrapped. The first milestone provides the GTK application shell, editable design tokens, a component preview, project serialization and CSS export. The nested preview starts GNOME Shell through a private D-Bus session, a temporary XDG data/config directory and a temporary dconf profile. A small temporary extension loads the generated stylesheet without changing the active desktop settings. Stop and relaunch the nested session to apply later CSS edits. The local GTK preview remains separate from the real Shell preview.
+The project is being bootstrapped. The first milestone provides the GTK application shell, editable design tokens, a component preview, project serialization and CSS export. The nested preview starts GNOME Shell through a private D-Bus session, a temporary XDG data/config directory and a temporary dconf profile. A small temporary extension loads the generated stylesheet without changing the active desktop settings. The temporary extension watches its stylesheet directory and reloads the theme automatically whenever the editor changes CSS. The local GTK preview remains separate from the real Shell preview.
 
 ## Requirements
 
