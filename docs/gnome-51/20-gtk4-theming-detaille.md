@@ -552,3 +552,34 @@ Conclusion : validé / partiel / à corriger
 ~~~
 
 Une validation sérieuse doit couvrir plusieurs applications GTK 4. Le même moteur CSS peut être utilisé par des interfaces très différentes ; ne généralisez pas un sélecteur observé dans une seule application.
+
+## 27. Ouvrir l'inspecteur GTK 4 et isoler une règle
+
+Lorsque l'application accepte l'inspecteur GTK, vous pouvez le demander au démarrage sans modifier sa configuration permanente :
+
+~~~bash
+GTK_DEBUG=interactive nom_application
+~~~
+
+Remplacez `nom_application` par la commande réelle de l'application. Cette variable ne fonctionne que si le programme utilise GTK et si l'inspecteur est disponible dans sa construction. Si l'application est déjà ouverte, fermez-la puis relancez-la depuis le terminal pour que la variable soit prise en compte.
+
+Pour une application Flatpak, transmettez la variable à l'environnement du bac à sable :
+
+~~~bash
+flatpak run --env=GTK_DEBUG=interactive identifiant.application
+~~~
+
+Remplacez l'identifiant par celui du paquet installé. Si l'inspecteur n'apparaît pas, vérifiez d'abord que le programme utilise GTK 4, que la variable a été transmise au bon processus et que la version distribuée autorise l'inspection. L'absence de l'inspecteur ne prouve pas que le CSS utilisateur est ignoré.
+
+Dans l'inspecteur :
+
+1. Sélectionnez le widget dans l'arbre des objets.
+2. Repérez le nœud CSS correspondant, ses classes et ses ancêtres.
+3. Examinez les propriétés calculées et les règles concurrentes.
+4. Activez l'état pertinent lorsque l'inspecteur le permet ; sinon, reproduisez-le dans l'interface.
+5. Modifiez une seule déclaration temporaire et observez précisément le résultat.
+6. Retirez l'essai, puis reportez uniquement la règle validée dans le thème.
+
+Pour un diagnostic fiable, consignez la version GTK, le nom du processus, le nœud CSS, les classes, l'état observé et le fournisseur qui gagne la cascade. Une capture de l'inspecteur seule ne remplace pas ces informations : le même widget peut changer d'arbre ou de classes selon l'application et son état.
+
+N'activez pas l'inspecteur ou les variables de débogage globalement pour toute la session. Lancez uniquement l'application concernée avec l'environnement de diagnostic, puis fermez-la à la fin du test.
