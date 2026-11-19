@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   build:
-    if: ${{ !startsWith(github.event.head_commit.message, 'docs: publish generated formats') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc
-          python -m pip install weasyprint
+          sudo apt-get install -y weasyprint
       - name: Generate EPUB and PDF
         run: bash scripts/build-docs.sh
       - name: Commit generated documents
