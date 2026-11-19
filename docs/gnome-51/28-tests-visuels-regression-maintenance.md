@@ -85,13 +85,18 @@ Pour les composants sensibles, ajoutez les cas de verrouillage, authentification
 Une intégration continue peut vérifier :
 - présence des fichiers attendus ;
 - validité de la structure du thème ;
-- compilation SCSS ;
+- compilation SCSS avec la version de compilateur prévue ;
 - absence de chemins de ressources cassés ;
-- absence de fichiers vides ;
+- présence et validité des fichiers `index.theme` annoncés ;
+- absence de fichiers vides ou temporaires ;
 - cohérence des métadonnées et licences ;
 - génération du PDF et de l’EPUB.
 
-La CI ne prouve pas que le rendu est correct. Les tests graphiques dépendent d’un environnement GNOME contrôlé et doivent être identifiés comme tests d’intégration visuelle, pas comme simples tests unitaires.
+Séparez les vérifications rapides des validations qui nécessitent une session graphique. Une vérification de structure ne doit pas être présentée comme un test de rendu. Si la compilation dépend d'un outil externe, épinglez ou documentez sa version : un résultat peut changer lorsque l'environnement de CI évolue.
+
+Pour les tests visuels automatisés, construisez une image d'environnement contrôlée et consignez le serveur d'affichage, le pilote, la résolution, les polices et les versions des composants. Le test doit échouer si la capture attendue n'a pas été produite : une capture absente ne doit jamais être interprétée comme une comparaison réussie.
+
+La CI ne prouve pas que le rendu est correct. Les tests graphiques dépendent d'un environnement GNOME contrôlé et doivent être identifiés comme tests d'intégration visuelle, pas comme simples tests unitaires. Gardez une validation humaine pour les différences de contraste, de hiérarchie, d'alignement et de lisibilité.
 
 ## 8. Gérer la compatibilité par version
 
@@ -106,17 +111,22 @@ Chaque publication doit indiquer clairement :
 
 Quand un thème cible plusieurs versions, conservez des branches ou des feuilles distinctes si les sélecteurs divergent. Ne multipliez pas les sélecteurs spéculatifs pour faire croire à une compatibilité universelle.
 
-## 9. Procédure de livraison
+## 9. Procédure de livraison et critères d'acceptation
 
 Avant publication :
-1. nettoyer les règles mortes ;
+1. nettoyer les règles mortes et commenter les exceptions nécessaires ;
 2. vérifier les licences de chaque ressource ;
-3. reconstruire les formats distribués ;
-4. installer le paquet dans un compte vierge ;
-5. tester l’installation, la mise à jour et la désinstallation ;
-6. vérifier le retour arrière ;
-7. archiver les captures de référence ;
-8. rédiger les limites et le journal des changements.
+3. reconstruire les formats distribués depuis les sources versionnées ;
+4. installer le paquet dans un compte vierge ou un instantané propre ;
+5. tester l'installation, la mise à jour et la désinstallation ;
+6. vérifier le retour arrière depuis les préférences réellement utilisées ;
+7. archiver les captures de référence et les différences significatives ;
+8. rédiger les limites, dépendances et le journal des changements ;
+9. vérifier l'archive finale et son contenu avant de la publier.
+
+La livraison doit répondre à des critères vérifiables : le paquet s'installe sans privilèges inattendus, chaque famille annoncée possède les fichiers nécessaires, les préférences peuvent être restaurées, les composants non pris en charge sont explicitement signalés et les captures correspondent à la version livrée.
+
+Testez aussi une mise à jour depuis la version précédente. Une installation neuve ne révèle pas les anciens fichiers devenus obsolètes. Vérifiez que la procédure de mise à jour ne laisse pas de sélecteurs périmés, d'icônes supprimées ou de ressources non référencées.
 
 Un thème prêt à publier doit être reproductible, réversible et documenté. La qualité visuelle ne compense pas une procédure de désinstallation dangereuse.
 
