@@ -17,6 +17,7 @@ SOURCE_FILES=(
   docs/gnome-51/08-catalogue-pratique-composants.md
   docs/gnome-51/11-applications-gnome.md
   docs/gnome-51/12-inspection-et-diagnostic-css.md
+  docs/gnome-51/13-panneau-superieur-shell.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md

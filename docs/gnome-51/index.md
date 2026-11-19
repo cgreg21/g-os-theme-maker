@@ -16,10 +16,12 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 8. [Paramètres GNOME, installation et dépannage](07-parametres-installation-diagnostic.md)
 9. [Catalogue pratique de toutes les familles de composants](08-catalogue-pratique-composants.md)
 10. [Personnaliser les applications GNOME](11-applications-gnome.md)
+11. [Personnaliser le panneau supérieur de GNOME Shell 51](13-panneau-superieur-shell.md)
 
 ## Compléments pédagogiques
 
 - [Personnaliser les applications GNOME](11-applications-gnome.md)
+- [Personnaliser le panneau supérieur de GNOME Shell 51](13-panneau-superieur-shell.md)
 - [Méthode d'inspection et de diagnostic CSS](12-inspection-et-diagnostic-css.md)
 
 ## Référence technique
