@@ -16,6 +16,17 @@ class ThemeModelTests(unittest.TestCase):
         restored = ThemeDocument.from_json(ThemeDocument(tokens=tokens).to_json())
         self.assertEqual(restored.tokens.component_overrides["card"], {"radius": 20, "spacing": 12})
 
+    def test_component_color_overrides_export(self):
+        tokens = ThemeTokens(component_overrides={"primary_button": {"background": "#123456", "hover": "#abcdef"}})
+        css = export_css(tokens)
+        self.assertIn(".gom-primary-button", css)
+        self.assertIn("background-color: #123456;", css)
+        self.assertIn("background-color: #abcdef;", css)
+
+    def test_rejects_invalid_component_color(self):
+        with self.assertRaises(ValueError):
+            ThemeTokens(component_overrides={"card": {"background": "invalid"}}).validate()
+
     def test_rejects_invalid_component_override(self):
         with self.assertRaises(ValueError):
             ThemeTokens(component_overrides={"card": {"radius": 99}}).validate()
