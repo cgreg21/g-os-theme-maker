@@ -19,7 +19,7 @@ class ThemeTokens:
     radius: int = 12
     spacing: int = 8
     font_size: int = 14
-    component_overrides: dict[str, dict[str, int]] = field(default_factory=dict)
+    component_overrides: dict[str, dict[str, int | str]] = field(default_factory=dict)
 
     def validate(self) -> None:
         for key in ("background", "surface", "foreground", "muted", "accent", "border"):
@@ -38,12 +38,23 @@ class ThemeTokens:
             raise ValueError("La taille de police doit être comprise entre 8 et 32.")
         allowed = {"topbar", "card", "primary_button", "secondary_button"}
         limits = {"radius": (0, 48), "spacing": (0, 32)}
+        color_keys = {"background", "foreground", "border", "hover", "active"}
         for component, values in self.component_overrides.items():
             if component not in allowed or not isinstance(values, dict):
                 raise ValueError(f"Composant invalide : {component}")
             for key, value in values.items():
-                if key not in limits or not isinstance(value, int) or not limits[key][0] <= value <= limits[key][1]:
-                    raise ValueError(f"Valeur invalide pour {component}.{key}")
+                if key in limits:
+                    if not isinstance(value, int) or not limits[key][0] <= value <= limits[key][1]:
+                        raise ValueError(f"Valeur invalide pour {component}.{key}")
+                elif key in color_keys:
+                    if not isinstance(value, str) or len(value) not in (4, 7) or not value.startswith("#"):
+                        raise ValueError(f"Couleur invalide pour {component}.{key}")
+                    try:
+                        int(value[1:], 16)
+                    except ValueError as exc:
+                        raise ValueError(f"Couleur invalide pour {component}.{key}") from exc
+                else:
+                    raise ValueError(f"Propriété invalide pour {component}.{key}")
 
 
 @dataclass
