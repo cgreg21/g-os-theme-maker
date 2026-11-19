@@ -260,7 +260,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         .preview-card {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; border: 1px solid {self.tokens.border}; border-radius: {card.get("radius", self.tokens.radius)}px; padding: {card.get("spacing", self.tokens.spacing) * 2}px; font-size: {self.tokens.font_size}px; }}
         .preview-card button {{ border-radius: {secondary.get("radius", self.tokens.radius)}px; padding: {secondary.get("spacing", self.tokens.spacing)}px; }}\n        .preview-card button.suggested-action {{ border-radius: {primary.get("radius", self.tokens.radius)}px; padding: {primary.get("spacing", self.tokens.spacing)}px; }}
         .preview-card button.suggested-action {{ background: {self.tokens.accent}; color: white; }}
-        '''
+        """
         css += f"""
         .preview-selectable {{ transition: outline-color 120ms ease; }}
         .preview-selected {{ outline: 2px solid {self.tokens.accent}; outline-offset: 3px; }}
