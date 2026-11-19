@@ -29,16 +29,33 @@ jobs:
         run: |
           sudo apt-get update -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
           sudo apt-get install -y --no-install-recommends pandoc weasyprint
-      - name: Generate EPUB and PDF
-        run: bash scripts/build-docs.sh
-      - name: Commit generated documents
+      - name: Generate and publish current documentation
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/guide-theme-gnome.epub docs/guide-theme-gnome.pdf
-          if git diff --cached --quiet; then
-            echo "Documentation already up to date."
-            exit 0
-          fi
-          git commit -m "docs: publish generated formats"
-          git push
+
+          for attempt in 1 2 3 4 5; do
+            echo "Publication attempt $attempt/5"
+            git fetch origin main
+            git reset --hard origin/main
+
+            bash scripts/build-docs.sh
+            git add docs/guide-theme-gnome.epub docs/guide-theme-gnome.pdf
+
+            if git diff --cached --quiet; then
+              echo "Documentation already up to date."
+              exit 0
+            fi
+
+            git commit -m "docs: publish generated formats"
+            if git push origin HEAD:main; then
+              echo "Generated documentation published."
+              exit 0
+            fi
+
+            echo "The main branch changed during publication; retrying from its latest commit."
+          done
+
+          echo "Could not publish generated documentation after 5 attempts."
+          exit 1
