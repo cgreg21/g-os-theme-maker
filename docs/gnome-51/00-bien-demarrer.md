@@ -92,3 +92,64 @@ Résultat attendu : les boutons qui correspondent au sélecteur prennent un fond
 ## Une règle d'or
 
 Avant d'éditer un élément, répondez à quatre questions : quel programme le dessine ? quel moteur utilise-t-il ? quel sélecteur ou quelle ressource le représente ? comment vérifier le résultat dans le moteur réel ? Les chapitres suivants vous apprennent à répondre à ces questions.
+
+
+## Distinguer le dossier de travail du thème installé
+
+Le dossier créé dans l'exercice précédent est un espace où vous écrivez vos fichiers. GNOME ne le surveille pas automatiquement et sa présence ne signifie pas que le thème est actif.
+
+Il faut distinguer trois étapes :
+
+1. **Écrire** : modifier les fichiers dans votre dossier de travail.
+2. **Installer** : copier une version contrôlée dans le répertoire utilisateur adapté au type de ressource.
+3. **Activer et tester** : sélectionner la ressource avec le mécanisme pris en charge par le moteur, puis ouvrir un composant qui l'utilise.
+
+Ces étapes ne sont pas identiques pour GTK 3, GTK 4, Libadwaita, GNOME Shell, les icônes et les curseurs. Certains moteurs ne proposent pas de sélection globale de thème utilisateur. Ne supposez donc pas qu'un seul réglage active toutes les parties du thème. Suivez le chapitre [installation, paramètres et dépannage](07-parametres-installation-diagnostic.md) avant de copier ou d'activer votre thème.
+
+Conservez le dossier de travail intact. Il doit rester votre source modifiable ; le dossier installé est une copie de test que vous pouvez remplacer ou supprimer.
+
+## Vérifier le moteur avant de chercher une solution
+
+Quand un changement n'apparaît pas, répondez dans cet ordre :
+
+1. **Quel élément est concerné ?** Par exemple, un bouton dans une application ou l'indicateur réseau du panneau.
+2. **Quel programme le dessine ?** Une application ou GNOME Shell ?
+3. **Quel moteur utilise-t-il ?** GTK 3, GTK 4, Libadwaita ou St ?
+4. **Quel fichier est chargé ?** Le fichier GTK d'une application n'est pas la feuille du Shell.
+5. **Le composant correspond-il au sélecteur ?** Un sélecteur peut être syntaxiquement valide sans désigner un élément existant.
+
+Pour les applications GTK, le chapitre [inspection et diagnostic CSS](12-inspection-et-diagnostic-css.md) explique comment ouvrir GTK Inspector. Pour GNOME Shell, il présente Looking Glass et les précautions d'une session de test.
+
+## Exercice de diagnostic guidé
+
+Reprenez le bouton de l'exercice précédent et imaginez que son fond ne change pas.
+
+- Si le bouton appartient à une application GTK 3, vérifiez le fichier `gtk-3.0/gtk.css` et le thème GTK effectivement sélectionné.
+- Si l'application utilise GTK 4, le fichier GTK 3 ne peut pas agir sur elle.
+- Si le bouton est dans le panneau GNOME, il appartient au Shell : une règle GTK ne le modifiera pas.
+- Si le bon fichier est chargé mais que rien ne change, inspectez le nœud CSS et ses classes au lieu d'ajouter immédiatement `!important`.
+- Si le changement fonctionne dans une fenêtre mais pas dans un dialogue, vérifiez si le dialogue utilise un composant ou un fournisseur CSS différent.
+
+Le but de cet exercice n'est pas de deviner le bon sélecteur. Il est d'apprendre à éliminer les causes possibles une par une et à prouver où se situe le problème.
+
+## Sauvegarder et revenir en arrière
+
+Avant une modification importante, créez une copie du fichier :
+
+```sh
+cp gtk-3.0/gtk.css gtk-3.0/gtk.css.bak
+```
+
+Après un essai raté, restaurez-la :
+
+```sh
+cp gtk-3.0/gtk.css.bak gtk-3.0/gtk.css
+```
+
+Adaptez le chemin au fichier réellement modifié. Cette sauvegarde concerne uniquement votre fichier de travail ; elle ne restaure pas une préférence GNOME, une extension ou un fichier système. Pour désinstaller un thème déjà installé, utilisez la procédure du chapitre d'installation et ne supprimez que le dossier que vous avez créé.
+
+Ne lancez pas de commande de suppression avec `sudo` pour corriger un problème de thème utilisateur. Si vous ne savez plus quelle ressource a été modifiée, arrêtez les changements et identifiez d'abord le fichier et son emplacement.
+
+## Suite conseillée
+
+Après ce chapitre, suivez le parcours débutant du [sommaire](index.md) dans l'ordre. Ne passez aux références avancées qu'après avoir réalisé le premier thème, inspecté au moins un composant et vérifié le mécanisme d'installation correspondant à votre moteur.
