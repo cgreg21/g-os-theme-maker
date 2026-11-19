@@ -108,7 +108,7 @@ flatpak run --command=sh org.gnome.TextEditor
 À l'intérieur du shell, examinez les chemins et les outils disponibles :
 
 ```sh
-printf '%s\\n' "$XDG_DATA_DIRS"
+printf '%s\n' "$XDG_DATA_DIRS"
 command -v fc-list
 command -v gtk4-demo
 ```
