@@ -1,5 +1,9 @@
 # Clavier virtuel, saisie, IBus et accessibilité du Shell
 
+![Sélecteur de méthode de saisie GNOME 51](images/official/input-methods-switcher.png)
+
+Cette capture officielle montre le changement de méthode de saisie. Elle ne représente pas tous les panneaux de clavier virtuel ni toutes les interfaces IBus.
+
 Ce chapitre couvre les éléments du Shell liés à la saisie et à l'accessibilité : clavier à l'écran, suggestions, panneaux de caractères, méthodes de saisie et aides visuelles. Ces interfaces ne sont pas toujours visibles. Leur présence dépend de la langue, du matériel, des méthodes de saisie configurées et des options d'accessibilité activées.
 
 Les sélecteurs sont ceux de l'inventaire GNOME Shell 51.0. Ils peuvent changer : vérifiez la version installée avant de les réutiliser.
