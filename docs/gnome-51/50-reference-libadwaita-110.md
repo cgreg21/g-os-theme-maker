@@ -365,16 +365,22 @@ Ils représentent les indicateurs de défilement lorsque du contenu dépasse les
 
 ### Classes historiques dépréciées
 
-La documentation Libadwaita 1.10 identifie plusieurs classes historiques comme dépréciées, notamment :
+La documentation Libadwaita 1.10 identifie plusieurs classes historiques comme dépréciées et conservées pour compatibilité :
 
-- `.content` ;
-- `.sidebar` ;
-- `.app-notification` ;
-- `.large-title` ;
+- `.content` : remplacez-la par `.boxed-list` sur une liste encadrée ;
+- `.sidebar` : utilisez `.navigation-sidebar` sur la liste et un séparateur pour la bordure ;
+- `.app-notification` : utilisez le composant `AdwToastOverlay` pour les notifications intégrées ;
+- `.large-title` : utilisez `.title-1` ;
 - `.opaque` ;
 - `.dim-label`.
 
-Ne les utilisez pas pour concevoir un nouveau thème. Si une application ancienne les utilise, vérifiez leur comportement dans sa version précise avant de les remplacer.
+Ne les utilisez pas dans un nouveau code. Pour une application ancienne, vérifiez les composants qui portent ces classes avant de les remplacer : certaines migrations demandent de changer le widget ou la structure, pas seulement le nom de classe.
+
+### Barre d'en-tête plate : dépréciation ciblée
+
+La classe `.flat` n'est pas globalement dépréciée. Elle reste documentée pour les boutons et les groupes de bascules. En revanche, son utilisation sur `AdwHeaderBar` ou `GtkHeaderBar` pour obtenir une barre plate est dépréciée depuis Libadwaita 1.4.
+
+Pour une nouvelle interface, utilisez `AdwToolbarView` et ses barres d'outils. Ne retirez donc pas automatiquement `.flat` des boutons existants : vérifiez le type de composant auquel la classe est appliquée.
 
 ## 7. Apparence claire et sombre
 
