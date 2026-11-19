@@ -49,8 +49,8 @@ SOURCE_FILES=(
   docs/gnome-51/08-accessibilite.md
   docs/gnome-51/09-construction-validation.md
   docs/gnome-51/10-sources-et-inventaire.md
-  docs/gnome-51/35-editeur-visuel-tokens-projets.md
-  docs/gnome-51/36-apercu-shell-imbrique-mutter.md
+  docs/gnome-51/37-flatpak-themes-sandbox.md
+  docs/gnome-51/38-applications-qt-electron.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
