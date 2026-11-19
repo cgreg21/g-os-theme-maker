@@ -72,6 +72,7 @@ GTK 3, GTK 4 et Libadwaita ne sont pas interchangeables. Une application peut ch
 - [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
 - [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
 - [Mutter 51 : réglages, fenêtres et diagnostic avancé](44-mutter-reglages-fenetres-diagnostic.md)
+- [Décorations CSD et SSD : Wayland, X11 et Xwayland](45-decorations-csd-ssd-wayland-x11.md)
 - [Développer une extension GNOME Shell 51](29-developper-extension-shell.md)
 - [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
 - [Thèmes GNOME et applications Flatpak](37-flatpak-themes-sandbox.md)
