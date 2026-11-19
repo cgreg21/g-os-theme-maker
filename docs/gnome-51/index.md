@@ -86,7 +86,7 @@ GTK 3, GTK 4 et Libadwaita ne sont pas interchangeables. Une application peut ch
 - [Thèmes GNOME et applications Flatpak](37-flatpak-themes-sandbox.md)
 - [Accessibilité, mouvement, langue et densité](08-accessibilite.md)
 
-Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuvent ajouter leurs propres acteurs et feuilles de style. GDM et les décorations système sont des cibles distinctes du thème utilisateur.
+Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuvent ajouter leurs propres acteurs et feuilles de style. GDM et les décorations système sont des cibles distinctes du thème utilisateur.\n\nPour les extensions, suivez un ordre progressif : le chapitre 07 présente leur rôle, leur cycle de vie et leur diagnostic ; le chapitre 29 détaille le développement d'une extension complète ; le chapitre 39 traite spécifiquement de la thématisation des extensions existantes. Ces trois chapitres sont complémentaires et ne décrivent pas trois mécanismes concurrents.
 
 ## 6. Construire et maintenir un thème
 
