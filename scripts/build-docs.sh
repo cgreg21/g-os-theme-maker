@@ -52,6 +52,7 @@ SOURCE_FILES=(
   docs/gnome-51/37-flatpak-themes-sandbox.md
   docs/gnome-51/38-applications-qt-electron.md
   docs/gnome-51/39-thematisation-extensions-shell.md
+  docs/gnome-51/40-glossaire-technique.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
