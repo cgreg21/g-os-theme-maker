@@ -1,19 +1,44 @@
-# Manuel de personnalisation GNOME 51
+# Manuel de création et de personnalisation GNOME 51
 
-Référence principale : GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita.
+Ce manuel est conçu pour accompagner un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples de fichiers, des exercices, des méthodes de diagnostic et un catalogue technique des composants.
 
-## Chapitres
-1. [Architecture et périmètre](01-architecture.md)
-2. [GNOME Shell 51](02-gnome-shell.md)
-3. [GTK 3, GTK 4 et Libadwaita](03-gtk-libadwaita.md)
-4. [Référence CSS](04-reference-css.md)
-5. [GSettings et dconf](05-parametres-gnome.md)
-6. [Icônes, curseurs, polices, fonds et sons](06-ressources-visuelles.md)
-7. [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
-8. [Accessibilité, mouvement, RTL et HiDPI](08-accessibilite.md)
-9. [Construction, installation et validation](09-construction-validation.md)
-10. [Sources officielles et inventaire](10-sources-et-inventaire.md)
+La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version réellement installée.
 
-**Légende :** thème = CSS/ressource ; préférence = GSettings/dconf ; extension = code ; système = configuration administrateur/distribution ; hors périmètre = aucun mécanisme utilisateur garanti.
+## Parcours débutant — à lire dans l'ordre
 
-Le périmètre couvre les familles de composants GNOME 51 et les mécanismes publics de personnalisation. Il ne peut pas garantir le contrôle des widgets privés, applications Qt/Electron/Web, extensions tierces ou écrans système protégés. Les chapitres sont les sources de référence ; PDF et EPUB sont générés depuis l'ensemble.
+1. [Bien démarrer : comprendre GNOME avant de le personnaliser](00-bien-demarrer.md)
+2. [Créer son premier thème complet](01-creer-premier-theme.md)
+3. [Comprendre et écrire du CSS pour GNOME](02-css-debutant.md)
+4. [Atelier pratique : personnaliser GNOME Shell 51](03-atelier-gnome-shell.md)
+5. [Atelier pratique : GTK 3 et GTK 4](04-atelier-gtk.md)
+6. [Atelier pratique : Libadwaita](05-libadwaita.md)
+7. [Créer et modifier les ressources visuelles](06-icones-curseurs-polices-fonds.md)
+8. [Paramètres GNOME, installation et dépannage](07-parametres-installation-diagnostic.md)
+9. [Catalogue pratique de toutes les familles de composants](08-catalogue-pratique-composants.md)
+
+## Référence technique
+
+- [Architecture et périmètre](01-architecture.md)
+- [Inventaire GNOME Shell 51](02-gnome-shell.md)
+- [GTK 3, GTK 4 et Libadwaita](03-gtk-libadwaita.md)
+- [Référence CSS](04-reference-css.md)
+- [GSettings et dconf](05-parametres-gnome.md)
+- [Icônes, curseurs, polices, fonds et sons](06-ressources-visuelles.md)
+- [Extensions, Mutter, GDM et session](07-extensions-mutter-gdm.md)
+- [Accessibilité, mouvement, langue et densité](08-accessibilite.md)
+- [Construction, installation et validation](09-construction-validation.md)
+- [Sources officielles et inventaire](10-sources-et-inventaire.md)
+
+## Comment utiliser ce manuel
+
+Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Lorsque vous souhaitez personnaliser un composant précis, utilisez le catalogue pour retrouver sa famille, puis consultez le tutoriel du moteur correspondant.
+
+Chaque exemple est un point de départ et doit être vérifié avec la version ciblée. Un sélecteur CSS peut être valide sans correspondre à un composant présent. Une application peut charger son propre style. Les extensions peuvent ajouter des widgets et le thème utilisateur ne contrôle pas tous les moteurs.
+
+## Ce que signifie « tous les éléments »
+
+Le manuel vise la couverture de toutes les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que des ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
+
+## Formats exportés
+
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown. Après chaque modification de la documentation, reconstruisez les deux formats et vérifiez qu'ils contiennent bien le parcours débutant et les exemples.
