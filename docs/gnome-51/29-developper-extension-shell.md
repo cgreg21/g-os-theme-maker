@@ -21,7 +21,7 @@ Vérifiez la version et les outils :
 
 ```sh
 gnome-shell --version
-gnome-extensions --version
+gnome-extensions version
 gnome-extensions --help
 ```
 
@@ -304,6 +304,8 @@ Fournissez un UUID stable, une description précise, une licence, les versions t
 ## 12. Références
 
 - [Guide officiel des extensions GNOME](https://gjs.guide/extensions/)
+- [Guide de migration GNOME Shell 51](https://gjs.guide/extensions/upgrading/gnome-shell-51.html)
+- [Consignes de revue des extensions GNOME](https://gjs.guide/extensions/review-guidelines/review-guidelines.html)
 - [Extensions GNOME — administration](https://help.gnome.org/system-admin-guide/extensions.html)
 - [Sources GNOME Shell 51](https://github.com/GNOME/gnome-shell/tree/51.0)
 - [Référence GJS](https://gjs-docs.gnome.org/)

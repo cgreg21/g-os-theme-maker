@@ -146,6 +146,11 @@ def main() -> int:
                 errors.append(
                     f"{document.relative_to(ROOT)}: Clutter.get_default_backend() a été supprimé dans GNOME Shell 51"
                 )
+            if "gnome-extensions --version" in block:
+                errors.append(
+                    f"{document.relative_to(ROOT)}: utiliser « gnome-extensions version »"
+                )
+
 
         try:
             visible_lines = list(markdown_lines(document))
