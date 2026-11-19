@@ -1,6 +1,6 @@
 # 9. Construction, installation et validation
 
-## 9. Éléments qui ne sont pas contrôlés par le thème utilisateur
+## Périmètre réel d’un thème utilisateur
 
 - L’écran GDM dépend du thème système de GDM et de sa configuration ; un thème utilisateur ne le remplace pas automatiquement.
 - Les décorations de fenêtres dépendent du compositeur, de Mutter et des décorations côté client.
@@ -62,7 +62,7 @@ Un répertoire vide n’est pas une ressource de thème terminée. L’export do
 
 Tester chaque zone en clair, sombre et contraste élevé. Valider la syntaxe CSS avec les outils GTK correspondants et utiliser une session GNOME Shell imbriquée pour les tests Shell. Un aperçu statique ne remplace pas un test réel.
 
-## 12. Organisation de l’éditeur G-OS Theme Maker
+## Organiser un éditeur de thèmes
 
 Le catalogue doit guider l’organisation de l’application :
 
@@ -107,14 +107,7 @@ Les commandes dépendent de la distribution.
 
 ## 9.4 Matrice de test
 
-- **Zone** : Shell panneau/menus ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
-- **Zone** : Activités/dash/recherche ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
-- **Zone** : Réglages/notifications/OSD ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
-- **Zone** : Dialogues/verrouillage ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
-- **Zone** : GTK3/GTK4/Adw ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : ✓ ; **HiDPI** : ✓ ; **RTL** : ✓
-- **Zone** : Icônes/curseurs/polices/fonds ; **Clair** : ✓ ; **Sombre** : ✓ ; **Contraste** : ✓ ; **Clavier** : — ; **HiDPI** : ✓ ; **RTL** : ✓
-
-Ajouter hover, pressed, selected, disabled, loading, empty, error, warning, backdrop et drag/drop.
+La matrice détaillée figure dans la section « Matrice de tests obligatoire » ci-dessus. Ne maintenez pas deux listes de tests différentes : utilisez une seule matrice comme référence.
 
 ## 9.5 Retour arrière
 

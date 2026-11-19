@@ -2,7 +2,7 @@
 
 Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d’écran officielles GNOME légendées, des méthodes de diagnostic et un catalogue technique.
 
-La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 25 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
+La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle combine un parcours guidé, des ateliers pratiques, des références de composants et des chapitres avancés pour comprendre les moteurs, construire les thèmes et maintenir leur compatibilité. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
 ## Parcours débutant — à lire dans l'ordre
 
@@ -29,6 +29,9 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle reg
 21. [Composants Shell spécialisés](23-composants-shell-specialises.md)
 22. [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
 23. [Construire, installer, tester et publier un thème](25-creer-installer-publier-theme.md)
+24. [Comprendre les moteurs CSS et leurs cascades](26-comprendre-moteurs-css-gnome.md)
+25. [Construire un thème Shell depuis les sources SCSS](27-construire-theme-shell-scss.md)
+26. [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
 
 ## Captures de l'interface GNOME standard
 
@@ -56,6 +59,9 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Composants Shell spécialisés](23-composants-shell-specialises.md)
 - [Mutter et décorations](24-mutter-fenetres-decorations-ecrans.md)
 - [Publication d'un thème complet](25-creer-installer-publier-theme.md)
+- [Moteurs CSS et cascades](26-comprendre-moteurs-css-gnome.md)
+- [Sources SCSS du thème Shell](27-construire-theme-shell-scss.md)
+- [Tests visuels et maintenance](28-tests-visuels-regression-maintenance.md)
 
 ## Référence technique
 

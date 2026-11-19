@@ -30,6 +30,9 @@ SOURCE_FILES=(
   docs/gnome-51/23-composants-shell-specialises.md
   docs/gnome-51/24-mutter-fenetres-decorations-ecrans.md
   docs/gnome-51/25-creer-installer-publier-theme.md
+  docs/gnome-51/26-comprendre-moteurs-css-gnome.md
+  docs/gnome-51/27-construire-theme-shell-scss.md
+  docs/gnome-51/28-tests-visuels-regression-maintenance.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md

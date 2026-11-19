@@ -1,6 +1,6 @@
 # 8. Accessibilité, mouvement, langue et densité
 
-## 6. États communs à chaque composant
+## États transversaux à tester
 
 Un catalogue complet ne s’arrête pas à l’apparence normale. Pour chaque composant interactif, prévoir et tester :
 
@@ -21,7 +21,7 @@ Un catalogue complet ne s’arrête pas à l’apparence normale. Pour chaque co
 
 Prévoir aussi les directions LTR/RTL, les échelles HiDPI, les tailles de texte, la navigation clavier et les préférences de réduction des animations.
 
-## 7. Variantes d’apparence
+## Variantes visuelles
 
 Les variantes ne doivent pas être un simple filtre inversant les couleurs.
 
