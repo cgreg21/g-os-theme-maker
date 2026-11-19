@@ -2,9 +2,9 @@
 
 Ce chapitre couvre les interfaces ouvertes depuis les indicateurs du panneau : menus contextuels, réglages rapides, menu date/heure et bannières de notification. Les sélecteurs ont été recoupés dans les sources GNOME Shell **51.0**. Ils sont des détails d'implémentation : ils peuvent changer dans une version ultérieure.
 
-![Capture GNOME des réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
+![Illustration locale des réglages rapides GNOME dans le style Adwaita](images/reglages-rapides-adwaita.svg)
 
-![Capture GNOME du calendrier et des notifications](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
+![Illustration locale du calendrier et des notifications dans le style Adwaita](images/calendrier-notifications-adwaita.svg)
 
 ## Sources amont à conserver sous la main
 
