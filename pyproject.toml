@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "g-os-theme-maker"
+version = "0.1.0"
+description = "Visual GTK4 editor for GNOME Shell themes"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+g-os-theme-maker = "g_os_theme_maker.app:main"
+
+[tool.setuptools.packages.find]
+include = ["g_os_theme_maker*"]
