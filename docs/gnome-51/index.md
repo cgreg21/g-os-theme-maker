@@ -88,6 +88,7 @@ Les paramètres GSettings ne sont pas des propriétés CSS. Les extensions peuve
 - [Référence des propriétés CSS St 51](47-reference-proprietes-css-st-51.md)
 - [Référence CSS GTK 4.23 et comparaison avec St](48-reference-css-gtk-423-comparaison-st.md)
 - [Référence CSS GTK 3.24](49-reference-css-gtk3-324.md)
+- [Référence Libadwaita 1.10 : variables et classes de style](50-reference-libadwaita-110.md)
 - [Créer, installer et publier un thème](25-creer-installer-publier-theme.md)
 - [Tests visuels, régressions et maintenance](28-tests-visuels-regression-maintenance.md)
 
