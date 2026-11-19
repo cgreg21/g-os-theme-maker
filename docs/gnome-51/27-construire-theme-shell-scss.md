@@ -16,19 +16,50 @@ Dans GNOME Shell 51, les sources du thème sont organisées sous data/theme :
 
 Le fichier CSS utilisé à l’exécution est le résultat compilé. Modifier le SCSS d’une copie du dépôt GNOME ne modifie pas le thème installé sur une session existante.
 
-## 2. Suivre un composant depuis son sélecteur
+## 2. Obtenir les sources exactes de GNOME Shell 51
+
+Pour comprendre un sélecteur, partez de la version amont qui correspond à la session testée. Un checkout limité à la branche 51.0 permet de chercher sans mélanger les versions :
+
+```bash
+git clone --depth 1 --branch 51.0 \
+  https://github.com/GNOME/gnome-shell.git gnome-shell-51
+cd gnome-shell-51
+```
+
+Vérifiez le commit récupéré :
+
+```bash
+git describe --tags --always
+git rev-parse HEAD
+```
+
+Conservez ce commit dans vos notes de compatibilité. Une distribution peut appliquer des correctifs en plus de la version amont ; lorsque le résultat diffère, comparez aussi les sources du paquet de la distribution.
+
+## 3. Suivre un composant depuis son sélecteur
 
 Prenons les réglages rapides. La recherche commence par le nom de la classe :
 
-    grep -Rni --include='*.scss' '.quick-toggle' data/theme/gnome-shell-sass/widgets
+```bash
+grep -Rni --include='*.scss' '.quick-toggle' \
+  data/theme/gnome-shell-sass/widgets
+```
 
-Ouvrez ensuite le fichier trouvé et remontez les imports depuis _widgets.scss. Cherchez les couleurs et fonctions utilisées, puis vérifiez les variantes clair, sombre et contraste élevé.
+Ouvrez ensuite le fichier trouvé et remontez les imports depuis `_widgets.scss`. Cherchez les couleurs, mixins et fonctions utilisées, puis vérifiez les variantes clair, sombre et contraste élevé.
 
-La même méthode fonctionne pour .popup-menu-item, .notification-banner, #panel ou .switcher-popup.
+La même méthode fonctionne pour `.popup-menu-item`, `.notification-banner`, `#panel` ou `.switcher-popup`.
 
-Ne copiez pas un sélecteur d’une ancienne version sans comparaison : le nom, la structure du widget et les états peuvent avoir changé.
+Pour retrouver toutes les occurrences, y compris dans le code qui construit l'acteur :
 
-## 3. Comprendre le rôle des variantes
+```bash
+grep -Rni --include='*.js' --include='*.ui' \
+  --include='*.scss' 'quick-toggle' .
+```
+
+Le SCSS décrit l'apparence ; le code JavaScript ou les fichiers UI peuvent expliquer quand le nœud est créé, quelles classes lui sont ajoutées et dans quels états il apparaît. Vérifiez ces deux côtés avant de conclure qu'un sélecteur est utilisable.
+
+Ne copiez pas un sélecteur d'une ancienne version sans comparaison : le nom, la structure du widget et les états peuvent avoir changé.
+
+## 4. Comprendre le rôle des variantes
 
 Les fichiers d’entrée définissent notamment $variant et $contrast, puis importent les couleurs, fonctions communes et widgets. Les conditions SCSS sont résolues pendant la compilation.
 
@@ -40,28 +71,34 @@ Conséquences :
 
 Évitez de construire un thème qui ne fonctionne que dans une variante.
 
-## 4. Compiler les sources officielles
+## 5. Compiler les sources officielles
 
 La construction amont GNOME Shell 51 déclare les feuilles SCSS dans data/theme/meson.build. Le projet utilise sassc pour générer les CSS lorsque les fichiers compilés ne sont pas déjà présents.
 
-Dans un checkout complet de GNOME Shell, après installation des dépendances de compilation :
+Dans un checkout complet de GNOME Shell, après installation des dépendances de compilation indiquées par le projet :
 
-    meson setup _build
-    meson compile -C _build
+```bash
+meson setup _build
+meson compile -C _build
+```
 
-Pour une expérimentation isolée sur une feuille, depuis le dossier data/theme du checkout :
+Cette construction concerne le projet GNOME Shell complet et peut nécessiter de nombreuses dépendances de développement. Consultez le `meson.build` et les instructions de construction de la branche 51.0 avant de lancer la configuration. Si Meson indique une dépendance absente, installez le paquet de développement correspondant à votre distribution ; ne désactivez pas au hasard les fonctionnalités pour faire aboutir la compilation.
 
-    sassc -a gnome-shell-dark.scss /tmp/gnome-shell-dark.css
+Pour une expérimentation isolée, utilisez le compilateur et les options réellement déclarés par le projet. Vérifiez la commande exacte dans `data/theme/meson.build` et la version de Sass attendue. Une compilation manuelle peut omettre des options ou des dépendances que Meson applique automatiquement.
 
-Cette commande compile une feuille source ; elle ne l’installe pas et ne remplace pas le thème de la session. Les options et dépendances exactes doivent être vérifiées dans le meson.build de la branche utilisée.
+La sortie compilée est un artefact de test. Elle ne doit pas être copiée dans les répertoires système ni considérée comme installée dans la session. Cette compilation ne remplace pas les tests visuels du Shell.
 
-## 5. Créer un thème utilisateur sans modifier GNOME
+## 6. Créer un thème utilisateur sans modifier GNOME
 
-Pour une personnalisation personnelle, ne modifiez pas les sources du système. Créez un thème distinct :
+Pour une personnalisation personnelle, ne modifiez pas les sources du système. Créez un thème distinct dans un emplacement utilisateur reconnu :
 
-    ~/.local/share/themes/MonTheme/
-    └── gnome-shell/
-        └── gnome-shell.css
+```text
+~/.local/share/themes/MonTheme/
+└── gnome-shell/
+    └── gnome-shell.css
+```
+
+Le nom `MonTheme` est le nom du thème à sélectionner. Le sous-répertoire `gnome-shell` et le fichier `gnome-shell.css` doivent respecter exactement cette orthographe. Un fichier nommé `gtk.css` ou un dossier `gnome-shell-theme` ne sera pas chargé à leur place.
 
 Exemple minimal :
 
@@ -77,7 +114,7 @@ Exemple minimal :
 
 L’utilisation d’un thème Shell utilisateur nécessite l’extension User Themes et dépend des possibilités de la session/distribution. Installez et activez cette extension depuis une source de confiance, puis sélectionnez le thème avec un outil compatible. Si cette extension n’est pas disponible ou autorisée, n’essayez pas de contourner les protections du système.
 
-## 6. Tester sans rendre la session inutilisable
+## 7. Tester sans rendre la session inutilisable
 
 - Conservez un compte ou une session de secours.
 - Commencez par une seule règle.
@@ -86,15 +123,19 @@ L’utilisation d’un thème Shell utilisateur nécessite l’extension User Th
 - Sur Wayland, ne comptez pas sur le raccourci de redémarrage Shell propre aux sessions X11.
 - En cas d’écran inutilisable, désactivez le thème utilisateur depuis une session de secours ou supprimez uniquement le répertoire de test.
 
-## 7. Mettre à jour un thème après une version GNOME
+## 8. Mettre à jour un thème après une version GNOME
 
 Pour chaque nouvelle version :
-1. comparez les fichiers SCSS amont ;
-2. recherchez les sélecteurs utilisés par votre thème ;
-3. vérifiez les états et les composants déplacés ;
-4. testez clair, sombre et contraste élevé ;
-5. testez le verrouillage, les dialogues et les indicateurs de confidentialité ;
-6. documentez les composants retirés ou non testés.
+1. récupérez les sources exactes et notez le commit ;
+2. comparez les fichiers SCSS amont ;
+3. recherchez les sélecteurs utilisés par votre thème dans SCSS et dans le code des acteurs ;
+4. vérifiez les classes ajoutées et retirées à l'exécution ;
+5. vérifiez les propriétés St et les états interactifs ;
+6. testez clair, sombre et contraste élevé ;
+7. testez le verrouillage, les dialogues et les indicateurs de confidentialité ;
+8. documentez les composants retirés, modifiés ou non testés.
+
+Pour un thème qui contient peu de règles, une recherche manuelle ciblée est souvent plus fiable qu'une migration automatique. Pour un thème volumineux, établissez une liste de sélecteurs utilisés et vérifiez chacun dans les sources de la nouvelle version. Supprimez les règles qui ne correspondent plus à un acteur réel au lieu de conserver des correctifs spéculatifs.
 
 Un thème Shell est une personnalisation d’implémentation, pas une API stable. Le fait qu’un sélecteur ait existé en GNOME 50 ne prouve pas qu’il existe encore en GNOME 51.
 
