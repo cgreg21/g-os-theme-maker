@@ -1,28 +1,37 @@
 # Manuel de création et de personnalisation GNOME 51
 
-Ce manuel est conçu pour accompagner un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples de fichiers, des exercices, des méthodes de diagnostic et un catalogue technique des composants.
+Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des schémas annotés, des méthodes de diagnostic et un catalogue technique.
 
-La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version réellement installée.
+La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
 ## Parcours débutant — à lire dans l'ordre
 
-1. [Bien démarrer : comprendre GNOME avant de le personnaliser](00-bien-demarrer.md)
+1. [Bien démarrer](00-bien-demarrer.md)
 2. [Créer son premier thème complet](01-creer-premier-theme.md)
 3. [Comprendre et écrire du CSS pour GNOME](02-css-debutant.md)
-4. [Atelier pratique : personnaliser GNOME Shell 51](03-atelier-gnome-shell.md)
+4. [Atelier pratique : GNOME Shell 51](03-atelier-gnome-shell.md)
 5. [Atelier pratique : GTK 3 et GTK 4](04-atelier-gtk.md)
 6. [Atelier pratique : Libadwaita](05-libadwaita.md)
 7. [Créer et modifier les ressources visuelles](06-icones-curseurs-polices-fonds.md)
 8. [Paramètres GNOME, installation et dépannage](07-parametres-installation-diagnostic.md)
-9. [Catalogue pratique de toutes les familles de composants](08-catalogue-pratique-composants.md)
+9. [Catalogue pratique des composants](08-catalogue-pratique-composants.md)
 10. [Personnaliser les applications GNOME](11-applications-gnome.md)
-11. [Personnaliser le panneau supérieur de GNOME Shell 51](13-panneau-superieur-shell.md)
+11. [Personnaliser le panneau supérieur](13-panneau-superieur-shell.md)
+12. [Personnaliser la vue Activités](14-vue-activites-overview.md)
+
+## Guides illustrés
+
+- [Anatomie du panneau supérieur](images/panneau-superieur.svg)
+- [Anatomie de la vue Activités](images/vue-activites.svg)
+
+Les schémas sont des illustrations pédagogiques de l'interface et non des captures d'écran exactes. Les sélecteurs et structures décrits dans les chapitres sont, eux, contrôlés dans les sources GNOME Shell 51.0.
 
 ## Compléments pédagogiques
 
 - [Personnaliser les applications GNOME](11-applications-gnome.md)
-- [Personnaliser le panneau supérieur de GNOME Shell 51](13-panneau-superieur-shell.md)
-- [Méthode d'inspection et de diagnostic CSS](12-inspection-et-diagnostic-css.md)
+- [Inspection et diagnostic CSS](12-inspection-et-diagnostic-css.md)
+- [Panneau supérieur](13-panneau-superieur-shell.md)
+- [Vue Activités](14-vue-activites-overview.md)
 
 ## Référence technique
 
@@ -39,14 +48,14 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 
 ## Comment utiliser ce manuel
 
-Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Lorsque vous souhaitez personnaliser un composant précis, utilisez le catalogue pour retrouver sa famille, puis consultez le tutoriel du moteur correspondant.
+Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Pour un composant précis, consultez son tutoriel, observez le schéma, puis vérifiez le sélecteur dans les sources correspondant à la version utilisée.
 
-Chaque exemple est un point de départ et doit être vérifié avec la version ciblée. Un sélecteur CSS peut être valide sans correspondre à un composant présent. Une application peut charger son propre style. Les extensions peuvent ajouter des widgets et le thème utilisateur ne contrôle pas tous les moteurs.
+Chaque exemple est un point de départ. Un sélecteur CSS peut être valide sans correspondre à un composant présent. Une application peut charger son propre style. Les extensions peuvent ajouter des widgets et le thème utilisateur ne contrôle pas tous les moteurs.
 
-## Ce que signifie « tous les éléments »
+## Couverture et limites
 
-Le manuel vise la couverture de toutes les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que des ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
+Le manuel vise les familles de composants natifs documentées pour GNOME Shell 51, GTK 3, GTK 4 et Libadwaita, ainsi que les ressources visuelles et paramètres GNOME. Il ne peut pas garantir la modification de chaque widget personnalisé de chaque application tierce, ni des écrans système protégés. Ces limites sont identifiées plutôt que masquées.
 
 ## Formats exportés
 
-Le PDF et l'EPUB sont générés à partir des chapitres Markdown. Après chaque modification de la documentation, reconstruisez les deux formats et vérifiez qu'ils contiennent bien le parcours débutant et les exemples.
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des illustrations SVG. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
