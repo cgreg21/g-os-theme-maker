@@ -329,8 +329,22 @@ if [ "$ref_size" != "$candidate_size" ]; then
   exit 2
 fi
 
-magick compare "$reference" "$candidate" "$output"
-printf 'Différence enregistrée dans %s\n' "$output"
+if magick compare "$reference" "$candidate" "$output"; then
+  compare_status=0
+else
+  compare_status=$?
+  if [ "$compare_status" -ne 1 ]; then
+    printf 'Échec de la comparaison ImageMagick (code %s).\n' \
+      "$compare_status" >&2
+    exit "$compare_status"
+  fi
+fi
+
+if [ "$compare_status" -eq 0 ]; then
+  printf 'Images identiques : %s\n' "$output"
+else
+  printf 'Différence détectée et enregistrée dans %s\n' "$output"
+fi
 ```
 
 Le code de sortie de `magick compare` peut signaler qu'une différence existe. Si vous l'intégrez à une CI, traitez séparément les erreurs d'exécution et les différences visuelles, puis publiez l'image de différence comme artefact. Une différence détectée ne doit pas être acceptée ou rejetée sans règle explicite et revue humaine.
