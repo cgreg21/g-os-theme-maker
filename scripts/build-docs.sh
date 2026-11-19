@@ -57,6 +57,7 @@ SOURCE_FILES=(
   docs/gnome-51/42-gtk-css-variables-requetes-media.md
   docs/gnome-51/43-inventaire-selecteurs-shell-51.md
   docs/gnome-51/44-mutter-reglages-fenetres-diagnostic.md
+  docs/gnome-51/45-decorations-csd-ssd-wayland-x11.md
 )
 
 for source in "${SOURCE_FILES[@]}"; do
