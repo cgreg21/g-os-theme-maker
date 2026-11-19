@@ -2,7 +2,7 @@
 
 Ce chapitre explique la vue d'ensemble affichée avec la touche Super ou le bouton Activités. Il distingue les fenêtres, les espaces de travail, la recherche, le Dash et la grille d'applications. Les repères CSS ci-dessous ont été vérifiés dans les sources amont GNOME Shell **51.0**. Ils décrivent l'implémentation de cette version, pas une API stable.
 
-![Schéma annoté de la vue Activités : recherche, fenêtres, espaces de travail, Dash et lanceur d'applications](images/vue-activites.svg)
+![Schéma annoté de la vue Activités : recherche, fenêtres, espaces de travail, Dash et lanceur d'applications](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
 
 Sources amont :
 - [overview.js](https://github.com/GNOME/gnome-shell/blob/51.0/js/ui/overview.js)

@@ -10,7 +10,7 @@ Sources principales :
 
 Les noms de classes sont des détails d'implémentation. Ils peuvent changer lors d'une mise à jour de GNOME. Ce chapitre décrit la version 51.0 et ne garantit pas la compatibilité avec d'autres versions.
 
-![Schéma annoté du panneau supérieur : Activités, horloge, indicateurs système et états des boutons](images/panneau-superieur.svg)
+![Schéma annoté du panneau supérieur : Activités, horloge, indicateurs système et états des boutons](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
 
 Le schéma est une représentation pédagogique simplifiée. Il sert à localiser les zones et classes ; il ne prétend pas reproduire à l'identique toutes les dispositions possibles.
 

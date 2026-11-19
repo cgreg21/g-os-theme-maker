@@ -19,16 +19,17 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 11. [Personnaliser le panneau supérieur](13-panneau-superieur-shell.md)
 12. [Personnaliser la vue Activités](14-vue-activites-overview.md)
 13. [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
+14. [Écran de verrouillage, déverrouillage et GDM](16-ecran-verrouillage-gdm.md)
 
-## Guides illustrés
+## Captures de l'interface GNOME standard
 
-- [Anatomie du panneau supérieur](images/panneau-superieur.svg)
-- [Anatomie de la vue Activités](images/vue-activites.svg)
-- [Anatomie d'une application GNOME](images/application-gnome.svg)
-- [Menus et réglages rapides](images/menus-reglages-rapides.svg)
-- [Calendrier et notifications](images/calendrier-notifications.svg)
+- [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
+- [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
+- [Anatomie d'une application GNOME](https://release.gnome.org/49/assets/img/gnome49.png)
+- [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
+- [Calendrier et notifications](https://help.gnome.org/gnome-help/figures/shell-appts.png)
 
-Les schémas sont des illustrations pédagogiques de l'interface et non des captures d'écran exactes. Les sélecteurs et structures décrits dans les chapitres sont, eux, contrôlés dans les sources GNOME Shell 51.0.
+Les visuels renvoient désormais aux captures officielles de GNOME Help et aux images de présentation GNOME. Ils montrent l'apparence standard ; certaines captures documentaires sont antérieures à GNOME 51 et servent à identifier les composants, pas à figer leurs dimensions.
 
 ## Compléments pédagogiques
 

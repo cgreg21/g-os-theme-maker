@@ -4,7 +4,7 @@ Ce chapitre explique comment aborder les applications GNOME une par une. Il comp
 
 L'objectif est de savoir **ce qui peut être personnalisé**, **où chercher l'implémentation**, **comment tester une règle** et **comment documenter une limite**. Aucun sélecteur présenté ici ne doit être supposé universel : il faut toujours le confirmer dans la version de l'application installée.
 
-![Schéma annoté d'une fenêtre GNOME : barre d'en-tête, navigation, contenu, cartes et contrôles](images/application-gnome.svg)
+![Schéma annoté d'une fenêtre GNOME : barre d'en-tête, navigation, contenu, cartes et contrôles](https://release.gnome.org/49/assets/img/gnome49.png)
 
 Ce schéma représente une architecture courante, pas le gabarit obligatoire de toutes les applications. Certaines applications n'ont pas de barre latérale, utilisent une barre d'outils différente ou dessinent leur contenu avec des composants spécialisés.
 
