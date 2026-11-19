@@ -62,19 +62,18 @@ Un répertoire vide n’est pas une ressource de thème terminée. L’export do
 
 Tester chaque zone en clair, sombre et contraste élevé. Valider la syntaxe CSS avec les outils GTK correspondants et utiliser une session GNOME Shell imbriquée pour les tests Shell. Un aperçu statique ne remplace pas un test réel.
 
-## Organiser un éditeur de thèmes
+## Délimiter la portée d’un thème
 
-Le catalogue doit guider l’organisation de l’application :
+Avant de commencer un thème, établissez une fiche de périmètre :
 
-1. **Cible** : Shell 51, GTK 3, GTK 4, Libadwaita, icônes, curseurs, polices, fonds.
-2. **Écran** : choisir une zone d’interface dans la cible.
-3. **Composant** : sélectionner le bouton, menu, carte, champ, ligne, etc.
-4. **État** : normal, hover, focus, actif, sélectionné, désactivé, erreur.
-5. **Propriétés** : couleurs, texte, bordure, rayon, taille, espacement, ombre.
-6. **Aperçu** : montrer le composant et ses états, puis valider dans le moteur réel.
-7. **Compatibilité** : afficher la version cible et les limites connues.
+1. **Moteur** : GNOME Shell 51, GTK 3, GTK 4 ou Libadwaita.
+2. **Zone** : panneau, menu, dialogue, fenêtre, liste, champ ou ressource visuelle.
+3. **Élément réel** : nœud, classe, widget ou fichier de ressource observé.
+4. **États** : normal, survol, focus, actif, sélectionné, désactivé et erreur lorsqu’ils existent.
+5. **Mécanisme** : CSS, préférence GSettings, extension, ressource ou configuration système.
+6. **Limites** : version testée, composants privés, styles applicatifs et éléments non modifiables.
 
-Ne pas présenter une propriété comme modifiable si le moteur ne l’expose pas. Les composants ajoutés par les extensions doivent être identifiés comme tels.
+Ne promettez jamais un rendu si le moteur ne fournit pas le mécanisme nécessaire. Les composants ajoutés par les extensions doivent être distingués des composants natifs.
 
 ## 9.1 Installation utilisateur
 
