@@ -349,3 +349,202 @@ Modifiez les espacements de grille, le style des dossiers et les indicateurs de 
 - Ne masquez pas les repères de focus et ne réduisez pas les cibles interactives à des tailles difficiles à utiliser.
 
 Pour chaque nouvelle version de GNOME, comparez les fichiers SCSS et JavaScript amont avant de réutiliser les sélecteurs.
+
+
+## 15. Préparer une campagne de test complète
+
+La vue Activités change fortement selon le contenu du bureau. Un test limité à un bureau vide ne permet pas de valider le Dash, les aperçus, les miniatures ou la grille.
+
+Préparez un environnement de test avec :
+- une fenêtre maximisée ;
+- deux fenêtres qui se chevauchent ;
+- une fenêtre réduite ou minimisée ;
+- plusieurs applications ouvertes ;
+- au moins trois espaces de travail ;
+- des applications favorites et non favorites ;
+- un dossier contenant plusieurs applications ;
+- une recherche donnant des résultats de plusieurs fournisseurs.
+
+Notez la résolution, le facteur d'échelle, le nombre d'écrans, leur disposition et la version exacte de GNOME Shell. Ne changez qu'une variable entre deux captures de référence.
+
+### Scénario de référence
+
+1. Démarrez sur un bureau sans fenêtre au premier plan.
+2. Ouvrez la vue Activités avec Super.
+3. Vérifiez l'emplacement du champ de recherche et le focus initial.
+4. Tapez une recherche et parcourez les résultats au clavier.
+5. Effacez la recherche et vérifiez le retour aux aperçus.
+6. Survolez une fenêtre, puis sélectionnez-la.
+7. Fermez une fenêtre avec son bouton de fermeture dans l'aperçu.
+8. Passez à un autre espace de travail.
+9. Déplacez une fenêtre vers une autre miniature.
+10. Ouvrez le Dash, lancez une application favorite et revenez à la vue.
+11. Ouvrez la grille d'applications, changez de page et ouvrez un dossier.
+12. Quittez la vue Activités et vérifiez le bureau.
+
+Ce scénario vérifie les transitions entre les zones, et pas uniquement leur apparence statique.
+
+## 16. Vérifier le glisser-déposer des fenêtres et des lanceurs
+
+Le glisser-déposer est piloté par le code JavaScript du Shell et les acteurs Clutter/St. Le CSS peut rendre les éléments, les états de survol et les emplacements temporaires plus ou moins lisibles, mais il ne définit ni le démarrage du déplacement ni la destination.
+
+Pour les fenêtres :
+- commencez le déplacement depuis une zone qui déclenche réellement le glisser-déposer ;
+- déplacez la fenêtre vers une autre miniature d'espace de travail ;
+- vérifiez que la cible de dépôt est visible ;
+- relâchez et confirmez que la fenêtre appartient au bureau attendu ;
+- recommencez avec plusieurs fenêtres et avec un écran puis plusieurs écrans.
+
+Pour les applications du Dash ou de la grille :
+- vérifiez le déplacement vers et depuis les favoris si le Shell expose cette opération ;
+- observez le retour visuel pendant le déplacement ;
+- vérifiez que le dépôt ne déclenche pas une ouverture involontaire ;
+- confirmez que l'ordre des favoris reste correct après fermeture et réouverture de la vue.
+
+Ne supposez pas que le CSS puisse transformer un élément en cible de dépôt ou modifier l'ordre des favoris. Si l'action fonctionnelle est incorrecte, recherchez la logique JavaScript et l'état de l'acteur avant de modifier les styles.
+
+### Contrôler les emplacements temporaires
+
+Pendant certaines opérations, le Shell affiche un acteur ou un emplacement temporaire, notamment avec la classe .placeholder dans le contexte des miniatures. Inspectez cet état pendant le déplacement, pas uniquement après le dépôt.
+
+Relevez :
+- quel acteur reste visible pendant le mouvement ;
+- où apparaît l'emplacement temporaire ;
+- si sa taille correspond à l'élément déplacé ;
+- si la cible change lorsque le pointeur passe au-dessus d'un autre espace ;
+- si l'emplacement disparaît après annulation ou dépôt.
+
+Une capture prise uniquement après le déplacement ne permet pas de diagnostiquer le retour visuel intermédiaire. Faites une courte vidéo ou plusieurs captures pendant les phases départ, déplacement, survol de la cible et dépôt.
+
+## 17. Tester les états des aperçus de fenêtres
+
+Un aperçu doit rester compréhensible quand plusieurs fenêtres sont proches. Contrôlez séparément :
+- état normal ;
+- survol ;
+- sélection ;
+- focus clavier ;
+- bouton de fermeture au survol ;
+- bouton de fermeture au focus ;
+- fenêtre active ;
+- titre long ;
+- application avec icône manquante ou générique.
+
+Un bouton de fermeture ne doit pas recouvrir le titre ni devenir invisible sur une miniature claire. Évitez d'imposer une taille fixe à .window-picker ou à chaque miniature : le Shell calcule la géométrie selon le nombre de fenêtres et l'espace disponible.
+
+Exemple de règle de diagnostic temporaire :
+
+~~~css
+/* À retirer après inspection : visualiser les limites des aperçus */
+.window-picker {
+  outline: 1px dashed magenta;
+}
+
+.window-caption {
+  outline: 1px solid cyan;
+}
+~~~
+
+N'utilisez pas ces contours comme style final. Ils servent à distinguer les limites du conteneur, du titre et de l'aperçu.
+
+## 18. Tester les fournisseurs de recherche
+
+La recherche dépend des fournisseurs activés et des applications installées. Un résultat absent ne signifie pas nécessairement que son style CSS est défectueux.
+
+Préparez plusieurs cas :
+- une application installée ;
+- un nom partiel ;
+- une recherche sans résultat ;
+- plusieurs catégories de résultats ;
+- un résultat avec description longue ;
+- une recherche avec caractères accentués ;
+- une recherche avec une chaîne très courte ;
+- une recherche effacée puis relancée.
+
+Vérifiez la séparation visuelle entre les fournisseurs, l'alignement des icônes, le titre, la description, la sélection clavier et le retour au champ. Le classement et le contenu des résultats sont fournis par le moteur de recherche du Shell et ses fournisseurs ; le thème ne les réordonne pas.
+
+## 19. Adapter la vue aux écrans et à l'échelle
+
+La géométrie de la vue Activités dépend de la surface disponible. Une règle adaptée à un écran large peut réduire fortement la place des aperçus sur un écran plus petit ou en mode portrait.
+
+Validez au minimum :
+- écran principal seul ;
+- écran externe avec disposition horizontale ;
+- écran externe placé à gauche ou au-dessus ;
+- résolution réduite ;
+- facteur d'échelle élevé ;
+- texte agrandi ;
+- fenêtre unique puis grand nombre de fenêtres.
+
+Évitez les largeurs et hauteurs rigides sur les éléments structurants. Préférez les unités relatives et les marges modérées. Si le Dash ou les miniatures débordent, retirez d'abord les dimensions forcées et les espacements excessifs avant de réduire la taille des cibles interactives.
+
+Les captures doivent mentionner la résolution et l'échelle. Deux captures faites à des résolutions différentes ne permettent pas de conclure directement à une régression CSS.
+
+## 20. Diagnostiquer une règle qui semble ne pas agir
+
+Procédez du plus général au plus précis :
+
+1. Vérifiez que la vue Activités est ouverte et que le composant est présent.
+2. Vérifiez que le fichier CSS modifié est celui réellement chargé.
+3. Ajoutez temporairement un contour visible sur le conteneur.
+4. Si le contour apparaît, réduisez le sélecteur jusqu'au nœud visé.
+5. Si le contour n'apparaît pas, vérifiez le contexte et la classe réelle dans Looking Glass.
+6. Vérifiez la déclaration gagnante et les propriétés prises en charge par St.
+7. Contrôlez les états de survol, de focus, d'activation et de sélection.
+8. Vérifiez si une extension remplace ou reconstruit le composant.
+9. Retirez les règles de diagnostic et validez le scénario complet.
+
+Une classe peut être ajoutée ou retirée dynamiquement. Inspectez le composant dans l'état exact où le problème apparaît. Un sélecteur relevé sur une vue au repos peut ne pas exister pendant une animation ou un glisser-déposer.
+
+## 21. Distinguer un problème de thème d'un problème d'extension
+
+Une extension peut remplacer le Dash, ajouter des lanceurs, modifier la recherche ou intervenir dans la disposition des espaces de travail. Pour isoler un défaut :
+
+1. Reproduisez le défaut avec la configuration habituelle.
+2. Notez les extensions actives et leurs versions.
+3. Reproduisez dans un profil de test avec les extensions non essentielles désactivées.
+4. Comparez les acteurs et classes observés.
+5. Réactivez les extensions une par une si le défaut disparaît.
+6. Documentez le composant réellement responsable.
+
+Ne désactivez pas toutes les extensions sur la session de travail si cela risque de perturber son fonctionnement. Utilisez une session dédiée. Le fait qu'une règle fonctionne sans extension ne prouve pas qu'elle soit incorrecte : l'extension peut simplement remplacer l'acteur auquel elle s'appliquait.
+
+## 22. Préserver la lisibilité et l'accessibilité
+
+La vue Activités est un point de navigation central. Toute personnalisation doit préserver :
+- un focus visible sur la recherche, les fenêtres, les tuiles et les contrôles ;
+- une taille de cible suffisante pour les boutons de fermeture et les lanceurs ;
+- un contraste de texte et d'icônes sur les fonds variables ;
+- la distinction entre application favorite et application en cours ;
+- l'identification de l'espace de travail actif ;
+- la lisibilité des titres longs ;
+- une navigation utilisable sans souris.
+
+Ne remplacez pas l'indication d'application en cours par un simple effet de survol. Ne masquez pas le bouton de fermeture au clavier. Ne réduisez pas l'opacité des éléments actifs au point de les rendre difficiles à distinguer.
+
+## 23. Fiche de validation de la vue Activités
+
+Conservez une fiche par version de GNOME et par configuration d'écran :
+
+~~~text
+Version GNOME Shell :
+Distribution et session :
+Résolution :
+Facteur d'échelle :
+Nombre et disposition des écrans :
+Extensions actives :
+Nombre de fenêtres :
+Nombre d'espaces de travail :
+Fournisseurs de recherche testés :
+Sélecteurs modifiés :
+États visuels vérifiés :
+Glisser-déposer des fenêtres :
+Glisser-déposer des lanceurs :
+Navigation clavier :
+Résultat à échelle élevée :
+Résultat multi-écran :
+Régressions constatées :
+Captures ou vidéo de référence :
+Conclusion : validé / partiel / à corriger
+~~~
+
+La vue est validée lorsque le scénario de référence fonctionne, que les interactions restent compréhensibles et que les différences entre les configurations d'écran sont documentées. Une simple capture esthétique ne constitue pas une validation fonctionnelle.
