@@ -1,6 +1,6 @@
 # 9. Construction, installation et validation
 
-## Périmètre réel d’un thème utilisateur
+## 1. Périmètre réel d’un thème utilisateur
 
 - L’écran GDM dépend du thème système de GDM et de sa configuration ; un thème utilisateur ne le remplace pas automatiquement.
 - Les décorations de fenêtres dépendent du compositeur, de Mutter et des décorations côté client.
@@ -78,6 +78,67 @@ Ne promettez jamais un rendu si le moteur ne fournit pas le mécanisme nécessai
 ## 5. Installation utilisateur
 
 Installer dans les répertoires XDG utilisateur : thèmes, icônes, curseurs, polices et fonds. Ne pas écrire dans `/usr/share` sans demande explicite et privilèges. Le paquet doit contenir nom, version, auteur, cibles, versions testées, variantes, ressources absentes, licences, installation, désinstallation et limites.
+
+## 18. Installer et retirer un thème utilisateur sans risque
+
+L'installation doit rester limitée au compte courant. Ne copiez pas un thème expérimental dans `/usr/share/themes` et ne lancez pas le gestionnaire de fichiers avec des privilèges administrateur pour contourner les permissions.
+
+Exemple pour un thème GTK dont le répertoire racine contient directement les sous-répertoires du thème :
+
+```sh
+set -eu
+
+source_dir="${1:?Usage : installer-theme.sh repertoire-du-theme}"
+theme_name="${2:?Usage : installer-theme.sh repertoire-du-theme nom-du-theme}"
+
+case "$theme_name" in
+  ""|.|..|*/*)
+    printf 'Nom de thème invalide.\\n' >&2
+    exit 2
+    ;;
+esac
+
+test -d "$source_dir"
+test -d "$source_dir/gtk-3.0" -o -d "$source_dir/gtk-4.0" -o -d "$source_dir/gnome-shell"
+
+target="$HOME/.themes/$theme_name"
+if test -e "$target"; then
+  printf 'La cible existe déjà : %s\\n' "$target" >&2
+  printf 'Sauvegardez-la ou choisissez un autre nom avant de continuer.\\n' >&2
+  exit 1
+fi
+
+install -d "$HOME/.themes"
+cp -a -- "$source_dir" "$target"
+printf 'Thème copié dans : %s\\n' "$target"
+```
+
+Ce script copie les fichiers ; il n'active pas le thème. L'activation dépend du moteur et de la version : GTK, GNOME Shell et Libadwaita n'utilisent pas tous le même mécanisme. Vérifiez séparément les extensions et préférences nécessaires avant de changer une valeur GSettings.
+
+Avant une mise à jour, conservez une copie de la version installée et comparez le contenu. Ne remplacez pas automatiquement un répertoire existant : il peut contenir des fichiers locaux qui ne figurent pas dans l'archive.
+
+Pour retirer une installation créée sous `~/.themes`, vérifiez le chemin exact avant toute suppression :
+
+```sh
+theme_name="MonTheme"
+target="$HOME/.themes/$theme_name"
+
+case "$theme_name" in
+  ""|.|..|*/*) printf 'Nom invalide.\\n' >&2; exit 2 ;;
+esac
+
+if test -d "$target" && test ! -L "$target"; then
+  printf 'Répertoire à retirer : %s\\n' "$target"
+  printf 'Vérifiez qu’il s’agit bien du thème installé par vous.\\n'
+  # Décommentez uniquement après vérification :
+  # rm -r -- "$target"
+else
+  printf 'Répertoire absent ou non conforme : %s\\n' "$target" >&2
+  exit 1
+fi
+```
+
+La désinstallation des fichiers ne restaure pas automatiquement les préférences visuelles. Remettez d'abord les préférences utilisées à leur valeur précédente, puis retirez les fichiers. Ne supprimez jamais un répertoire partagé ou un thème fourni par la distribution.
 
 ## 6. Validation
 
