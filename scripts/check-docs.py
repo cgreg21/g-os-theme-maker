@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate local documentation images and the exported chapter inventory."""
+"""Validate local documentation images, links and exported chapter inventory."""
 
 from pathlib import Path
 import re
@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs" / "gnome-51"
 BUILD_SCRIPT = ROOT / "scripts" / "build-docs.sh"
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
+LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 TABLE_SEPARATOR_RE = re.compile(
     r"^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$"
 )
@@ -21,7 +22,7 @@ def markdown_lines(path: Path):
     fence_length = 0
     for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         stripped = line.lstrip()
-        match = re.match(r"(`{3,}|~{3,})", stripped)
+        match = re.match(r"(\`{3,}|~{3,})", stripped)
         if match:
             marker = match.group(1)
             if fence_char is None:
@@ -47,16 +48,32 @@ def main() -> int:
     if not source_block:
         errors.append("SOURCE_FILES introuvable dans scripts/build-docs.sh")
     else:
-        included = set(re.findall(r"docs/gnome-51/[A-Za-z0-9._/-]+\.md", source_block.group(1)))
+        source_entries = re.findall(
+            r"docs/gnome-51/[A-Za-z0-9._/-]+\.md", source_block.group(1)
+        )
+        included = set(source_entries)
         missing = sorted(expected_chapters - included)
+        duplicates = sorted(
+            path for path in included if source_entries.count(path) > 1
+        )
         if missing:
-            errors.append("Chapitres absents des exports PDF/EPUB : " + ", ".join(missing))
+            errors.append(
+                "Chapitres absents des exports PDF/EPUB : " + ", ".join(missing)
+            )
+        if duplicates:
+            errors.append(
+                "Chapitres inclus plusieurs fois dans les exports : "
+                + ", ".join(duplicates)
+            )
 
     image_directory = DOCS / "images"
     if image_directory.exists():
         vector_images = sorted(image_directory.rglob("*.svg"))
         if vector_images:
-            errors.append("Illustrations SVG interdites : " + ", ".join(str(p.relative_to(ROOT)) for p in vector_images))
+            errors.append(
+                "Illustrations SVG interdites : "
+                + ", ".join(str(p.relative_to(ROOT)) for p in vector_images)
+            )
 
     for document in markdown_files:
         for number, line in markdown_lines(document):
@@ -64,6 +81,7 @@ def main() -> int:
                 errors.append(
                     f"{document.relative_to(ROOT)}:{number}: tableau Markdown interdit"
                 )
+
             for match in IMAGE_RE.finditer(line):
                 target = match.group(1).split()[0].strip("<>")
                 if re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I) or target.startswith("//"):
@@ -86,13 +104,36 @@ def main() -> int:
                         f"{document.relative_to(ROOT)}:{number}: image locale introuvable ({target})"
                     )
 
+            for match in LINK_RE.finditer(line):
+                raw_target = match.group(1).strip()
+                if raw_target.startswith("<") and ">" in raw_target:
+                    target = raw_target[1:raw_target.find(">")]
+                else:
+                    target = raw_target.split()[0] if raw_target else ""
+                if not target or target.startswith("#"):
+                    continue
+                if re.match(r"^[a-z][a-z0-9+.-]*:", target, re.I) or target.startswith("//"):
+                    continue
+                local_target = target.split("#", 1)[0].split("?", 1)[0]
+                if not local_target:
+                    continue
+                linked_path = (document.parent / local_target).resolve()
+                if not linked_path.is_relative_to(ROOT.resolve()):
+                    errors.append(
+                        f"{document.relative_to(ROOT)}:{number}: lien local hors du dépôt ({target})"
+                    )
+                elif not linked_path.is_file():
+                    errors.append(
+                        f"{document.relative_to(ROOT)}:{number}: lien local introuvable ({target})"
+                    )
+
     if errors:
         print("\n".join(f"ERREUR: {error}" for error in errors), file=sys.stderr)
         return 1
 
     print(
         f"Documentation valide : {len(markdown_files)} fichiers Markdown, "
-        "chapitres exportés et images PNG/JPG locales."
+        "chapitres exportés, liens locaux et images PNG/JPG locales."
     )
     return 0
 
