@@ -54,14 +54,25 @@ Pour chaque ressource, vérifiez :
 
 ## 4. Générer un fichier avec xcursorgen
 
-`xcursorgen` construit un fichier Xcursor à partir d'images PNG et d'un fichier de description. Une ligne décrit la durée, le hotspot horizontal et vertical, puis le chemin de l'image.
+`xcursorgen` construit un fichier Xcursor à partir d'images PNG et d'un fichier de description. Chaque ligne indique la taille nominale du curseur, le hotspot horizontal et vertical, le fichier PNG et, pour une animation, la durée d'affichage en millisecondes. Le délai est facultatif pour une image statique.
 
-Exemple pour un curseur statique :
+Exemple pour un curseur statique de taille nominale 32 :
 
 ```text
-# délai_ms hotspot_x hotspot_y image.png
-0 4 4 pointer-32.png
+# taille xhot yhot image.png
+32 4 4 pointer-32.png
 ```
+
+Exemple pour une animation de trois images de même taille nominale :
+
+```text
+# taille xhot yhot image.png délai_ms
+32 15 15 watch-1.png 100
+32 15 15 watch-2.png 100
+32 15 15 watch-3.png 100
+```
+
+Les lignes de même taille constituent les images successives du curseur animé. Le délai appartient à chaque image. Vérifiez que les hotspots restent cohérents et que les images sont conçues pour la même taille nominale.
 
 Générez le fichier :
 
@@ -72,7 +83,7 @@ file left_ptr
 
 Le délai nul est adapté à une image statique. Pour une animation, fournissez plusieurs lignes avec des durées cohérentes et des images dont les dimensions et hotspots sont compatibles. Vérifiez la syntaxe exacte avec `man xcursorgen` sur votre distribution.
 
-Une image de 32 × 32 pixels avec un hotspot à (4, 4) n'est qu'un exemple : la valeur doit correspondre au dessin réel. Les coordonnées commencent à zéro.
+Une image PNG de 32 × 32 pixels avec un hotspot à (4, 4) n'est qu'un exemple : la taille nominale et les coordonnées doivent correspondre au dessin réel. Les coordonnées commencent à zéro. Le paramètre `size` est la taille nominale Xcursor, pas un délai.
 
 ## 5. Tailles et HiDPI
 
@@ -145,3 +156,92 @@ Créez un thème qui remplace uniquement le pointeur standard et le curseur de t
 - [Xcursor — documentation de libXcursor](https://www.x.org/releases/current/doc/libXcursor/)
 - [xcursorgen — manuel](https://manpages.debian.org/xcursorgen)
 - [Spécification Freedesktop des thèmes d'icônes](https://specifications.freedesktop.org/icon-theme/)
+
+
+## 11. Noms de curseurs et liens de compatibilité
+
+Le nom de fichier dans `cursors/` est un nom de rôle, pas un nom arbitraire choisi pour décrire le dessin. Les applications et toolkits peuvent demander des noms différents pour une même intention. Il est donc courant de fournir plusieurs noms compatibles qui pointent vers un même fichier Xcursor.
+
+Exemple de lien dans le dossier `cursors` :
+
+```bash
+ln -s left_ptr default
+ln -s hand pointer
+ln -s text xterm
+```
+
+Ces exemples illustrent le mécanisme ; ils ne remplacent pas un inventaire vérifié des noms réellement demandés. Ne créez un alias que si les deux noms désignent bien le même comportement. Conservez les noms de base attendus par les environnements ciblés et testez les applications GTK, Qt et les applications XWayland.
+
+Pour inspecter les liens et leurs cibles :
+
+```bash
+find cursors -maxdepth 1 -type l -printf '%f -> %l\\n'
+```
+
+Un lien cassé équivaut à une ressource absente. Pour un paquet qui doit être extrait sur différents systèmes, vérifiez que l'archive préserve les liens symboliques ; sinon, fournissez des fichiers ordinaires.
+
+## 12. Tailles nominales et images sources
+
+La taille inscrite dans la configuration `xcursorgen` décrit la taille nominale de l'image Xcursor. Elle ne doit pas être confondue avec la taille du PNG en pixels ni avec le facteur d'échelle de GNOME.
+
+Un thème peut fournir plusieurs tailles nominales pour un même rôle. Pour chaque taille :
+
+- choisissez une source PNG adaptée, sans agrandissement excessif ;
+- vérifiez les dimensions réelles du fichier ;
+- placez le hotspot au même endroit fonctionnel ;
+- comparez l'épaisseur des traits et la lisibilité ;
+- testez l'affichage sur un écran standard et un écran HiDPI.
+
+Exemple de génération de deux variantes du même rôle :
+
+```text
+24 3 3 pointer-24.png
+32 4 4 pointer-32.png
+48 6 6 pointer-48.png
+```
+
+Les trois lignes de tailles différentes sont des variantes de taille, pas les images d'une animation. Pour une animation, plusieurs lignes partagent la même taille nominale et possèdent un délai.
+
+## 13. Vérifier le résultat généré
+
+Après génération, vérifiez que le fichier est bien reconnu comme un curseur Xcursor :
+
+```bash
+file cursors/left_ptr
+```
+
+Inspectez également la configuration et les sources utilisées :
+
+```bash
+nl -ba pointer.conf
+file pointer-*.png
+```
+
+Si le curseur est décalé, vérifiez d'abord le hotspot. S'il est flou, comparez les sources PNG à la taille nominale demandée. Si l'animation est trop rapide ou trop lente, ajustez les délais en millisecondes, pas les dimensions.
+
+La validation finale doit se faire dans une session graphique réelle. Un fichier reconnu par `file` peut encore présenter un hotspot incorrect, un contraste insuffisant ou une animation incohérente.
+
+## 14. Déployer et revenir en arrière
+
+Installez le thème dans le répertoire utilisateur :
+
+```bash
+install -d "$HOME/.local/share/icons/NomCurseur"
+cp -a ./NomCurseur/. "$HOME/.local/share/icons/NomCurseur/"
+```
+
+Avant de changer le thème, notez les valeurs actuelles :
+
+```bash
+gsettings get org.gnome.desktop.interface cursor-theme
+gsettings get org.gnome.desktop.interface cursor-size
+```
+
+Après le test, restaurez le nom et la taille précédents avec `gsettings set`. Ne réinitialisez pas toutes les préférences GNOME pour annuler un essai de curseur.
+
+Pour mettre à jour un thème, préparez et vérifiez une copie complète avant de remplacer l'ancienne. Une simple copie par-dessus peut laisser des curseurs obsolètes qui ne figurent plus dans la nouvelle version.
+
+## 15. Références complémentaires
+
+- [Manuel xcursorgen — format du fichier de configuration](https://manpages.debian.org/bookworm/x11-apps/xcursorgen.1.en.html)
+- [Xcursor — documentation de libXcursor](https://www.x.org/releases/current/doc/libXcursor/)
