@@ -143,3 +143,160 @@ Pour chaque problème, consignez :
 - version dans laquelle le test a été effectué.
 
 Une règle n'est considérée comme vérifiée que lorsque le test est reproductible sur la version déclarée.
+
+
+## 11. Préparer un diagnostic reproductible
+
+Avant d'ouvrir un inspecteur, décrivez précisément le défaut : écran, composant, état (repos, survol, focus, actif, désactivé ou erreur), propriété concernée et résultat attendu. Relevez les versions et la session :
+
+```sh
+printf 'Session : %s\\n' "$XDG_SESSION_TYPE"
+printf 'Bureau : %s\\n' "$XDG_CURRENT_DESKTOP"
+gnome-shell --version
+pkg-config --modversion gtk+-3.0 2>/dev/null || true
+pkg-config --modversion gtk4 2>/dev/null || true
+pkg-config --modversion libadwaita-1 2>/dev/null || true
+```
+
+Les paquets de développement nécessaires à `pkg-config` peuvent être absents même si les bibliothèques d'exécution sont installées. Les versions retournées ne prouvent pas à elles seules qu'une application donnée utilise ces bibliothèques. Conservez une capture avant modification.
+
+## 12. Inspecter un widget GTK de bout en bout
+
+L'inspecteur doit être ouvert dans le processus qui affiche réellement la fenêtre. Une application déjà active peut réutiliser son processus et ignorer la variable d'environnement de la nouvelle commande.
+
+1. Enregistrez le travail et fermez toutes les fenêtres de l'application.
+2. Vérifiez que son processus est terminé.
+3. Lancez une nouvelle instance avec `GTK_DEBUG=interactive`.
+4. Sélectionnez le widget dans l'inspecteur.
+5. Relevez le type GTK, le nom, les classes, les pseudo-classes et les parents.
+6. Dans l'onglet CSS, identifiez la déclaration gagnante et les déclarations barrées.
+7. Modifiez temporairement une seule propriété.
+8. Vérifiez le résultat dans les états voisins.
+
+Si l'application est lancée par D-Bus ou réutilise un service existant, utilisez une application de test isolée. Ne tuez pas arbitrairement un processus de bureau ou un service partagé.
+
+Les fabriques de widgets permettent d'isoler des composants sans dépendre d'un écran applicatif complet :
+
+```sh
+gtk3-widget-factory
+gtk4-widget-factory
+```
+
+Elles ne sont pas forcément installées. Utilisez-les pour explorer les boutons, champs, listes et menus, puis confirmez le rendu dans l'application réelle : une fabrique ne reproduit pas nécessairement les classes et fournisseurs CSS de cette application.
+
+## 13. Lire correctement les résultats de l'inspecteur
+
+Distinguez quatre notions :
+
+- **Règle correspondante** : le sélecteur correspond au nœud.
+- **Déclaration gagnante** : la déclaration retenue par la cascade.
+- **Valeur calculée** : la valeur finale après cascade et héritage.
+- **Rendu observé** : le résultat effectivement dessiné à l'écran.
+
+Une valeur calculée correcte ne garantit pas que l'effet soit visible : un enfant peut recouvrir le fond, le widget peut dessiner son contenu lui-même ou l'ombre peut appartenir à une autre couche.
+
+Lorsqu'une propriété semble ignorée, vérifiez dans cet ordre : prise en charge par la version du moteur, nœud qui dessine l'effet, enfants et pseudo-classes, déclaration gagnante, puis avertissements du moteur. Réduisez le test à une seule propriété au lieu d'ajouter plusieurs déclarations à la fois.
+
+## 14. Distinguer GTK 3, GTK 4 et Libadwaita
+
+Un thème GTK 3 et un thème GTK 4 ne partagent pas automatiquement leurs sélecteurs, propriétés ni composants. Libadwaita ajoute ses propres conventions et fournisseurs CSS.
+
+Pour relever les bibliothèques mappées par un processus :
+
+```sh
+pid=1234
+grep -E '/(libgtk-3|libgtk-4|libadwaita-1)[.]so' "/proc/$pid/maps" | awk '{print $NF}' | sort -u
+```
+
+Remplacez `1234` par le PID réel. L'accès à `/proc/$pid/maps` peut être limité. Cette inspection identifie des bibliothèques mappées, mais ne prouve pas à elle seule quels widgets ou fournisseurs CSS sont utilisés.
+
+Reproduisez le problème dans le moteur réellement chargé par l'application. Ne concluez pas qu'une règle est compatible GTK 4 parce qu'elle fonctionne dans une application GTK 3 d'apparence similaire.
+
+## 15. Identifier la feuille CSS réellement chargée
+
+Une application peut charger du CSS depuis son paquet, une ressource GResource, son code ou un emplacement utilisateur. Modifier un fichier dont le nom paraît pertinent ne prouve pas que le processus l'utilise.
+
+Pour lister les ressources d'un fichier GResource autonome :
+
+```sh
+gresource list application.gresource
+```
+
+Le chemin dépend de l'application ; les ressources peuvent aussi être compilées dans un binaire. Dans GTK Inspector, relevez le fournisseur CSS et la règle qui gagne. Distinguez le CSS livré par l'application, celui du toolkit, le thème sélectionné et les surcharges utilisateur. Préférez une copie de travail ou un profil isolé aux modifications directes des fichiers système.
+
+## 16. Inspecter GNOME Shell sans le confondre avec GTK
+
+Les acteurs St ne sont pas des widgets GTK. Leurs sélecteurs, propriétés et pseudo-classes ne sont pas interchangeables. Dans Looking Glass :
+
+1. Reproduisez l'état exact du composant.
+2. Inspectez l'acteur, ses classes, son parent et ses enfants.
+3. Notez si la classe apparaît uniquement dans un état dynamique.
+4. Recherchez-la dans les sources JavaScript et SCSS de la version GNOME testée.
+5. Vérifiez que le code ajoute effectivement cette classe dans le scénario observé.
+6. Testez dans une session de développement et consultez les journaux.
+
+Pour suivre les messages du Shell :
+
+```sh
+journalctl -b -f /usr/bin/gnome-shell
+```
+
+Selon la distribution et la journalisation, ce filtre peut ne rien retourner. Utilisez alors le journal de session. L'absence de message ne prouve pas que le CSS a été chargé correctement.
+
+## 17. Isoler les erreurs de chargement
+
+Pour observer les messages récents pendant une reproduction :
+
+```sh
+journalctl --user -b --since "5 minutes ago" --no-pager
+```
+
+Conservez aussi la sortie du terminal si l'application y a été lancée. Relevez le premier avertissement pertinent : les suivants peuvent être des conséquences.
+
+Une propriété inconnue peut venir d'un moteur différent, d'une version trop ancienne, d'une faute de frappe ou d'un nœud qui ne la prend pas en charge. Vérifiez le moteur et sa version avant de remplacer la propriété. Consultez les références GTK, St et Libadwaita séparément.
+
+## 18. Transformer le diagnostic en correction minimale
+
+1. Créez une branche ou une copie de travail.
+2. Ajoutez une règle limitée au composant et à l'état observés.
+3. Ne modifiez pas simultanément les règles globales et spécifiques.
+4. Rechargez ou redémarrez uniquement le processus concerné selon le mécanisme du moteur.
+5. Reproduisez le scénario initial.
+6. Testez les états voisins et les composants partageant le sélecteur.
+7. Retirez les règles temporaires.
+8. Comparez avec la capture initiale.
+9. Conservez les versions, le journal et le résultat.
+
+Le rechargement à chaud n'est pas universel. Une application peut charger son CSS uniquement au démarrage. Ne redémarrez pas brutalement le Shell ou la session de travail pour tester une règle.
+
+## 19. Vérifier l'accessibilité pendant l'inspection
+
+Après une correction, vérifiez le focus clavier, l'ordre de navigation, les états désactivés et sélectionnés, les grandes tailles de texte, les modes clair et sombre, les libellés longs et les messages d'erreur. Ne retirez pas un contour de focus parce qu'il semble décoratif et ne communiquez pas une sélection uniquement par la couleur. Testez clavier et souris séparément.
+
+## 20. Modèle de preuve technique
+
+Complétez une fiche distincte pour chaque moteur et application :
+
+```text
+Application et version :
+Origine du paquet :
+PID du processus :
+Bibliothèques GTK/Libadwaita chargées :
+GNOME et session :
+Moteur CSS :
+Composant et état :
+Type, classes et parent du nœud :
+Propriété étudiée :
+Règle correspondante :
+Déclaration gagnante :
+Valeur calculée :
+Rendu constaté :
+Fichier ou ressource CSS :
+Messages du journal :
+Correction :
+États voisins testés :
+Accessibilité vérifiée :
+Statut : confirmé / partiel / non testé
+```
+
+Une fiche « confirmé » doit permettre à une autre personne de retrouver le composant et de reproduire le test. Si le processus, le moteur ou la ressource CSS restent inconnus, indiquez explicitement cette limite.
