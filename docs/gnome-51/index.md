@@ -22,6 +22,9 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 14. [Écran de verrouillage, déverrouillage et GDM](16-ecran-verrouillage-gdm.md)
 15. [OSD, dialogues, Alt-Tab et capture d'écran](17-osd-dialogues-alt-tab-capture.md)
 16. [Clavier virtuel, saisie, IBus et accessibilité](18-clavier-ibus-accessibilite.md)
+17. [Personnaliser GTK 3 en détail](19-gtk3-theming-detaille.md)
+18. [Personnaliser GTK 4 en détail](20-gtk4-theming-detaille.md)
+19. [Personnaliser Libadwaita en détail](21-libadwaita-theming-detaille.md)
 
 ## Captures de l'interface GNOME standard
 
