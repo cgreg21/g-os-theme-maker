@@ -131,3 +131,120 @@ Réalisez deux captures avec le même état d'interface et vérifiez qu'elles so
 - [GTK 4 — unités et CSS](https://docs.gtk.org/gtk4/css-overview.html)
 - [Freedesktop Icon Theme Specification](https://specifications.freedesktop.org/icon-theme/latest/)
 - [WCAG — contraste](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
+
+
+## 11. Examiner la configuration réelle
+
+Avant de corriger une palette, relevez la configuration de la session. Les commandes suivantes sont des outils de diagnostic en lecture seule ; elles ne changent pas le profil ni les réglages.
+
+Afficher les périphériques connus de colord :
+
+```bash
+colormgr get-devices
+```
+
+La commande renvoie des identifiants de périphériques. Pour examiner un périphérique précis, copiez son identifiant exact :
+
+```bash
+colormgr get-device IDENTIFIANT_DU_PERIPHERIQUE
+```
+
+Lister les profils connus :
+
+```bash
+colormgr get-profiles
+```
+
+Ces commandes peuvent être absentes si colord ou ses utilitaires ne sont pas installés. Leur sortie décrit les profils connus du service ; elle ne prouve pas à elle seule que chaque application applique correctement la transformation colorimétrique.
+
+Relever quelques paramètres d'interface utiles :
+
+```bash
+gsettings get org.gnome.desktop.interface color-scheme
+gsettings get org.gnome.desktop.interface gtk-theme
+gsettings get org.gnome.desktop.interface text-scaling-factor
+```
+
+Le schéma et les clés disponibles dépendent de la version et de la session. Si une clé est inconnue, ne créez pas une clé arbitraire : consultez les clés réellement exposées :
+
+```bash
+gsettings list-schemas | grep -E 'gnome|mutter'
+gsettings list-keys org.gnome.desktop.interface
+```
+
+Pour une session Wayland, les outils X11 comme `xrandr` ne constituent pas une source fiable pour décrire la configuration physique des écrans. Ne mélangez pas leurs résultats avec ceux de Mutter.
+
+## 12. Procédure de diagnostic d'une couleur inattendue
+
+Suivez cet ordre afin d'éviter de compenser dans le thème un problème qui vient de l'écran ou de la chaîne graphique.
+
+1. Comparez deux surfaces dans la même application et la même fenêtre.
+2. Vérifiez le profil associé à l'écran dans Paramètres → Couleur.
+3. Vérifiez que le mode clair/sombre est identique et que l'application n'impose pas son propre thème.
+4. Comparez une capture système avec une autre capture faite dans les mêmes conditions.
+5. Vérifiez si le défaut existe dans plusieurs applications ou dans une seule.
+6. Testez une couleur simple et connue, sans transparence ni dégradé.
+7. Seulement ensuite, inspectez la règle CSS, l'opacité, les effets et les états du composant.
+
+Interprétation des résultats :
+
+- Si toutes les applications paraissent altérées, examinez d'abord le profil, l'écran et les réglages matériels.
+- Si une seule application est touchée, examinez son moteur, son thème et ses paramètres propres.
+- Si seule une capture exportée diffère, examinez le profil incorporé, le format et le logiciel qui ouvre l'image.
+- Si le défaut apparaît uniquement sur un écran HiDPI, vérifiez les ressources et les dimensions logiques avant de modifier les couleurs.
+- Si une couleur change selon l'état du contrôle, vérifiez les pseudo-classes et les styles de l'état concerné.
+
+## 13. Transparence, composition et couleurs superposées
+
+La couleur visible d'un élément transparent n'est pas sa couleur CSS seule. Elle résulte de la composition avec ce qui se trouve derrière. Pour une couche simple, le principe est :
+
+`Cvisible = alpha × Cavant + (1 − alpha) × Carrière`
+
+Une même déclaration semi-transparente peut donc produire des résultats très différents sur une surface claire, sombre, colorée ou animée.
+
+Lorsqu'un panneau, une notification ou un menu paraît trop clair ou trop sombre :
+
+- identifiez la couleur de premier plan ;
+- identifiez la surface située derrière ;
+- relevez l'opacité réelle ;
+- vérifiez les effets de flou et de composition ;
+- testez le composant sur plusieurs arrière-plans.
+
+Évitez de corriger une transparence en assombrissant globalement la palette : cette correction risque de rendre les autres contextes incorrects. Les effets de flou dépendent aussi du compositeur et ne peuvent pas être reproduits fidèlement par une simple capture isolée.
+
+## 14. Préparer des ressources graphiques adaptées
+
+Une ressource doit être conçue pour son usage, pas simplement exportée à une grande résolution.
+
+Pour une image raster :
+- exportez à la dimension attendue et aux densités réellement utilisées ;
+- évitez d'agrandir une petite image au moment de l'affichage ;
+- conservez un original sans perte pour les itérations ;
+- vérifiez le rendu à la taille physique finale ;
+- contrôlez le profil colorimétrique incorporé et la cohérence des exports.
+
+Pour un SVG :
+- vérifiez le `viewBox`, les dimensions intrinsèques et les unités ;
+- évitez les détails trop fins à petite taille ;
+- contrôlez le rendu dans le moteur qui consommera réellement le fichier ;
+- ne supposez pas que GTK, GNOME Shell et les visionneuses SVG utilisent exactement la même chaîne de rendu.
+
+Les thèmes d'icônes peuvent fournir plusieurs tailles et contextes. Respectez la structure du thème et les noms Freedesktop au lieu de dupliquer un seul fichier sous des noms arbitraires.
+
+## 15. Fiche de rapport reproductible
+
+Lorsqu'une personne signale une différence de couleur ou de netteté, demandez un rapport minimal contenant :
+
+- version de GNOME et type de session (Wayland ou X11) ;
+- version de l'application et du toolkit lorsqu'elle est connue ;
+- écran concerné et résolution ;
+- facteur d'échelle ;
+- profil ICC associé, si disponible ;
+- mode clair/sombre ;
+- nom et version du thème ;
+- capture système originale ;
+- étapes exactes pour reproduire le problème.
+
+Ne demandez pas une photo de l'écran comme seule preuve. Si une photo est utile pour documenter un reflet ou un défaut matériel, conservez-la comme pièce distincte de la capture système.
+
+Un rapport ne doit pas contenir uniquement « les couleurs sont mauvaises ». Il doit préciser l'élément, l'état, l'application, le résultat attendu et le résultat observé.
