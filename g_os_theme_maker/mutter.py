@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -15,13 +16,13 @@ _EXTENSION_UUID = "g-os-theme-preview@local"
 
 class NestedShellController:
     def __init__(self, command: Sequence[str] | None = None) -> None:
-        self.command = list(command or ("gnome-shell", "--nested", "--wayland"))
+        self.command = list(command) if command is not None else None
         self.process: subprocess.Popen[bytes] | None = None
         self._runtime: tempfile.TemporaryDirectory[str] | None = None
 
     @property
     def available(self) -> bool:
-        return shutil.which("dbus-run-session") is not None and shutil.which(self.command[0]) is not None
+        return shutil.which("dbus-run-session") is not None and shutil.which((self.command or ["gnome-shell"])[0]) is not None
 
     @property
     def running(self) -> bool:
@@ -79,7 +80,7 @@ class NestedShellController:
             "XDG_CONFIG_HOME": str(config_home),
             "DCONF_PROFILE": str(root / "dconf-profile"),
         }
-        shell_command = "gsettings set org.gnome.shell enabled-extensions \"['" + _EXTENSION_UUID + "']\" && exec " + " ".join(self.command)
+        shell_command = "gsettings set org.gnome.shell enabled-extensions \"['" + _EXTENSION_UUID + "']\" && exec " + " ".join(self._shell_command())
         try:
             self.process = subprocess.Popen(
                 ["dbus-run-session", "--", "sh", "-c", shell_command],
@@ -90,6 +91,21 @@ class NestedShellController:
             self._runtime.cleanup()
             self._runtime = None
             raise
+
+    def _shell_command(self) -> list[str]:
+        if self.command is not None:
+            return self.command
+        version = subprocess.run(
+            ["gnome-shell", "--version"],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=5,
+        ).stdout
+        match = re.search(r"(\\d+)", version)
+        if match and int(match.group(1)) >= 49:
+            return ["gnome-shell", "--devkit", "--wayland"]
+        return ["gnome-shell", "--nested", "--wayland"]
 
     def stop(self) -> None:
         if self.running and self.process is not None:
