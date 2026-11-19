@@ -205,8 +205,7 @@ Pour relever les bibliothèques mappées par un processus :
 
 ```sh
 pid=1234
-grep -E '/(libgtk-3|libgtk-4|libadwaita-1)\\.so' "/proc/$pid/maps" \\
-  | awk '{print $NF}' | sort -u
+grep -E '/(libgtk-3|libgtk-4|libadwaita-1)[.]so' "/proc/$pid/maps" | awk '{print $NF}' | sort -u
 ```
 
 Remplacez `1234` par le PID réel. L'accès à `/proc/$pid/maps` peut être limité. Cette inspection identifie des bibliothèques mappées, mais ne prouve pas à elle seule quels widgets ou fournisseurs CSS sont utilisés.
