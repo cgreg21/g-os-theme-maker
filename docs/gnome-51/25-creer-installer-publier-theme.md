@@ -65,27 +65,72 @@ Pour GTK 3, créez `gtk-3.0/gtk.css`. Pour GTK 4, créez `gtk-4.0/gtk.css`. N'an
 
 Testez boutons, champs, listes, barres d'en-tête, menus, dialogues, vues vides, barres de défilement et états désactivés.
 
-## 5. Installer dans le compte utilisateur
+## 5. Installer les ressources dans le compte utilisateur
+
+Le nom du dossier installé doit correspondre au nom choisi dans les préférences. Depuis le répertoire qui contient `MonTheme/` :
 
 ```bash
-mkdir -p ~/.themes
-cp -a MonTheme ~/.themes/
-mkdir -p ~/.local/share/icons
-cp -a MonTheme/icons/MonTheme ~/.local/share/icons/
+mkdir -p "$HOME/.themes" "$HOME/.local/share/icons"
+cp -a MonTheme "$HOME/.themes/MonTheme"
 ```
 
-Ne copiez pas les ressources dans `/usr/share` pour un simple usage personnel. Le dossier utilisateur permet de tester et de supprimer le thème sans privilèges administrateur.
+Cette copie installe les sous-répertoires `gnome-shell/`, `gtk-3.0/` et `gtk-4.0/` éventuels. N'ajoutez pas ces répertoires si le paquet ne contient pas réellement les ressources correspondantes.
 
-## 6. Vérifier les préférences
+Les thèmes d'icônes et les thèmes de curseurs sont généralement installés comme thèmes d'icônes XDG, chacun dans son propre répertoire :
 
 ```bash
-gsettings list-keys org.gnome.desktop.interface
+cp -a MonTheme/icons/MonTheme "$HOME/.local/share/icons/MonTheme"
+cp -a MonTheme/cursors/MonCurseur "$HOME/.local/share/icons/MonCurseur"
+```
+
+N'exécutez chaque copie que si le dossier source existe et contient un `index.theme` valide. Le dossier `cursors/` du paquet est ici une convention d'organisation : après installation, le thème Xcursor est bien recherché parmi les thèmes d'icônes. Vérifiez aussi les chemins des ressources référencées dans `index.theme`.
+
+Les polices, fonds d'écran et sons ont leurs propres mécanismes et ne deviennent pas actifs parce qu'ils sont placés dans `~/.themes`. Documentez séparément leur installation. Pour un usage personnel, évitez `/usr/share` et les commandes avec `sudo`.
+
+## 6. Sauvegarder, sélectionner et vérifier les préférences
+
+Avant de modifier les préférences, sauvegardez la branche dconf concernée. Elle contient plusieurs réglages d'interface, pas uniquement les noms de thèmes :
+
+```bash
+mkdir -p "$HOME/.local/state/mon-theme"
+dconf dump /org/gnome/desktop/interface/ \
+  > "$HOME/.local/state/mon-theme/interface.dconf"
+```
+
+Vérifiez que le fichier existe et n'est pas vide avant de poursuivre. Relevez ensuite les valeurs actuellement actives :
+
+```bash
 gsettings get org.gnome.desktop.interface gtk-theme
 gsettings get org.gnome.desktop.interface icon-theme
 gsettings get org.gnome.desktop.interface cursor-theme
+gsettings get org.gnome.desktop.interface color-scheme
 ```
 
-La sélection du thème Shell peut nécessiter GNOME Tweaks ou User Themes. Ne modifiez pas les préférences personnelles sans expliquer comment les restaurer.
+Sélectionnez uniquement les familles réellement installées :
+
+```bash
+gsettings set org.gnome.desktop.interface gtk-theme 'MonTheme'
+gsettings set org.gnome.desktop.interface icon-theme 'MonTheme'
+gsettings set org.gnome.desktop.interface cursor-theme 'MonCurseur'
+```
+
+La dernière commande ne s'applique que si le thème de curseurs a été installé. Le schéma et la clé doivent exister sur la version ciblée ; consultez `gsettings list-schemas` et `gsettings list-keys` en cas de doute.
+
+Le thème GNOME Shell est distinct du thème GTK. Son activation peut nécessiter l'extension User Themes, installée et compatible avec la version courante :
+
+```bash
+gnome-extensions list
+gnome-extensions info user-theme@gnome-shell-extensions.gcampax.github.com
+```
+
+Si l'extension est disponible, son schéma expose généralement la clé `name`. Vérifiez avant de la modifier :
+
+```bash
+gsettings list-schemas | grep -F org.gnome.shell.extensions.user-theme
+gsettings list-keys org.gnome.shell.extensions.user-theme
+```
+
+N'activez pas une extension inconnue ou incompatible sur votre session principale. Une modification de thème GTK ne garantit pas un changement équivalent dans les applications GTK 4 ou Libadwaita : vérifiez chaque famille séparément.
 
 ## 7. Construire un test reproductible
 
@@ -126,25 +171,34 @@ GTK_DEBUG=interactive nom-de-l-application
 
 Le nom d'exécutable dépend de l'application. Fermez-la proprement après l'inspection.
 
-## 12. Retour arrière
+## 12. Retour arrière et désinstallation
 
-Notez les valeurs courantes avant l'activation :
-
-```bash
-gsettings get org.gnome.desktop.interface gtk-theme
-gsettings get org.gnome.desktop.interface icon-theme
-gsettings get org.gnome.desktop.interface cursor-theme
-```
-
-Conservez ces valeurs. Pour revenir en arrière, rétablissez les thèmes précédents dans Paramètres ou GNOME Tweaks, puis désactivez User Themes si nécessaire.
-
-Pour supprimer un thème de test :
+La sauvegarde créée à l'étape 6 permet de restaurer les réglages de la branche dconf de l'interface :
 
 ```bash
-rm -rf ~/.themes/MonTheme
+dconf load /org/gnome/desktop/interface/ \
+  < "$HOME/.local/state/mon-theme/interface.dconf"
 ```
 
-Vérifiez le chemin avant de lancer une commande de suppression. N'utilisez jamais une variable vide ou non vérifiée.
+Cette opération restaure les valeurs enregistrées dans cette branche, y compris les préférences d'interface sans rapport direct avec le thème. Utilisez-la si vous souhaitez revenir à l'état complet sauvegardé. Si vous ne voulez restaurer que les thèmes, remettez uniquement les valeurs précédemment relevées avec `gsettings set`. Ne confondez pas cette restauration avec `gsettings reset`, qui rétablit la valeur par défaut du schéma et non votre ancienne valeur personnelle.
+
+Si User Themes a été activée uniquement pour cet essai, désactivez-la après avoir vérifié que cela ne perturbe pas d'autres personnalisations :
+
+```bash
+gnome-extensions disable user-theme@gnome-shell-extensions.gcampax.github.com
+```
+
+Ne lancez cette commande que si l'extension est installée et si vous l'aviez activée pour ce test. Rétablissez également le nom du thème Shell précédent si vous n'avez pas restauré la sauvegarde dconf.
+
+Supprimez ensuite uniquement les répertoires de ce paquet que vous avez effectivement installés. Vérifiez chaque chemin avant suppression :
+
+```bash
+rm -rf -- "$HOME/.themes/MonTheme"
+rm -rf -- "$HOME/.local/share/icons/MonTheme"
+rm -rf -- "$HOME/.local/share/icons/MonCurseur"
+```
+
+Retirez une ligne si le répertoire correspondant n'appartient pas à ce test. N'utilisez jamais une variable vide ou non vérifiée dans une commande de suppression. Les polices, fonds d'écran et sons installés séparément doivent être désinstallés selon les chemins indiqués dans le README du paquet.
 
 ## 13. Documenter et publier
 
