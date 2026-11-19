@@ -190,12 +190,13 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             self.selected_widget.remove_css_class("preview-selected")
         self.selected_widget = widget
         widget.add_css_class("preview-selected")
-        self.selected_component = component
+        self.selected_component = None
         self.selection_label.set_text(f"Sélection : {name}")
         self.component_properties.set_visible(True)
         values = self.tokens.component_overrides.get(component, {})
         for key, spin in self.component_fields.items():
             spin.set_value(values.get(key, getattr(self.tokens, key)))
+        self.selected_component = component
 
     def _component_number_field(self, label: str, key: str, low: int, high: int) -> None:
         row = Gtk.Box(spacing=8)
@@ -255,9 +256,9 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         secondary = overrides.get("secondary_button", {})
         css = f"""
         .preview-canvas {{ background: {self.tokens.background}; color: {self.tokens.foreground}; }}
-        .preview-topbar {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; padding: {self.tokens.spacing}px; border-radius: {self.tokens.radius}px; }}
+        .preview-topbar {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; padding: {topbar.get("spacing", self.tokens.spacing)}px; border-radius: {topbar.get("radius", self.tokens.radius)}px; }}
         .preview-card {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; border: 1px solid {self.tokens.border}; border-radius: {card.get("radius", self.tokens.radius)}px; padding: {card.get("spacing", self.tokens.spacing) * 2}px; font-size: {self.tokens.font_size}px; }}
-        .preview-card button {{ border-radius: {self.tokens.radius}px; padding: {self.tokens.spacing}px; }}
+        .preview-card button {{ border-radius: {secondary.get("radius", self.tokens.radius)}px; padding: {secondary.get("spacing", self.tokens.spacing)}px; }}\n        .preview-card button.suggested-action {{ border-radius: {primary.get("radius", self.tokens.radius)}px; padding: {primary.get("spacing", self.tokens.spacing)}px; }}
         .preview-card button.suggested-action {{ background: {self.tokens.accent}; color: white; }}
         '''
         css += f"""
