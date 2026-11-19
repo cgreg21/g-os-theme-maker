@@ -1,0 +1,44 @@
+name: Build documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/guide-theme-gnome.md"
+      - "docs/guide.css"
+      - "scripts/build-docs.sh"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs: publish generated formats') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install document tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          python -m pip install weasyprint
+      - name: Generate EPUB and PDF
+        run: bash scripts/build-docs.sh
+      - name: Commit generated documents
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/guide-theme-gnome.epub docs/guide-theme-gnome.pdf
+          if git diff --cached --quiet; then
+            echo "Documentation already up to date."
+            exit 0
+          fi
+          git commit -m "docs: publish generated formats"
+          git push
