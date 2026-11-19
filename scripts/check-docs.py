@@ -128,7 +128,7 @@ def main() -> int:
     for document in markdown_files:
         for block in code_blocks(document):
             if re.search(
-                r"St\.BoxLayout\s*\(\s*\{[^}]*\bvertical\s*:",
+                r"St\\.BoxLayout\\s*\\(\\s*\\{[^}]*\\bvertical\\s*:",
                 block,
                 re.S,
             ):
@@ -136,6 +136,20 @@ def main() -> int:
                     f"{document.relative_to(ROOT)}: propriété St.BoxLayout.vertical "
                     "supprimée dans GNOME Shell 51 ; utiliser orientation"
                 )
+
+            forbidden_apis = (
+                (
+                    r"\\basync\\s+disable\\s*\\(",
+                    "disable() doit être synchrone dans GNOME Shell 51",
+                ),
+                (
+                    r"\\bClutter\\.get_default_backend\\s*\\(",
+                    "Clutter.get_default_backend() a été supprimé dans GNOME Shell 51",
+                ),
+            )
+            for pattern, message in forbidden_apis:
+                if re.search(pattern, block):
+                    errors.append(f"{document.relative_to(ROOT)}: {message}")
 
         try:
             visible_lines = list(markdown_lines(document))

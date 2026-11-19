@@ -168,18 +168,15 @@ L'exemple montre la gestion de l'identifiant et doit être adapté au besoin ré
 
 ## 7. Ajouter une feuille de style
 
-La classe `Extension` expose `loadStylesheet()` et `unloadStylesheet()`. Chargez la feuille lors de l'activation et retirez-la à la désactivation :
+Pour une extension GNOME Shell classique, placez `stylesheet.css` à la racine du dossier, à côté de `extension.js` et de `metadata.json`. Le système d'extensions du Shell charge cette feuille lorsqu'il active l'extension et la retire lorsqu'il la désactive. Il n'est donc pas nécessaire d'appeler des méthodes `loadStylesheet()` ou `unloadStylesheet()` sur l'objet `Extension` : ces méthodes ne font pas partie de l'API de cette classe.
 
-```javascript
-enable() {
-  this.loadStylesheet();
-  // Créer les acteurs de l'extension.
-}
+Structure :
 
-disable() {
-  // Détruire les acteurs de l'extension.
-  this.unloadStylesheet();
-}
+```text
+mon-extension@example.org/
+├── metadata.json
+├── extension.js
+└── stylesheet.css
 ```
 
 Exemple CSS :
@@ -191,7 +188,9 @@ Exemple CSS :
 }
 ```
 
-Ajoutez votre propre classe aux acteurs. Évitez les sélecteurs génériques tels que `label` ou `button`, qui pourraient modifier les composants du Shell sans rapport avec l'extension.
+Ajoutez votre propre classe aux acteurs. Évitez les sélecteurs génériques tels que `label` ou `button`, qui pourraient modifier les composants du Shell sans rapport avec l'extension. Le CSS de cette feuille s'applique au Shell et aux widgets St de l'extension, pas à la fenêtre GTK de préférences.
+
+Si une extension a besoin d'un fournisseur CSS construit dynamiquement ou chargé depuis un emplacement différent, elle doit gérer explicitement le fournisseur avec les API St appropriées et conserver la référence nécessaire à son retrait. Ce cas avancé ne doit pas être confondu avec le chargement automatique de `stylesheet.css`.
 
 ## 8. Préférences et GSettings
 
@@ -281,6 +280,20 @@ Pour maintenir une extension :
 4. testez une session après déconnexion/reconnexion ;
 5. vérifiez qu'aucun signal ou timer ne subsiste ;
 6. documentez les limitations.
+
+### Points de portage à contrôler pour GNOME Shell 51
+
+Le guide de migration GNOME Shell 51 signale plusieurs changements qui peuvent casser un exemple repris d'un ancien tutoriel :
+
+- La propriété `St.BoxLayout.vertical` a été supprimée. Utilisez `orientation: Clutter.Orientation.VERTICAL` ou `Clutter.Orientation.HORIZONTAL`.
+- `Shell.GLSLEffect` a été supprimé. Pour un effet GLSL, utilisez `Clutter.ShaderEffect` et un `Cogl.Snippet` adapté ; les chapitres 52 et 53 détaillent ce chemin.
+- `Clutter.get_default_backend()` a été supprimé. Depuis un acteur, utilisez `actor.get_context().get_backend()` ; pour le contexte de scène, utilisez `global.stage.context.get_backend()`.
+- `disable()` doit rester synchrone. Une méthode déclarée `async disable()` provoque désormais une erreur.
+- Les méthodes `open()` et `close()` de `PopupMenu` reçoivent un objet d'options, par exemple `menu.close({animate: false})`, plutôt que l'ancienne valeur d'énumération d'animation.
+- Pour les boutons St, préférez les noms explicites `St.ButtonMask.PRIMARY`, `MIDDLE` et `SECONDARY`. Les anciens noms numériques restent compatibles mais sont dépréciés.
+- Respectez la préférence de mouvement réduit exposée par `St.Settings` avant de lancer une animation non essentielle.
+
+Vérifiez ces points dans le guide de migration de la version ciblée avant de reprendre du code d'une extension GNOME 50 ou antérieure. Ne faites pas une substitution mécanique sans vérifier le type d'objet, le contexte d'appel et la signature GJS.
 
 ## 11. Publication et sécurité
 
