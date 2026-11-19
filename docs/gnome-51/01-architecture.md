@@ -40,7 +40,7 @@ Les thèmes Shell, GTK, icônes et curseurs sont des paquets distincts. Les para
 - **Système** : dépend de GDM, Mutter, pilote, distribution ou droits administrateur.
 - **Non garanti** : interface tierce, widget privé ou rendu propriétaire.
 
-Ne jamais représenter une clé dconf comme une propriété CSS. L'éditeur doit afficher le niveau de prise en charge avant de proposer une modification.
+Ne jamais représenter une clé dconf comme une propriété CSS. Le niveau de prise en charge doit être explicite avant toute modification.
 
 ## 1.3 Cascade et priorité
 
