@@ -203,3 +203,95 @@ def export_gnome_shell_theme(tokens: ThemeTokens, destination: str | Path) -> Pa
         encoding="utf-8",
     )
     return theme_dir
+
+
+def export_gtk3_css(tokens: ThemeTokens) -> str:
+    """Export a GTK 3.24 stylesheet."""
+    tokens.validate()
+    return f"""/* GTK 3.24 */
+@define-color theme_bg_color {tokens.background};
+@define-color theme_fg_color {tokens.foreground};
+@define-color theme_selected_bg_color {tokens.accent};
+@define-color theme_selected_fg_color #ffffff;
+window, .background {{ background-color: @theme_bg_color; color: @theme_fg_color; }}
+headerbar, .titlebar {{ background-color: {tokens.surface}; color: {tokens.foreground}; border-color: {tokens.border}; }}
+button {{ background-color: {tokens.surface}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; padding: {tokens.spacing}px {tokens.spacing * 2}px; }}
+button:hover, button:focus {{ background-color: {tokens.accent}; color: #ffffff; }}
+button:active, button:checked {{ background-color: {tokens.accent}; color: #ffffff; }}
+entry, textview, spinbutton {{ background-color: {tokens.background}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; }}
+selection {{ background-color: {tokens.accent}; color: #ffffff; }}
+popover, menu, .menu {{ background-color: {tokens.surface}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; }}
+tooltip {{ background-color: {tokens.surface}; color: {tokens.foreground}; }}
+"""
+
+
+def export_gtk4_css(tokens: ThemeTokens) -> str:
+    """Export conservative GTK 4 CSS without 4.16-only custom properties."""
+    tokens.validate()
+    return f"""/* GTK 4.0+ compatible stylesheet; no CSS custom properties. */
+@define-color theme_bg_color {tokens.background};
+@define-color theme_fg_color {tokens.foreground};
+@define-color theme_selected_bg_color {tokens.accent};
+@define-color theme_selected_fg_color #ffffff;
+window, .background {{ background-color: {tokens.background}; color: {tokens.foreground}; }}
+headerbar {{ background-color: {tokens.surface}; color: {tokens.foreground}; border-color: {tokens.border}; }}
+button {{ background-color: {tokens.surface}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; padding: {tokens.spacing}px {tokens.spacing * 2}px; }}
+button:hover, button:focus {{ background-color: {tokens.accent}; color: #ffffff; }}
+button:active, button:checked {{ background-color: {tokens.accent}; color: #ffffff; }}
+entry, textview, spinbutton {{ background-color: {tokens.background}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; }}
+popover, menu {{ background-color: {tokens.surface}; color: {tokens.foreground}; border: 1px solid {tokens.border}; border-radius: {tokens.radius}px; }}
+"""
+
+
+def export_libadwaita_css(tokens: ThemeTokens) -> str:
+    """Export optional Libadwaita user CSS variables for GTK 4.16+."""
+    tokens.validate()
+    return f""":root {{
+  --window-bg-color: {tokens.background};
+  --window-fg-color: {tokens.foreground};
+  --view-bg-color: {tokens.background};
+  --view-fg-color: {tokens.foreground};
+  --headerbar-bg-color: {tokens.surface};
+  --headerbar-fg-color: {tokens.foreground};
+  --headerbar-border-color: {tokens.border};
+  --card-bg-color: {tokens.surface};
+  --card-fg-color: {tokens.foreground};
+  --popover-bg-color: {tokens.surface};
+  --popover-fg-color: {tokens.foreground};
+  --accent-bg-color: {tokens.accent};
+  --accent-fg-color: #ffffff;
+  --accent-color: {tokens.accent};
+  --border-color: {tokens.border};
+}}
+"""
+
+
+def export_complete_theme(tokens: ThemeTokens, destination: str | Path) -> Path:
+    """Export Shell, GTK 3, GTK 4 and optional Libadwaita CSS."""
+    tokens.validate()
+    safe_name = re.sub(r"[^A-Za-z0-9._-]+", "-", tokens.name.strip()).strip(".-") or "G-OS-Theme"
+    theme_dir = Path(destination) / safe_name
+    for folder in ("gnome-shell", "gtk-3.0", "gtk-4.0", "libadwaita"):
+        (theme_dir / folder).mkdir(parents=True, exist_ok=True)
+    (theme_dir / "gnome-shell" / "gnome-shell.css").write_text(export_gnome_shell_css(tokens), encoding="utf-8")
+    (theme_dir / "gtk-3.0" / "gtk.css").write_text(export_gtk3_css(tokens), encoding="utf-8")
+    (theme_dir / "gtk-4.0" / "gtk.css").write_text(export_gtk4_css(tokens), encoding="utf-8")
+    (theme_dir / "libadwaita" / "gtk-4.16.css").write_text(export_libadwaita_css(tokens), encoding="utf-8")
+    readme = (
+        f"# {tokens.name}\n\n"
+        "Thème généré par G-OS Theme Maker.\n\n"
+        "## Contenu\n"
+        "- gnome-shell/ : GNOME Shell 51 (vérifier les sélecteurs sur chaque version).\n"
+        "- gtk-3.0/ : GTK 3.24.\n"
+        "- gtk-4.0/ : feuille GTK 4 sans propriétés CSS personnalisées.\n"
+        "- libadwaita/gtk-4.16.css : variables utilisateur optionnelles pour GTK 4.16+.\n\n"
+        "## Installation GTK\n"
+        "Copier le dossier dans ~/.themes/ pour les thèmes GTK classiques. "
+        "Les applications Libadwaita ne garantissent pas la prise en charge d'un thème GTK global. "
+        "Pour tester les variables Libadwaita, importer le fichier optionnel dans ~/.config/gtk-4.0/gtk.css, "
+        "puis relancer l'application.\n\n"
+        "Les ressources d'icônes et de curseurs ne sont pas générées dans cette version. "
+        "Consulter docs/guide-theme-gnome.md pour les détails et limites de compatibilité.\n"
+    )
+    (theme_dir / "README.md").write_text(readme, encoding="utf-8")
+    return theme_dir
