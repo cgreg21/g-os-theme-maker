@@ -7,7 +7,7 @@ A visual GTK4 application for creating GNOME Shell themes without writing CSS by
 - Visual theme editor for colors, typography, spacing, borders, radii and component states.
 - Live GTK preview and an isolated nested GNOME Shell preview backend.
 - Property inspector for selecting preview components and editing their theme tokens.
-- Theme presets, light/dark variants, JSON project files and GNOME Shell CSS export.
+- JSON project files, generic CSS export and installable GNOME Shell theme directory export.
 - No changes to the user's active desktop theme during editing.
 
 ## Current status
@@ -37,4 +37,4 @@ python3 -m g_os_theme_maker
 
 ## Project format
 
-Projects are JSON documents with a versioned schema. Exported CSS is intended for GNOME Shell theme development and should be validated against the target GNOME Shell version before installation.
+Projects are JSON documents with a versioned schema. The GNOME Shell export creates a theme directory containing `gnome-shell/gnome-shell.css` and a short installation note. Copy the generated theme directory to `~/.themes/`, then select it with GNOME Tweaks or the User Themes extension. CSS selectors can vary by GNOME Shell release; review the theme in a nested session before using it on your desktop. The generic CSS export remains available separately.
