@@ -1,6 +1,6 @@
 # Manuel de création et de personnalisation GNOME 51
 
-Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des schémas annotés, des méthodes de diagnostic et un catalogue technique.
+Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d'écran légendées, des méthodes de diagnostic et un catalogue technique.
 
 La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
@@ -54,7 +54,7 @@ Les visuels renvoient désormais aux captures officielles de GNOME Help et aux i
 
 ## Comment utiliser ce manuel
 
-Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Pour un composant précis, consultez son tutoriel, observez le schéma, puis vérifiez le sélecteur dans les sources correspondant à la version utilisée.
+Lisez d'abord le parcours débutant. Réalisez les exercices dans un dossier de test et ne modifiez pas les fichiers système. Pour un composant précis, consultez son tutoriel, observez la capture, puis vérifiez le sélecteur dans les sources correspondant à la version utilisée.
 
 Chaque exemple est un point de départ. Un sélecteur CSS peut être valide sans correspondre à un composant présent. Une application peut charger son propre style. Les extensions peuvent ajouter des widgets et le thème utilisateur ne contrôle pas tous les moteurs.
 
@@ -64,4 +64,4 @@ Le manuel vise les familles de composants natifs documentées pour GNOME Shell 5
 
 ## Formats exportés
 
-Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des illustrations SVG. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des captures officielles liées dans les chapitres. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.

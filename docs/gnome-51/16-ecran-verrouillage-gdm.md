@@ -26,11 +26,9 @@ GDM utilise sa propre configuration et ses propres ressources système. Le thèm
 
 ## 2. Repérer le contexte avant de modifier le CSS
 
-| Interface | Moment d'affichage | Environnement de style |
-| --- | --- | --- |
-| Verrouillage | Session ouverte, écran verrouillé | GNOME Shell de l'utilisateur |
-| Déverrouillage | Authentification pour reprendre la session | GNOME Shell de l'utilisateur |
-| Connexion GDM | Avant l'ouverture de session | Greeter et configuration système GDM |
+- **Verrouillage** : session ouverte, écran verrouillé ; le style est chargé par le GNOME Shell de l'utilisateur.
+- **Déverrouillage** : authentification pour reprendre la session ; le dialogue appartient au GNOME Shell de l'utilisateur.
+- **Connexion GDM** : avant l'ouverture de session ; le greeter utilise son environnement et sa configuration système.
 
 Un sélecteur CSS valide n'est utile que s'il est chargé par le bon processus Shell. Ne commencez donc jamais par copier une règle trouvée dans un thème tiers sans identifier le contexte visé.
 
