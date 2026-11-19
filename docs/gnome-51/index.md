@@ -40,6 +40,7 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle com
 32. [Maîtriser Fontconfig et la typographie](34-fontconfig-typographie-detail.md)
 33. [Thèmes GNOME et applications Flatpak](37-flatpak-themes-sandbox.md)
 34. [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
+35. [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
 
 ## Captures de l'interface GNOME standard
 
@@ -80,6 +81,7 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Fontconfig et typographie](34-fontconfig-typographie-detail.md)
 - [Thèmes et applications Flatpak](37-flatpak-themes-sandbox.md)
 - [Applications Qt, Electron et environnements hybrides](38-applications-qt-electron.md)
+- [Thématisation des extensions GNOME Shell](39-thematisation-extensions-shell.md)
 
 ## Référence technique
 
