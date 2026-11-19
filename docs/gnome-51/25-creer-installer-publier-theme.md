@@ -250,3 +250,148 @@ Le thème est prêt à être partagé lorsque son installation est reproductible
 - [GNOME Human Interface Guidelines](https://developer.gnome.org/hig/)
 
 Ce chapitre clôt le parcours pratique. Les chapitres précédents restent la référence détaillée de chaque moteur et composant.
+
+
+## 18. Préparer une livraison vérifiable
+
+Une archive publiée doit permettre de savoir précisément ce qu'elle contient, pour quelle version elle est prévue et comment la vérifier. Distinguez la version du thème de la version de GNOME ciblée. Par exemple, `2.1.0` peut être la version du thème, tandis que `GNOME Shell 51.x` est sa cible de compatibilité.
+
+Utilisez une convention de version stable et notez les changements dans un fichier `CHANGELOG.md`. Une version majeure peut signaler une rupture de structure ou de compatibilité ; une version mineure une nouvelle famille de ressources ; une version corrective une correction sans changement d'usage. Cette convention est un choix de projet, pas une règle imposée par GNOME.
+
+Le README doit indiquer sans ambiguïté :
+
+- nom et version du thème ;
+- version GNOME et versions des toolkits réellement testées ;
+- composants pris en charge et composants hors périmètre ;
+- extensions et dépendances requises ;
+- installation, mise à jour, désinstallation et retour arrière ;
+- variantes disponibles et limites connues ;
+- licences et attribution des ressources redistribuées ;
+- adresse ou méthode de signalement des problèmes.
+
+N'annoncez pas « compatible GNOME 51 » si seule une capture d'écran a été vérifiée. Indiquez les composants testés et ceux qui restent non testés.
+
+## 19. Vérifier le contenu avant archivage
+
+Depuis le répertoire qui contient `MonTheme/`, vérifiez la structure et les liens symboliques :
+
+```sh
+find MonTheme -mindepth 1 -maxdepth 4 -print | sort
+find MonTheme -type l -printf '%p -> %l\n'
+```
+
+Un lien symbolique doit rester dans le périmètre du thème ou viser une dépendance explicitement documentée. Évitez les liens vers le répertoire personnel, `/tmp`, `/usr/share` ou un chemin propre à votre machine. Un lien absolu ne devient pas portable parce qu'il est inclus dans une archive.
+
+Contrôlez les fichiers obligatoires uniquement pour les familles annoncées. Exemple de vérification minimale pour un thème qui fournit Shell et GTK 3 :
+
+```sh
+test -s MonTheme/README.md
+test -s MonTheme/LICENSE
+test -s MonTheme/gnome-shell/gnome-shell.css
+test -s MonTheme/gtk-3.0/gtk.css
+```
+
+Adaptez ces contrôles au contenu réel du paquet. Ne créez pas artificiellement des fichiers vides pour faire passer les tests. Si le thème ne redistribue pas une famille, le README doit le dire.
+
+Recherchez les fichiers qui ne doivent pas être publiés :
+
+```sh
+find MonTheme -type f \(
+  -name '*.bak' -o -name '*.tmp' -o -name '*~' \
+  -o -name '.DS_Store' -o -name 'Thumbs.db' \
+  -o -name '*.dconf' -o -name '*.log' \
+\) -print
+```
+
+Examinez chaque résultat. Certains fichiers portant une extension inhabituelle peuvent être des ressources voulues ; ne les supprimez pas aveuglément. Une archive ne doit jamais contenir de sauvegarde personnelle, de journal de session ou de fichier de configuration privé.
+
+## 20. Créer une archive stable et contrôler son contenu
+
+Pour une archive GNU tar reproductible, normalisez l'ordre, les propriétaires et les dates. La valeur de date ci-dessous est un exemple fixe : choisissez une date de référence documentée pour la version publiée.
+
+```sh
+tar --sort=name \
+  --mtime='UTC 2026-01-01' \
+  --owner=0 --group=0 --numeric-owner \
+  -czf MonTheme-2.1.0.tar.gz MonTheme/
+```
+
+La reproductibilité dépend aussi des outils et des métadonnées des fichiers. Si vous exigez une identité binaire stricte, figez les versions des outils de construction et normalisez également les permissions et les métadonnées avant l'archivage. Ne modifiez pas les dates des fichiers sources de travail uniquement pour produire une archive.
+
+Inspectez la liste des membres :
+
+```sh
+tar -tzvf MonTheme-2.1.0.tar.gz
+```
+
+Vérifiez qu'aucun membre ne commence par `/`, ne contient de segment `../` et ne pointe vers un chemin inattendu. L'archive doit avoir un unique dossier racine prévisible, ici `MonTheme/`, afin d'éviter de disperser les fichiers lors de l'extraction.
+
+Testez l'intégrité gzip et tar :
+
+```sh
+gzip -t MonTheme-2.1.0.tar.gz
+tar -tzf MonTheme-2.1.0.tar.gz >/dev/null
+```
+
+Enfin, extrayez l'archive dans un répertoire temporaire vide et vérifiez les fichiers réellement extraits. Ne testez pas l'installation directement depuis votre dossier de développement : cela peut masquer un fichier oublié dans l'archive.
+
+## 21. Calculer et publier une empreinte
+
+Une empreinte permet de vérifier qu'une archive téléchargée est identique à celle publiée :
+
+```sh
+sha256sum MonTheme-2.1.0.tar.gz \
+  > MonTheme-2.1.0.tar.gz.sha256
+sha256sum --check MonTheme-2.1.0.tar.gz.sha256
+```
+
+Publiez le fichier d'empreinte à côté de l'archive et conservez la valeur dans les notes de version. Une somme SHA-256 détecte une altération accidentelle ou une différence de fichier ; elle ne prouve pas à elle seule l'identité de l'auteur. Pour authentifier une publication, signez également les artefacts avec une clé dont l'empreinte et le mode de vérification sont communiqués par un canal indépendant.
+
+Ne placez jamais une clé privée de signature dans le dépôt ni dans l'archive du thème.
+
+## 22. Vérifier l'installation depuis l'archive publiée
+
+Le dernier test doit partir de l'archive téléchargée, et non du dossier de développement :
+
+1. vérifiez l'empreinte ;
+2. listez le contenu de l'archive ;
+3. extrayez-la dans un dossier temporaire ;
+4. lisez le README de cette extraction ;
+5. installez dans un compte utilisateur ou une machine virtuelle de test ;
+6. vérifiez les composants annoncés ;
+7. testez la désinstallation et le retour arrière ;
+8. comparez le résultat avec la version annoncée.
+
+Conservez le nom exact de l'archive, son empreinte, les versions logicielles, la date du test et les résultats. Si une correction est nécessaire, publiez une nouvelle version plutôt que de remplacer silencieusement une archive déjà annoncée.
+
+## 23. Contrôler les licences des ressources incluses
+
+La licence du CSS ne couvre pas nécessairement les icônes, polices, curseurs, images, sons ou fonds d'écran. Chaque ressource peut avoir une licence et des obligations distinctes.
+
+Pour chaque famille redistribuée :
+
+- identifiez le projet et l'auteur d'origine ;
+- conservez le texte de licence demandé ;
+- ajoutez les mentions d'attribution requises ;
+- vérifiez les obligations de redistribution et de modification ;
+- distinguez les ressources créées par le projet des ressources tierces ;
+- vérifiez les marques et logos, qui peuvent être soumis à des règles distinctes du droit d'auteur.
+
+Un fichier `LICENSE` générique ne suffit pas si le paquet contient des ressources sous des licences différentes. Ajoutez un dossier `licenses/` ou un fichier `THIRD-PARTY-NOTICES.md` lorsque cela clarifie les attributions. N'affirmez pas qu'une ressource est libre simplement parce qu'elle est disponible publiquement.
+
+## 24. Procédure de publication et de maintenance
+
+Avant chaque publication :
+
+1. mettez à jour la version et le journal des changements ;
+2. vérifiez les fichiers et liens symboliques ;
+3. exécutez les tests de syntaxe et les tests visuels prévus ;
+4. vérifiez les licences et attributions ;
+5. construisez l'archive depuis une copie propre ;
+6. testez l'archive extraite ;
+7. calculez son empreinte ;
+8. rédigez les notes de version avec les limites connues ;
+9. publiez archive, empreinte, sources et documentation ;
+10. conservez les artefacts et résultats de test.
+
+Après publication, ne remplacez pas le contenu d'une version existante sans créer une nouvelle version clairement identifiée. En cas de défaut critique, marquez la version comme retirée ou déconseillée, expliquez le problème et publiez une version corrigée.
