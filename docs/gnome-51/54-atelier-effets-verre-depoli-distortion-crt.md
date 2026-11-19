@@ -161,33 +161,30 @@ cogl_texel = texture2D(cogl_sampler, uv);
 
 La fréquence et l'amplitude contrôlent la forme de l'ondulation. Une amplitude trop forte peut faire apparaître des zones non couvertes sur les bords. Gardez la déformation modeste et vérifiez les limites de texture.
 
-### Construire le snippet en GJS
+### Raccorder le hook au pipeline Cogl
 
-```javascript
-import Clutter from 'gi://Clutter';
-import Cogl from 'gi://Cogl';
+Attention : un snippet `TEXTURE_LOOKUP` ne se raccorde pas comme un snippet `FRAGMENT`. Le premier est propre à une couche de texture et doit être ajouté avec `Cogl.Pipeline.add_layer_snippet()` (couche 0 dans cet exemple). `Clutter.ShaderEffect.new_with_snippet()` est illustré au chapitre 53 pour les traitements `FRAGMENT` ; ne lui passez pas ce snippet de recherche de texture en supposant qu'il sera automatiquement attaché à une couche.
 
-const snippet = new Cogl.Snippet(
-    Cogl.SnippetHook.TEXTURE_LOOKUP,
-    null,
-    null
-);
+L'assemblage bas niveau du pipeline suit ce principe :
 
-snippet.set_replace(`
-    vec2 uv = cogl_tex_coord.st;
-    uv.x += sin(uv.y * 18.0) * 0.006;
-    cogl_texel = texture2D(cogl_sampler, uv);
-`);
+```c
+CoglSnippet *snippet =
+    cogl_snippet_new (COGL_SNIPPET_HOOK_TEXTURE_LOOKUP, NULL, NULL);
 
-const effect = Clutter.ShaderEffect.new_with_snippet(snippet);
-actor.add_effect_with_name('wave-distortion', effect);
+cogl_snippet_set_replace (snippet,
+    "vec2 uv = cogl_tex_coord.st; "
+    "uv.x += sin(uv.y * 18.0) * 0.006; "
+    "cogl_texel = texture2D(cogl_sampler, uv);");
+
+cogl_pipeline_add_layer_snippet (pipeline, 0, snippet);
+g_object_unref (snippet);
 ```
 
-Ce bloc montre l'assemblage du traitement. L'acteur doit déjà exister, avoir une taille non nulle et être correctement intégré à la scène. Conservez les références nécessaires pendant la durée de vie de l'effet et retirez l'acteur ou l'effet à la désactivation.
+Ce fragment C montre uniquement la création et l'attachement du snippet à un pipeline Cogl déjà configuré avec une couche de texture. Il ne constitue pas à lui seul un effet d'acteur GNOME Shell. Pour l'utiliser sur le contenu d'un acteur, il faut intégrer ce pipeline dans un effet hors écran Clutter adapté (ou une implémentation native de `Clutter.OffscreenEffect`) et gérer la cible, la couche, le rendu et les uniformes. Cette intégration avancée n'est pas fournie ici sous la forme d'une extension GJS complète : mieux vaut ne pas présenter un `Clutter.ShaderEffect` générique comme un raccordement valide de ce hook spécialisé.
 
 ## 5. Vignettage, lignes de balayage et aberration chromatique
 
-Les traitements suivants sont des variantes de post-traitement. Ils s'appliquent à une texture fournie au shader, pas au bureau complet.
+Les traitements suivants sont des variantes de post-traitement. Ils s'appliquent à une texture fournie au shader, pas au bureau complet. Les fragments utilisant `cogl_sampler`, `cogl_tex_coord` et `cogl_texel` ciblent le hook `TEXTURE_LOOKUP` d'une couche Cogl ; ils nécessitent donc le raccordement par `Cogl.Pipeline.add_layer_snippet()` décrit à la section précédente et un effet hors écran qui utilise ce pipeline. Ils ne peuvent pas être collés tels quels dans l'exemple `Clutter.ShaderEffect` du chapitre 53.
 
 ### Vignettage
 
