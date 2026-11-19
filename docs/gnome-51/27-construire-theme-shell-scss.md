@@ -40,7 +40,7 @@ Conservez ce commit dans vos notes de compatibilité. Une distribution peut appl
 Prenons les réglages rapides. La recherche commence par le nom de la classe :
 
 ```bash
-grep -Rni --include='*.scss' '.quick-toggle' \
+grep -RniF --include='*.scss' '.quick-toggle' \
   data/theme/gnome-shell-sass/widgets
 ```
 
