@@ -23,6 +23,7 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 
 - [Anatomie du panneau supérieur](images/panneau-superieur.svg)
 - [Anatomie de la vue Activités](images/vue-activites.svg)
+- [Anatomie d'une application GNOME](images/application-gnome.svg)
 
 Les schémas sont des illustrations pédagogiques de l'interface et non des captures d'écran exactes. Les sélecteurs et structures décrits dans les chapitres sont, eux, contrôlés dans les sources GNOME Shell 51.0.
 

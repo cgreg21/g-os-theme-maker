@@ -10,10 +10,6 @@ Sources principales :
 
 Les noms de classes sont des détails d'implémentation. Ils peuvent changer lors d'une mise à jour de GNOME. Ce chapitre décrit la version 51.0 et ne garantit pas la compatibilité avec d'autres versions.
 
-![Schéma annoté du panneau supérieur : Activités, horloge, indicateurs système et états des boutons](images/panneau-superieur.svg)
-
-Le schéma est une représentation pédagogique simplifiée. Il sert à localiser les zones et classes ; il ne prétend pas reproduire à l'identique toutes les dispositions possibles.
-
 ## 1. Comprendre le panneau avant de le modifier
 
 Le panneau est un ensemble d'acteurs St créés par le code JavaScript du Shell. Le CSS modifie leur apparence, mais ne crée pas les indicateurs et ne décide pas de leur position fonctionnelle.
