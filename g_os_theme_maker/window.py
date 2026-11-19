@@ -188,7 +188,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             self.tokens.validate()
         except ValueError:
             return
-        css = f\'''
+        css = f"""
         .preview-canvas {{ background: {self.tokens.background}; color: {self.tokens.foreground}; }}
         .preview-topbar {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; padding: {self.tokens.spacing}px; border-radius: {self.tokens.radius}px; }}
         .preview-card {{ background: {self.tokens.surface}; color: {self.tokens.foreground}; border: 1px solid {self.tokens.border}; border-radius: {self.tokens.radius}px; padding: {self.tokens.spacing * 2}px; font-size: {self.tokens.font_size}px; }}
