@@ -1,6 +1,6 @@
 # Manuel de création et de personnalisation GNOME 51
 
-Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d'écran légendées, des méthodes de diagnostic et un catalogue technique.
+Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des illustrations locales légendées, des méthodes de diagnostic et un catalogue technique.
 
 La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 25 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
@@ -32,18 +32,17 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle reg
 
 ## Captures de l'interface GNOME standard
 
-Les visuels sont des captures d'interfaces GNOME réelles, issues de l'aide officielle GNOME et des notes de version GNOME 51. Ils montrent l'apparence standard Adwaita, pas des schémas redessinés. Les captures GNOME Help peuvent provenir d'une version antérieure ; les captures release.gnome.org/51 correspondent à GNOME 51.
+Les visuels ci-dessous sont des illustrations SVG originales stockées dans ce dépôt. Elles reprennent la palette, les surfaces, les arrondis et la hiérarchie du thème Adwaita par défaut pour expliquer les interfaces. Ce ne sont pas des captures d'écran GNOME réelles ni des ressources officielles.
 
-- [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
-- [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
-- [Application GNOME 51 : Papers](https://release.gnome.org/51/papers-signature-screenshot.webp)
-- [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
-- [Calendrier GNOME 51](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
-- [Aperçu de document GNOME 51](https://release.gnome.org/51/sushi-screenshot.webp)
-- [Loupe GNOME 51](https://release.gnome.org/51/loupe-properties-screenshot.webp)
-- [Fond d'écran Adwaita GNOME 51](https://release.gnome.org/51/adwaita-thumb.webp)
+- [Panneau supérieur Adwaita](images/panneau-superieur-adwaita.svg)
+- [Vue Activités Adwaita](images/vue-activites-adwaita.svg)
+- [Fenêtre d'application Adwaita](images/fenetre-adwaita.svg)
+- [Réglages rapides](images/reglages-rapides-adwaita.svg)
+- [Calendrier et notifications](images/calendrier-notifications-adwaita.svg)
+- [Écran de verrouillage](images/ecran-verrouillage-adwaita.svg)
+- [Fond Adwaita](images/fond-adwaita.svg)
 
-Les captures GNOME Help servent à identifier les zones du Shell, pas à figer leurs dimensions ou sélecteurs. Les captures des notes de version sont propres à GNOME 51.
+Les sélecteurs, dimensions et comportements doivent toujours être vérifiés dans la version de GNOME ciblée. Les SVG sont des supports pédagogiques, pas des spécifications de pixels.
 
 ## Compléments pédagogiques
 
@@ -81,4 +80,4 @@ Le manuel vise les familles de composants natifs documentées pour GNOME Shell 5
 
 ## Formats exportés
 
-Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des captures officielles liées dans les chapitres. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des illustrations SVG locales du dépôt. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
