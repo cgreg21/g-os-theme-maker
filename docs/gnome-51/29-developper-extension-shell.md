@@ -35,18 +35,22 @@ Le répertoire utilisateur habituel est :
 
 Le nom du dossier doit correspondre exactement à l'UUID déclaré dans `metadata.json`.
 
-## 3. Structure minimale
+## 3. Structure minimale et fichiers requis
+
+Une extension GNOME Shell moderne doit au minimum fournir `metadata.json` et son module principal `extension.js`. Les autres fichiers dépendent des fonctionnalités :
 
 ```text
-org.example.mon-extension/
+mon-extension@example.org/
 ├── metadata.json
 ├── extension.js
-├── stylesheet.css
-├── prefs.js
-└── README.md
+├── stylesheet.css       # facultatif
+├── prefs.js              # facultatif
+├── schemas/              # facultatif
+│   └── org.example.mon-extension.gschema.xml
+└── README.md             # documentation du projet
 ```
 
-Tous les fichiers ne sont pas obligatoires. `prefs.js` n'est utile que si l'extension possède des préférences. Une feuille CSS est facultative.
+Le dossier installé doit porter le même UUID que les métadonnées. Le fichier `prefs.js` n'est chargé que si l'extension fournit une interface de préférences. Le schéma GSettings est nécessaire uniquement si l'extension stocke des options de cette manière. Une feuille CSS n'est utile que si l'extension crée ou stylise des acteurs.
 
 Exemple de métadonnées GNOME Shell 51 :
 
@@ -60,13 +64,23 @@ Exemple de métadonnées GNOME Shell 51 :
 }
 ```
 
-L'UUID doit être unique. La clé `shell-version` déclare les versions prises en charge ; elle ne rend pas automatiquement le code compatible. Testez chaque version annoncée.
+L'UUID doit être unique, stable et identique au nom du dossier. La clé `shell-version` déclare les versions prises en charge ; elle ne rend pas automatiquement le code compatible. Testez chaque version annoncée. N'ajoutez pas une version à cette liste uniquement pour faire disparaître un avertissement : cette déclaration est une promesse de compatibilité.
 
-## 4. Comprendre le cycle de vie
+## 4. Comprendre le cycle de vie et l'état
 
-GNOME Shell charge le module, crée l'objet extension, puis appelle `enable()` lorsque l'extension est activée. Lorsqu'elle est désactivée, `disable()` doit retirer tout ce que `enable()` a ajouté.
+GNOME Shell charge le module, crée l'objet extension, puis appelle `enable()` lorsque l'extension est activée. Lorsqu'elle est désactivée, `disable()` doit retirer tout ce que `enable()` a ajouté. Une même instance peut être activée, désactivée puis réactivée : le code ne doit donc pas supposer que `enable()` ne sera appelé qu'une seule fois.
 
 Règle essentielle : chaque connexion, timer, raccourci, acteur, menu ou provider créé doit avoir une opération de nettoyage correspondante.
+
+Organisez les ressources comme des propriétés de l'instance :
+
+- initialisez les propriétés à `null` ou à une valeur neutre ;
+- créez les objets dans `enable()` ;
+- déconnectez et détruisez les objets dans `disable()` ;
+- remettez les propriétés dans leur état neutre après nettoyage ;
+- rendez le nettoyage sûr même si une initialisation partielle a échoué.
+
+Ne masquez pas une erreur d'initialisation en laissant une extension à moitié active. Si une étape obligatoire échoue, nettoyez les ressources déjà créées et signalez l'erreur dans les journaux.
 
 - `enable()` : créer les éléments et connecter les signaux.
 - `disable()` : déconnecter les signaux, annuler les timers, retirer les raccourcis et détruire les acteurs.
@@ -104,7 +118,9 @@ export default class ExampleExtension extends Extension {
 }
 ```
 
-Le bouton est détruit à la désactivation. Si vous connectez un signal sur un objet qui survit à l'extension, conservez l'identifiant renvoyé par `connect()` et déconnectez-le dans `disable()`.
+Le bouton est détruit à la désactivation. Le code d'exemple est volontairement réduit : un véritable indicateur doit aussi gérer ses états, son accessibilité, ses actions et ses erreurs. Si vous connectez un signal sur un objet qui survit à l'extension, conservez l'identifiant renvoyé par `connect()` et déconnectez-le dans `disable()`.
+
+Ne connectez pas un signal sur un objet persistant en supposant que la destruction de votre bouton supprimera automatiquement cette connexion. La durée de vie de la source du signal et celle de l'acteur sont deux choses différentes.
 
 ## 6. Connexions de signaux et temporisateurs
 
@@ -124,7 +140,31 @@ if (this._signalId) {
 }
 ```
 
-Pour un timer GLib, conservez l'identifiant retourné par la fonction d'ajout puis retirez la source à la désactivation. Ne supposez pas que détruire un widget annule un timer indépendant.
+Pour un timer GLib, conservez l'identifiant retourné par la fonction d'ajout puis retirez la source à la désactivation. Ne supposez pas que détruire un widget annule un timer indépendant. Faites de même pour les raccourcis globaux et les gestionnaires d'événements.
+
+Exemple de principe pour une source GLib :
+
+```javascript
+import GLib from 'gi://GLib';
+
+// Dans enable()
+this._timeoutId = GLib.timeout_add(
+  GLib.PRIORITY_DEFAULT,
+  1000,
+  () => {
+    this._refresh();
+    return GLib.SOURCE_CONTINUE;
+  }
+);
+
+// Dans disable()
+if (this._timeoutId !== null) {
+  GLib.Source.remove(this._timeoutId);
+  this._timeoutId = null;
+}
+```
+
+L'exemple montre la gestion de l'identifiant et doit être adapté au besoin réel. Une source qui doit s'arrêter d'elle-même peut retourner `GLib.SOURCE_REMOVE`. Vérifiez toujours que le callback ne peut plus être appelé après la destruction des objets qu'il utilise.
 
 ## 7. Ajouter une feuille de style
 
@@ -180,24 +220,47 @@ glib-compile-schemas --strict schemas/
 
 Ne modifiez pas directement les fichiers de schéma du système. Le schéma livré par l'extension doit avoir un identifiant propre et un chemin cohérent.
 
-## 9. Installer et diagnostiquer
+## 9. Installer, mettre à jour et diagnostiquer
 
-Depuis le dossier parent de l'extension :
+Depuis le dossier parent de l'extension, installez le contenu dans le répertoire qui porte exactement l'UUID :
 
 ```sh
-mkdir -p ~/.local/share/gnome-shell/extensions
-cp -a org.example.mon-extension \
-  ~/.local/share/gnome-shell/extensions/mon-extension@example.org
+install -d "$HOME/.local/share/gnome-shell/extensions/mon-extension@example.org"
+cp -a org.example.mon-extension/. \
+  "$HOME/.local/share/gnome-shell/extensions/mon-extension@example.org/"
+```
+
+Cette copie met à jour les fichiers présents mais ne retire pas les fichiers obsolètes. Pour une mise à jour de développement propre, sauvegardez vos éventuelles données locales, supprimez uniquement le répertoire exact de cette extension, recréez-le et recopiez les sources. Ne faites pas de suppression par motif ou avec une variable non vérifiée.
+
+Vérifiez ensuite que GNOME détecte les métadonnées :
+
+```sh
 gnome-extensions list
 gnome-extensions info mon-extension@example.org
+```
+
+Si vous avez modifié les métadonnées, le schéma ou les fichiers, désactivez l'extension avant de copier les nouvelles versions, puis réactivez-la. Selon la version et la session, un rechargement peut être nécessaire ; ne supposez pas que le processus Shell recharge automatiquement chaque module.
+
+```sh
+gnome-extensions disable mon-extension@example.org
 gnome-extensions enable mon-extension@example.org
 ```
+
+Cette séquence ne doit être exécutée qu'après avoir vérifié que l'extension est installée et que l'environnement permet sa réactivation.
 
 Pour désactiver :
 
 ```sh
 gnome-extensions disable mon-extension@example.org
 ```
+
+Pour supprimer l'extension après l'avoir désactivée, vérifiez l'UUID et le chemin avant de supprimer le seul répertoire concerné :
+
+```sh
+rm -rf -- "$HOME/.local/share/gnome-shell/extensions/mon-extension@example.org"
+```
+
+Ne supprimez pas le répertoire parent `extensions`, qui peut contenir d'autres extensions.
 
 Consultez les erreurs de session :
 
