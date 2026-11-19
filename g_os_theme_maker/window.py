@@ -311,6 +311,8 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         display = Gdk.Display.get_default()
         if display:
             Gtk.StyleContext.add_provider_for_display(display, self._provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        if self.shell.running:
+            self.shell.update_theme(export_gnome_shell_css(self.tokens))
 
     def _toggle_nested_shell(self, _button: Gtk.Button) -> None:
         try:
@@ -321,7 +323,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             else:
                 self.shell.start(export_gnome_shell_css(self.tokens))
                 self.nested_button.set_label("■ Arrêter Mutter imbriqué")
-                self.status.set_text("Aperçu GNOME Shell lancé avec le thème courant dans une session D-Bus et une configuration isolées. Arrêtez puis relancez pour recharger les modifications.")
+                self.status.set_text("Aperçu GNOME Shell lancé en session isolée. Les modifications du thème sont rechargées automatiquement.")
         except (RuntimeError, OSError) as exc:
             self.status.set_text(str(exc))
 
