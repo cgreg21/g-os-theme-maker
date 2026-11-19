@@ -93,24 +93,38 @@ theme_name="${2:?Usage : installer-theme.sh repertoire-du-theme nom-du-theme}"
 
 case "$theme_name" in
   ""|.|..|*/*)
-    printf 'Nom de thème invalide.\\n' >&2
+    printf 'Nom de thème invalide.\n' >&2
     exit 2
     ;;
 esac
 
-test -d "$source_dir"
-test -d "$source_dir/gtk-3.0" -o -d "$source_dir/gtk-4.0" -o -d "$source_dir/gnome-shell"
+# Résoudre le chemin source pour détecter une copie dans son propre contenu.
+source_dir=$(cd -- "$source_dir" && pwd -P)
+if [ ! -d "$source_dir/gtk-3.0" ] &&
+   [ ! -d "$source_dir/gtk-4.0" ] &&
+   [ ! -d "$source_dir/gnome-shell" ]; then
+  printf 'Aucun répertoire de thème GTK ou Shell reconnu dans la source.\n' >&2
+  exit 1
+fi
 
 target="$HOME/.themes/$theme_name"
-if test -e "$target"; then
-  printf 'La cible existe déjà : %s\\n' "$target" >&2
-  printf 'Sauvegardez-la ou choisissez un autre nom avant de continuer.\\n' >&2
+case "$target/" in
+  "$source_dir/"*)
+    printf 'La cible ne peut pas être créée à l’intérieur du répertoire source.\n' >&2
+    exit 1
+    ;;
+esac
+
+if [ -e "$target" ] || [ -L "$target" ]; then
+  printf 'La cible existe déjà : %s\n' "$target" >&2
+  printf 'Sauvegardez-la ou choisissez un autre nom avant de continuer.\n' >&2
   exit 1
 fi
 
 install -d "$HOME/.themes"
-cp -a -- "$source_dir" "$target"
-printf 'Thème copié dans : %s\\n' "$target"
+mkdir -- "$target"
+cp -a -- "$source_dir/." "$target/"
+printf 'Thème copié dans : %s\n' "$target"
 ```
 
 Ce script copie les fichiers ; il n'active pas le thème. L'activation dépend du moteur et de la version : GTK, GNOME Shell et Libadwaita n'utilisent pas tous le même mécanisme. Vérifiez séparément les extensions et préférences nécessaires avant de changer une valeur GSettings.
@@ -124,16 +138,16 @@ theme_name="MonTheme"
 target="$HOME/.themes/$theme_name"
 
 case "$theme_name" in
-  ""|.|..|*/*) printf 'Nom invalide.\\n' >&2; exit 2 ;;
+  ""|.|..|*/*) printf 'Nom invalide.\n' >&2; exit 2 ;;
 esac
 
 if test -d "$target" && test ! -L "$target"; then
-  printf 'Répertoire à retirer : %s\\n' "$target"
-  printf 'Vérifiez qu’il s’agit bien du thème installé par vous.\\n'
+  printf 'Répertoire à retirer : %s\n' "$target"
+  printf 'Vérifiez qu’il s’agit bien du thème installé par vous.\n'
   # Décommentez uniquement après vérification :
   # rm -r -- "$target"
 else
-  printf 'Répertoire absent ou non conforme : %s\\n' "$target" >&2
+  printf 'Répertoire absent ou non conforme : %s\n' "$target" >&2
   exit 1
 fi
 ```
