@@ -70,17 +70,26 @@ Testez boutons, champs, listes, barres d'en-tête, menus, dialogues, vues vides,
 Le nom du dossier installé doit correspondre au nom choisi dans les préférences. Depuis le répertoire qui contient `MonTheme/` :
 
 ```bash
-mkdir -p "$HOME/.themes" "$HOME/.local/share/icons"
-cp -a MonTheme "$HOME/.themes/MonTheme"
+install -d "$HOME/.themes/MonTheme"
+cp -a MonTheme/. "$HOME/.themes/MonTheme/"
 ```
+
+La copie du contenu avec `MonTheme/.` évite de créer un sous-dossier `MonTheme/MonTheme` lorsque la destination existe déjà. Elle met à jour les fichiers présents, mais ne supprime pas les anciens fichiers qui auraient été retirés du paquet. Pour une mise à jour propre, sauvegardez d'abord les personnalisations locales, puis supprimez uniquement le répertoire exact de ce thème avant de le recréer et de recopier son contenu.
 
 Cette copie installe les sous-répertoires `gnome-shell/`, `gtk-3.0/` et `gtk-4.0/` éventuels. N'ajoutez pas ces répertoires si le paquet ne contient pas réellement les ressources correspondantes.
 
 Les thèmes d'icônes et les thèmes de curseurs sont généralement installés comme thèmes d'icônes XDG, chacun dans son propre répertoire :
 
 ```bash
-cp -a MonTheme/icons/MonTheme "$HOME/.local/share/icons/MonTheme"
-cp -a MonTheme/cursors/MonCurseur "$HOME/.local/share/icons/MonCurseur"
+install -d "$HOME/.local/share/icons/MonTheme"
+cp -a MonTheme/icons/MonTheme/. "$HOME/.local/share/icons/MonTheme/"
+```
+
+Pour un thème de curseurs, appliquez le même principe après avoir vérifié que le dossier source existe :
+
+```bash
+install -d "$HOME/.local/share/icons/MonCurseur"
+cp -a MonTheme/cursors/MonCurseur/. "$HOME/.local/share/icons/MonCurseur/"
 ```
 
 N'exécutez chaque copie que si le dossier source existe et contient un `index.theme` valide. Le dossier `cursors/` du paquet est ici une convention d'organisation : après installation, le thème Xcursor est bien recherché parmi les thèmes d'icônes. Vérifiez aussi les chemins des ressources référencées dans `index.theme`.
