@@ -35,6 +35,9 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle com
 27. [Développer une extension GNOME Shell 51](29-developper-extension-shell.md)
 28. [CSS applicatif et ressources GResource](30-css-applications-gresource.md)
 29. [Couleurs, profils d'écran et fidélité du rendu](31-couleurs-profils-ecrans-rendu.md)
+30. [Maîtriser les thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
+31. [Concevoir et diagnostiquer un thème de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
+32. [Maîtriser Fontconfig et la typographie](34-fontconfig-typographie-detail.md)
 
 ## Captures de l'interface GNOME standard
 
@@ -70,6 +73,9 @@ Les captures ne remplacent pas l’inspection de la version installée : les dim
 - [Développer une extension GNOME Shell](29-developper-extension-shell.md)
 - [CSS applicatif et GResource](30-css-applications-gresource.md)
 - [Couleurs et profils d'écran](31-couleurs-profils-ecrans-rendu.md)
+- [Thèmes d'icônes Freedesktop](32-themes-icones-freedesktop-detail.md)
+- [Thèmes de curseurs Xcursor](33-themes-curseurs-xcursor-detail.md)
+- [Fontconfig et typographie](34-fontconfig-typographie-detail.md)
 
 ## Référence technique
 

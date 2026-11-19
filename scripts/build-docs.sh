@@ -36,6 +36,9 @@ SOURCE_FILES=(
   docs/gnome-51/29-developper-extension-shell.md
   docs/gnome-51/30-css-applications-gresource.md
   docs/gnome-51/31-couleurs-profils-ecrans-rendu.md
+  docs/gnome-51/32-themes-icones-freedesktop-detail.md
+  docs/gnome-51/33-themes-curseurs-xcursor-detail.md
+  docs/gnome-51/34-fontconfig-typographie-detail.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md
