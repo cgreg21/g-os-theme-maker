@@ -74,7 +74,7 @@ Les pseudo-classes ne s’appliquent qu’aux nœuds qui exposent l’état corr
 - **Fonction** : Variables personnalisées `--nom` et `var()` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : GTK 4.16+ ; **Libadwaita** : Selon GTK 4.16+
 - **Fonction** : `@define-color` / `@color` ; **Shell 51** : Non ; **GTK 3** : Oui ; **GTK 4** : Ancien mécanisme, déprécié dans les versions récentes ; **Libadwaita** : À éviter
 - **Fonction** : `:root` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : GTK 4.16+ ; **Libadwaita** : Oui avec versions compatibles
-- **Fonction** : `@media` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : Non garanti ; **Libadwaita** : Non garanti
+- **Fonction** : requêtes de média `prefers-color-scheme` et `prefers-contrast` ; **Shell 51** : Non garanti ; **GTK 3** : Non ; **GTK 4** : Oui depuis GTK 4.20 ; **Libadwaita** : Oui lorsque la version GTK sous-jacente le prend en charge
 - **Fonction** : `@import` ; **Shell 51** : À éviter ; **GTK 3** : Oui, selon contexte ; **GTK 4** : Oui, selon contexte ; **Libadwaita** : Selon contexte
 
 Les variables Libadwaita telles que `--window-bg-color`, `--view-bg-color`, `--headerbar-bg-color`, `--card-bg-color`, `--popover-bg-color`, `--accent-bg-color` et `--accent-fg-color` sont des variables sémantiques. Leur présence et leur valeur par défaut dépendent de la version Libadwaita. Ne pas les confondre avec une garantie que toutes les applications acceptent un CSS utilisateur.
@@ -120,3 +120,56 @@ Ne pas proposer comme universels : `display:flex`, `display:grid`, `position:abs
 ## Métadonnées de compatibilité pour l’éditeur
 
 Chaque propriété de l'inspecteur doit déclarer moteur, version minimale, type, widgets admissibles, états admissibles, exporteur, statut de validation et référence. Statuts : commun vérifié, spécifique, partiel, non pris en charge. Un parseur sans erreur ne prouve pas le rendu.
+
+
+## Référence de version GNOME 51
+
+Les statuts génériques ci-dessus ne remplacent pas les références versionnées. La cible de la publication GNOME 51 est GTK 4.23 et Libadwaita 1.10 ; Libadwaita 1.10 requiert GTK 4.23.1. GTK 3 reste documenté séparément en version 3.24 pour les applications historiques.
+
+Points de version à ne pas confondre :
+
+- Les propriétés personnalisées CSS (noms commençant par deux tirets) et var() sont prises en charge par GTK 4 depuis 4.16, mais pas par GTK 3.24.
+- GTK 4.20 a ajouté des requêtes de média pour les préférences de schéma de couleurs et de contraste. La cible GTK 4.23 de GNOME 51 les inclut.
+- GTK 4.23 ajoute font-width ; font-stretch est le raccourci associé et nécessite Pango 1.58 ou plus récent pour les fonctionnalités correspondantes.
+- GTK 3.24 conserve ses extensions historiques, notamment @define-color. Ne transposez pas les mécanismes GTK 4 dans GTK 3.
+- Les classes et sélecteurs de GNOME Shell sont liés aux sources 51.0. Ils ne sont pas des sélecteurs GTK et ne suivent pas la même grammaire dans tous les détails.
+
+### Exemple de règle conditionnelle GTK 4.23
+
+Cette règle vise une feuille GTK 4 dont le moteur prend en charge les préférences de schéma de couleurs. Elle ne doit pas être copiée dans une feuille GTK 3 ou GNOME Shell :
+
+~~~css
+@media (prefers-color-scheme: dark) {
+  .my-preview {
+    background-color: #242424;
+    color: #ffffff;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .my-preview {
+    border-width: 2px;
+  }
+}
+~~~
+
+Ce code est un exemple GTK 4.23. Il ne garantit pas qu'une application tierce charge la feuille CSS, ni qu'un widget privé expose la classe .my-preview.
+
+### Comment lire les statuts
+
+Les mentions « Oui », « Partiel » et « Non garanti » décrivent une orientation, pas un résultat de test exhaustif. Elles ne précisent pas toujours les versions minimales ni les restrictions de contexte. Pour une propriété utilisée dans un thème publié :
+
+1. consultez la page CSS Properties du moteur et de la version cible ;
+2. vérifiez la grammaire de la valeur ;
+3. inspectez le nœud réel ;
+4. testez le rendu dans l'application cible ;
+5. consignez la version exacte.
+
+Références versionnées :
+
+- [GNOME 51 — nouveautés développeurs](https://release.gnome.org/51/developers/)
+- [GTK 3.24 — CSS Overview](https://docs.gtk.org/gtk3/css-overview.html)
+- [GTK 3.24 — CSS Properties](https://docs.gtk.org/gtk3/css-properties.html)
+- [GTK 4 — CSS Overview](https://docs.gtk.org/gtk4/css-overview.html)
+- [GTK 4 — CSS Properties](https://docs.gtk.org/gtk4/css-properties.html)
+- [Libadwaita 1.10 — Styles and Appearance](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/styles-and-appearance.html)
