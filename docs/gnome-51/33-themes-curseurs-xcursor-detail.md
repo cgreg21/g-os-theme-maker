@@ -175,7 +175,7 @@ Ces exemples illustrent le mécanisme ; ils ne remplacent pas un inventaire vér
 Pour inspecter les liens et leurs cibles :
 
 ```bash
-find cursors -maxdepth 1 -type l -printf '%f -> %l\\n'
+find cursors -maxdepth 1 -type l -printf '%f -> %l\n'
 ```
 
 Un lien cassé équivaut à une ressource absente. Pour un paquet qui doit être extrait sur différents systèmes, vérifiez que l'archive préserve les liens symboliques ; sinon, fournissez des fichiers ordinaires.
