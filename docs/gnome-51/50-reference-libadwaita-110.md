@@ -480,7 +480,7 @@ Exemple :
 }
 ```
 
-Les anciennes ressources conditionnelles `style-dark.css`, `style-hc.css` et `style-hc-dark.css` sont dépréciées depuis Libadwaita 1.9. Elles ne doivent être conservées que pour maintenir une application existante qui les utilise encore.
+Libadwaita 1.10 prend toujours en charge les ressources conditionnelles `style-dark.css`, `style-hc.css` et `style-hc-dark.css` via `AdwApplication`. Pour une nouvelle application, préférez une feuille `style.css` unique et les requêtes `prefers-color-scheme` et `prefers-contrast`. Les ressources séparées restent valides pour les applications qui en ont besoin ; elles ne doivent pas être présentées comme dépréciées.
 
 Le chargement de `style.css` est lié au chemin de ressources défini par l'application. Une feuille placée dans un dossier arbitraire sur le disque ne sera pas automatiquement chargée par toutes les applications Libadwaita.
 
