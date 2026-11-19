@@ -1,6 +1,7 @@
+import tempfile
 import unittest
 
-from g_os_theme_maker.exporter import export_css
+from g_os_theme_maker.exporter import export_css, export_gnome_shell_css, export_gnome_shell_theme
 from g_os_theme_maker.model import ThemeDocument, ThemeTokens
 
 
@@ -43,6 +44,20 @@ class ThemeModelTests(unittest.TestCase):
         css = export_css(ThemeTokens(accent="#123456", radius=16))
         self.assertIn("@define-color gom_accent #123456;", css)
         self.assertIn("border-radius: 16px", css)
+
+    def test_gnome_shell_css_uses_theme_tokens(self):
+        css = export_gnome_shell_css(ThemeTokens(background="#111111", accent="#abcdef"))
+        self.assertIn("#panel", css)
+        self.assertIn("background-color: #111111;", css)
+        self.assertIn("background-color: #abcdef;", css)
+        self.assertIn(".popup-menu-content", css)
+
+    def test_gnome_shell_theme_export_creates_installable_layout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            theme_dir = export_gnome_shell_theme(ThemeTokens(name="My Theme"), directory)
+            self.assertEqual(theme_dir.name, "My-Theme")
+            self.assertTrue((theme_dir / "gnome-shell" / "gnome-shell.css").is_file())
+            self.assertTrue((theme_dir / "README.md").is_file())
 
 
 if __name__ == "__main__":
