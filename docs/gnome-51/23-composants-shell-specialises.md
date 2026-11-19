@@ -247,3 +247,75 @@ Choisissez un composant qui n'apparaît pas au démarrage, activez le contexte q
 - [Code JavaScript du Shell](https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/51.0/js/ui)
 - [Documentation St](https://gnome.pages.gitlab.gnome.org/gnome-shell/st/)
 - [GNOME Shell — notes de version](https://release.gnome.org/51/)
+
+## 13. Vérifier les sélecteurs dans la source avant de les publier
+
+Un inventaire de sélecteurs est une photographie d'une version donnée. Pour confirmer un nom avant de l'utiliser, partez de la source GNOME Shell 51.0 et non d'un thème tiers qui peut contenir des règles obsolètes.
+
+Depuis une copie du dépôt GNOME Shell :
+
+```sh
+git checkout 51.0
+git describe --tags --exact-match
+grep -RInE 'workspace-switcher|resize-popup|audio-selection-device|prompt-dialog' data/theme js/ui
+```
+
+Le résultat doit être relu dans son contexte. Une occurrence peut être un commentaire, une chaîne JavaScript ou une classe appliquée dynamiquement. Recherchez ensuite le point où la classe est ajoutée ou retirée :
+
+```sh
+grep -RInE 'add_style_class_name|remove_style_class_name|add_style_class' js/ui
+```
+
+Notez le fichier source, la classe, le composant propriétaire et la condition d'apparition. Une classe présente dans le CSS mais jamais ajoutée dans le scénario testé ne prouve pas que le composant est visible dans votre session.
+
+Pour un composant dynamique, reproduisez l'action qui le fait apparaître, puis contrôlez-le avec Looking Glass. Conservez une capture de l'inspection ou un relevé précis de l'arbre d'acteurs. N'utilisez pas le nom d'un fichier SCSS comme s'il s'agissait automatiquement d'un sélecteur.
+
+## 14. Construire une matrice d'états pour les composants rares
+
+Les composants spécialisés sont souvent difficiles à tester parce qu'ils ne sont pas visibles au démarrage. Préparez un scénario explicite :
+
+- **Workspace switcher** : changer d'espace avec le clavier, puis avec le geste pris en charge ; tester le premier, le dernier et un espace intermédiaire.
+- **Resize popup** : redimensionner une fenêtre avec les poignées et les raccourcis proposés par l'environnement ; vérifier que le texte reste visible.
+- **Avatars** : compte avec photo, compte sans photo, image de grande taille, image non carrée et nom long.
+- **Prompt et polkit** : scénario d'autorisation dans une machine de test ; ne déclenchez pas une opération administrative inconnue uniquement pour afficher le dialogue.
+- **Sélection audio** : connecter plusieurs périphériques de test, changer la sortie et débrancher le périphérique sélectionné.
+- **Contrôle parental et session** : ne testez ces écrans que si le service correspondant est configuré ; consignez « non applicable » plutôt que de simuler leur présence.
+- **QR code** : afficher une fonction qui produit réellement un QR code dans la version installée ; vérifier la netteté et la lisibilité après personnalisation.
+
+Pour chaque scénario, relevez l'état initial, l'action, l'état attendu, l'état réellement observé et le moyen de revenir à l'état initial.
+
+## 15. Préserver les fonctions et les signaux visuels
+
+Les éléments spécialisés portent souvent une information fonctionnelle ou de sécurité. Une personnalisation doit conserver :
+- la différence entre erreur, avertissement et information ;
+- le focus clavier et l'indication de sélection ;
+- l'identification du périphérique actif ;
+- la visibilité des contrôles parentaux et des demandes d'autorisation ;
+- la distinction entre avatar, icône générique et absence d'image ;
+- la lisibilité des QR codes et des aides visuelles.
+
+Évitez les règles qui masquent un élément avec `opacity: 0`, `visibility: hidden` ou une taille nulle pour obtenir une apparence plus épurée. Ne réduisez pas les zones interactives sans test d'accessibilité. Une règle CSS ne doit jamais rendre une demande d'autorisation moins explicite.
+
+## 16. Enregistrer les résultats de compatibilité
+
+Ajoutez au dossier de validation un compte rendu contenant :
+
+```text
+GNOME Shell :
+Version exacte :
+Distribution :
+Session : Wayland / X11
+Composant :
+Action qui le fait apparaître :
+Fichier source GNOME :
+Classe ou sélecteur :
+État initial :
+États testés :
+Règle CSS ajoutée :
+Résultat visuel :
+Fonction et accessibilité vérifiées :
+Limites :
+Statut : confirmé / partiel / non testé
+```
+
+Ne qualifiez pas un composant de compatible sur la seule présence d'un sélecteur dans le fichier SCSS. Le statut « confirmé » exige un composant effectivement affiché et testé dans la version indiquée.
