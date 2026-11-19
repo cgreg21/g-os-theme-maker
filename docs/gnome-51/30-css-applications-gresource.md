@@ -37,6 +37,16 @@ Avec ce fichier placé dans le répertoire `data/`, le fichier CSS sera accessib
 
 Ce chemin n'est pas un chemin du système de fichiers. Il désigne une ressource intégrée au programme.
 
+Le préfixe est un espace de noms choisi par le projet. Il doit être suffisamment spécifique pour éviter les collisions avec les ressources d'autres bibliothèques. Le nom du fichier peut être remplacé dans le bundle par un alias explicite :
+
+```xml
+<gresource prefix="/org/example/MonApplication">
+  <file alias="css/application.css">style.css</file>
+</gresource>
+```
+
+Dans ce cas, le chemin logique devient `/org/example/MonApplication/css/application.css`. Le chemin source reste relatif au répertoire source indiqué à la compilation. Distinguez toujours le chemin du fichier sur disque du chemin logique exposé par GResource.
+
 ## 3. Compiler les ressources
 
 Avec l'outil GLib :
@@ -93,7 +103,53 @@ Gtk.StyleContext.add_provider_for_display(
 )
 ```
 
-Le provider doit rester référencé aussi longtemps que nécessaire. Chargez-le après l'initialisation GTK et vérifiez le résultat dans l'application concernée.
+Le provider doit rester référencé aussi longtemps que nécessaire. Chargez-le après l'initialisation GTK et vérifiez le résultat dans l'application concernée. Pour une application réelle, conservez le provider dans un attribut de l'application ou de l'objet qui gère son cycle de vie. Ne le créez pas dans une fonction locale qui se termine immédiatement.
+
+Exemple de gestion explicite du provider dans une application GTK 4 :
+
+```python
+from gi.repository import Gtk, Gdk
+
+class Application(Gtk.Application):
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+
+        self.css_provider = Gtk.CssProvider()
+        self.css_provider.connect(
+            "parsing-error",
+            self.on_css_error,
+        )
+        self.css_provider.load_from_resource(
+            "/org/example/MonApplication/style.css"
+        )
+
+        display = Gdk.Display.get_default()
+        if display is None:
+            raise RuntimeError("Aucun écran GTK disponible")
+
+        self.css_display = display
+        Gtk.StyleContext.add_provider_for_display(
+            display,
+            self.css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+        )
+
+    def on_css_error(self, provider, section, error):
+        print(f"Erreur CSS : {error}")
+
+    def do_shutdown(self):
+        if getattr(self, "css_display", None) is not None:
+            Gtk.StyleContext.remove_provider_for_display(
+                self.css_display,
+                self.css_provider,
+            )
+            self.css_display = None
+            self.css_provider = None
+
+        Gtk.Application.do_shutdown(self)
+```
+
+Ce patron illustre la durée de vie du provider et son retrait. Adaptez la classe à la structure réelle de votre application. Dans une application multi-écrans ou multi-fenêtres, définissez clairement si le provider doit être global au display ou limité à un contexte plus restreint.
 
 La priorité `APPLICATION` est adaptée à une feuille applicative ordinaire. N'utilisez pas systématiquement une priorité supérieure pour écraser les styles du thème : cela peut dégrader la cohérence des composants.
 
@@ -118,6 +174,19 @@ Gtk.StyleContext.add_provider_for_screen(
 ```
 
 Cette API GTK 3 n'est pas interchangeable avec celle de GTK 4. Gardez des implémentations séparées si votre application prend en charge les deux générations de GTK.
+
+Le provider doit lui aussi rester vivant tant que la feuille est active. Si l'application le retire explicitement, utilisez `Gtk.StyleContext.remove_provider_for_screen()` avec le même écran et le même provider. Évitez de multiplier les providers à chaque ouverture de fenêtre : un provider global peut être installé une fois au démarrage et retiré à l'arrêt de l'application.
+
+Exemple de retrait :
+
+```python
+Gtk.StyleContext.remove_provider_for_screen(
+    screen,
+    provider,
+)
+```
+
+Dans GTK 3, connectez également le signal `parsing-error` du provider pendant le développement afin de repérer les propriétés ou sélecteurs invalides. Les propriétés CSS disponibles ne sont pas identiques entre GTK 3, GTK 4 et St.
 
 ## 6. Préférer des classes applicatives explicites
 
@@ -144,7 +213,17 @@ Les classes applicatives doivent être documentées et stables à l'échelle du 
 
 GTK 3 utilise notamment `get_style_context().add_class()` pour ajouter une classe ; GTK 4 expose `add_css_class()`. Vérifiez les API selon la version et le langage.
 
-## 7. Inspecter les ressources chargées
+## 7. Déboguer le chargement et les erreurs CSS
+
+Un provider chargé ne garantit pas que chaque règle soit valide ni qu'elle corresponde à un widget. Séparez les diagnostics :
+
+- ressource introuvable : vérifiez le préfixe, l'alias et le bundle compilé ;
+- erreur de syntaxe : écoutez `parsing-error` et consultez les journaux ;
+- règle sans effet : vérifiez le nœud CSS, les classes et la spécificité ;
+- style écrasé : examinez la priorité des providers et les règles applicatives ;
+- propriété ignorée : vérifiez la prise en charge par la version GTK utilisée.
+
+Le signal `parsing-error` fournit un emplacement et une erreur de parsing. Il ne signale pas nécessairement une règle syntaxiquement valide mais sans effet sur le widget ciblé. Pour ce dernier cas, l'inspecteur reste nécessaire.
 
 GTK Inspector expose des informations sur l'application et ses ressources. Il peut notamment aider à repérer le chemin de ressources utilisé et à charger des règles CSS temporaires.
 
@@ -158,8 +237,11 @@ Dans l'inspecteur :
 1. sélectionnez le widget ;
 2. relevez ses nœuds CSS et classes ;
 3. consultez les providers actifs ;
-4. testez une règle temporaire ;
-5. comparez le rendu avec et sans la feuille de l'application.
+4. testez une règle temporaire très ciblée ;
+5. vérifiez si une règle plus prioritaire la remplace ;
+6. comparez le rendu avec et sans la feuille de l'application.
+
+Procédez avec une seule modification à la fois. Une règle temporaire qui fonctionne dans l'inspecteur prouve que le widget peut être stylé, mais pas que le chemin GResource ou le provider de production est correctement configuré.
 
 L'inspecteur est un outil de diagnostic, pas une garantie que l'application accepte un thème utilisateur particulier.
 
