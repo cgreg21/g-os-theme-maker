@@ -176,3 +176,151 @@ L'exercice est réussi lorsque le composant est personnalisé sans modifier les 
 - [Documentation officielle des extensions GNOME](https://extensions.gnome.org/)
 - [GNOME Shell 51.0 — sources](https://github.com/GNOME/gnome-shell/tree/51.0)
 - [GNOME Shell — documentation de développement](https://gjs.guide/extensions/)
+
+
+## 12. Ouvrir Looking Glass et inspecter un acteur
+
+Looking Glass est l'outil de diagnostic intégré à GNOME Shell. Il permet d'observer l'état du Shell et d'inspecter des acteurs St. Il ne remplace pas l'inspection des sources : les classes et la hiérarchie observées doivent être rapprochées du code de la version installée.
+
+Dans une session de test :
+
+1. appuyez sur `Alt+F2` ;
+2. saisissez `lg` puis validez ;
+3. ouvrez l'onglet d'inspection ;
+4. sélectionnez l'acteur concerné avec l'outil de sélection si celui-ci est disponible dans la version utilisée ;
+5. relevez le type, les classes et la hiérarchie du composant ;
+6. fermez Looking Glass et vérifiez que l'interface reste dans son état normal.
+
+L'accès et la présentation de l'inspecteur peuvent évoluer selon GNOME Shell. Si l'outil de sélection ne permet pas de cibler un menu transitoire, ouvrez le menu avant de sélectionner l'acteur et recommencez. Certains acteurs disparaissent dès que le pointeur quitte leur zone.
+
+Ne copiez pas un nom de classe à partir d'une capture ou d'un thème tiers. Relevez-le dans la session et confirmez-le dans le code de l'extension. Un nom de classe peut être créé dynamiquement ou n'exister que dans un état donné.
+
+## 13. Localiser les fichiers d'une extension
+
+Les extensions utilisateur sont généralement installées sous :
+
+```text
+~/.local/share/gnome-shell/extensions/UUID/
+```
+
+Les extensions installées pour tout le système peuvent se trouver dans un répertoire partagé de la distribution, notamment sous `/usr/share/gnome-shell/extensions/`. Le chemin exact dépend du paquet et de la distribution.
+
+Pour identifier le répertoire de l'extension :
+
+```sh
+gnome-extensions info UUID_DE_EXTENSION
+```
+
+Examinez ensuite les fichiers de l'extension sans les modifier :
+
+```sh
+find ~/.local/share/gnome-shell/extensions/UUID_DE_EXTENSION \
+  -maxdepth 3 -type f -print
+```
+
+Adaptez le chemin au répertoire indiqué par les informations de l'extension. Une extension système peut ne pas être présente dans le dossier utilisateur.
+
+Recherchez les déclarations de classes et les feuilles de style :
+
+```sh
+grep -R -nE 'add_style_class_name|remove_style_class_name|add_style_pseudo_class|\.css' \
+  ~/.local/share/gnome-shell/extensions/UUID_DE_EXTENSION
+```
+
+Cette recherche donne des pistes, pas une description complète du style calculé. Les classes peuvent être construites à partir de chaînes, les feuilles peuvent être chargées indirectement et les acteurs peuvent être créés par des dépendances. Confirmez toujours le résultat à l'exécution.
+
+Ne modifiez pas directement une extension installée depuis extensions.gnome.org ou par le gestionnaire de paquets. Une mise à jour écraserait les changements et rendrait le diagnostic difficile à reproduire. Travaillez sur une copie ou sur un fork de l'extension, en respectant sa licence.
+
+## 14. Comprendre les feuilles CSS chargées par une extension
+
+Une feuille CSS peut être chargée à différents moments du cycle de vie. Une extension doit retirer ses ressources lors de sa désactivation. Si elle conserve un provider ou des acteurs après la désactivation, elle risque de laisser des effets visuels ou des références obsolètes.
+
+Pour analyser une extension existante, recherchez dans ses sources :
+
+- le point où la feuille CSS est chargée ;
+- le point où elle est retirée ;
+- les acteurs créés et détruits ;
+- les classes ajoutées et retirées ;
+- les signaux connectés et déconnectés ;
+- les éventuelles modifications de prototypes ou de méthodes du Shell.
+
+Ne supposez pas que toutes les extensions utilisent la même API de chargement CSS. La méthode dépend de la génération d'API et de l'architecture de l'extension. La référence exacte est le code GNOME Shell correspondant à la version déclarée, ainsi que les sources de l'extension.
+
+Pour une extension que vous développez, regroupez les opérations dans des fonctions d'activation et de désactivation faciles à auditer. Conservez les références aux objets et connexions que vous créez afin de pouvoir les détruire proprement. Le chapitre 29 détaille le développement et les ressources d'extension.
+
+## 15. Distinguer classe, pseudo-classe et état visuel
+
+Une classe décrit généralement une catégorie ou une variante d'acteur. Une pseudo-classe représente un état, par exemple survolé, actif, focalisé ou désactivé. Un état visuel peut aussi être représenté par une classe ajoutée par le code de l'extension.
+
+Pour comprendre pourquoi une règle ne s'applique pas :
+
+1. observez le composant au repos ;
+2. observez-le au survol ;
+3. activez-le ou ouvrez son menu ;
+4. placez le focus clavier dessus ;
+5. comparez les classes et états entre chaque situation ;
+6. vérifiez si l'extension change de classe ou si le moteur applique une pseudo-classe.
+
+Un composant peut ne pas recevoir le focus clavier de la même façon qu'un widget GTK. N'inventez pas une pseudo-classe en vous fondant sur le CSS web : vérifiez les pseudo-classes prises en charge par St et celles effectivement émises par le composant.
+
+Une règle correcte pour l'état normal peut masquer l'indication de focus ou rendre un état désactivé illisible. Le test doit donc couvrir les interactions, pas seulement le rendu statique.
+
+## 16. Dépanner une extension qui ne se recharge pas
+
+Lorsqu'un changement de CSS ne semble pas pris en compte :
+
+1. vérifiez que vous modifiez bien le répertoire de l'extension active ;
+2. vérifiez son UUID et sa version ;
+3. recherchez les erreurs de syntaxe ou les ressources introuvables ;
+4. désactivez puis réactivez l'extension ;
+5. observez les journaux de session ;
+6. si nécessaire, fermez la session puis reconnectez-vous ;
+7. contrôlez que la feuille est chargée et retirée au bon moment.
+
+Suivez les journaux utilisateur :
+
+```sh
+journalctl --user -f -o cat
+```
+
+Pour filtrer les messages contenant le nom d'une extension :
+
+```sh
+journalctl --user -b -o cat | grep -i 'nom de l extension'
+```
+
+Le texte des journaux varie selon l'extension. Un filtrage par nom peut manquer une erreur émise sous un autre identifiant ; en cas de doute, consultez les messages autour de l'heure du test sans filtre.
+
+Sous Wayland, le redémarrage complet de la session est la méthode de référence lorsque le Shell lui-même doit être relancé. Ne conseillez pas `Alt+F2`, puis `r` comme procédure générale : cette méthode historique ne fonctionne pas dans une session Wayland.
+
+## 17. Tester les interactions et la coexistence
+
+Une extension peut sembler correcte au repos, mais provoquer des régressions lorsque plusieurs extensions sont activées ensemble. Construisez une séquence de test contrôlée :
+
+1. testez le Shell sans extension tierce ;
+2. activez une seule extension ;
+3. vérifiez ses états et ses menus ;
+4. activez une seconde extension qui touche une zone voisine ;
+5. vérifiez les deux composants et le Shell natif ;
+6. répétez avec les extensions réellement utilisées ;
+7. désactivez-les une par une pour identifier un conflit.
+
+Contrôlez au minimum les états normal, survolé, actif, désactivé et focus lorsqu'ils existent. Testez également les ouvertures et fermetures répétées, les changements d'espace de travail, le mode sombre et les facteurs d'échelle utilisés.
+
+Documentez les conflits reproductibles avec les UUID et versions exacts. Une simple liste de noms d'extensions n'est pas suffisante pour retrouver le même environnement.
+
+## 18. Exercice : produire un diagnostic vérifiable
+
+Reprenez l'extension choisie dans l'exercice précédent et produisez un compte rendu :
+
+- version GNOME Shell et session graphique ;
+- UUID et version de l'extension ;
+- emplacement de ses fichiers ;
+- acteur ciblé et classes observées ;
+- fichier CSS ou règles concernées ;
+- états testés ;
+- extensions coexistantes ;
+- messages de journal pertinents ;
+- résultat après désactivation et réactivation.
+
+Le compte rendu doit permettre à une autre personne de reproduire le problème sans avoir à deviner les classes, versions ou chemins utilisés.
