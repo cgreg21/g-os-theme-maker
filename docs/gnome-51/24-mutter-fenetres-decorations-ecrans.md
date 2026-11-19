@@ -133,3 +133,137 @@ Identifiez les fonctions dépendantes du gestionnaire de fenêtres et des protoc
 - [Wayland — documentation](https://wayland.freedesktop.org/)
 
 Mutter n'est pas un moteur CSS. Ne cherchez pas un sélecteur pour une fonction de placement, de composition ou de protocole qui n'est pas dessinée par GTK ou GNOME Shell.
+
+## 12. Identifier précisément CSD, SSD et les décorations mixtes
+
+Ne déduisez pas le type de décoration à partir du seul aspect de la fenêtre. Une application peut dessiner sa barre d'en-tête tout en laissant au compositeur une bordure ou une ombre. Elle peut aussi proposer une décoration différente selon la session ou le backend.
+
+Procédez dans cet ordre :
+
+1. Identifiez l'application, son paquet et sa version.
+2. Repérez si la barre d'en-tête appartient à la fenêtre GTK ou à une décoration externe.
+3. Inspectez la barre avec GTK Inspector si elle appartient au toolkit.
+4. Comparez avec une application qui utilise une décoration serveur dans la même session.
+5. Recommencez sous Wayland et X11 lorsque les deux sessions sont disponibles.
+6. Consignez séparément barre de titre, boutons, bordure, ombre et ombrage de redimensionnement.
+
+Une règle `headerbar` agit sur le widget GTK qui porte ce nom ; elle ne modifie pas la décoration SSD du gestionnaire de fenêtres. De même, une règle du thème Shell ne transforme pas les contrôles de titre dessinés par l'application.
+
+## 13. Observer la fenêtre et son environnement
+
+Les outils disponibles varient selon la session. Sous X11, des utilitaires comme `xprop` peuvent fournir des propriétés de fenêtre. Sous Wayland, l'accès aux informations globales des surfaces est volontairement plus limité ; les outils X11 ne constituent donc pas une méthode universelle.
+
+Pour relever l'environnement sans modifier la configuration :
+
+```sh
+printf 'Session : %s\\n' "$XDG_SESSION_TYPE"
+printf 'Type de bureau : %s\\n' "$XDG_CURRENT_DESKTOP"
+printf 'Écran :\\n'
+gsettings get org.gnome.desktop.interface scaling-factor 2>/dev/null || true
+```
+
+Le facteur d'échelle de l'interface n'est pas une mesure exhaustive de tous les réglages d'affichage. Relevez aussi la résolution et la mise à l'échelle affichées dans Paramètres > Écrans. Pour une campagne reproductible, notez la configuration de chaque moniteur, leur disposition et le moniteur principal.
+
+Sous X11 seulement, si l'outil est installé :
+
+```sh
+xprop
+```
+
+Cliquez ensuite sur la fenêtre cible et examinez les propriétés disponibles. Ne recopiez pas les identifiants de fenêtre dans un rapport public si ceux-ci révèlent des détails personnels. Sous Wayland, utilisez les informations exposées par GNOME et les outils de diagnostic prévus par la session.
+
+## 14. Sauvegarder et restaurer une préférence Mutter
+
+Avant de modifier une préférence, relevez sa valeur initiale. La procédure suivante ne suppose pas qu'une clé donnée existe :
+
+```sh
+schema=org.gnome.mutter
+gsettings list-keys "$schema"
+gsettings list-recursively "$schema" > "$HOME/mutter-settings-before.txt"
+```
+
+Lisez la description et le type d'une clé avant de la modifier :
+
+```sh
+gsettings describe "$schema" nom-de-cle
+gsettings range "$schema" nom-de-cle
+gsettings get "$schema" nom-de-cle
+```
+
+Remplacez `nom-de-cle` par une clé réellement listée. N'utilisez pas une valeur copiée d'une autre version sans vérifier le type et la plage.
+
+Après un test, restaurez la valeur exacte notée au départ :
+
+```sh
+gsettings set "$schema" nom-de-cle 'valeur-initiale'
+```
+
+La valeur ci-dessus est un exemple de syntaxe, pas une valeur à appliquer telle quelle. Les valeurs chaîne, booléen, entier et tableau ont des syntaxes différentes. Si la clé accepte une valeur par défaut appropriée et que vous souhaitez explicitement revenir à cette valeur, vérifiez d'abord la documentation de la clé avant d'utiliser `gsettings reset`.
+
+Pour comparer toutes les préférences du schéma après le test :
+
+```sh
+gsettings list-recursively "$schema" > "$HOME/mutter-settings-after.txt"
+diff -u "$HOME/mutter-settings-before.txt" "$HOME/mutter-settings-after.txt"
+```
+
+Les différences doivent être expliquées. Ce relevé ne sauvegarde pas les paramètres d'écran ni les réglages d'autres schémas.
+
+## 15. Tester les écrans et les facteurs d'échelle sans confondre les causes
+
+Préparez une même fenêtre et une même page de contenu, puis vérifiez :
+- moniteur unique à échelle standard ;
+- écran HiDPI ;
+- deux moniteurs avec résolutions différentes ;
+- déplacement de la fenêtre d'un écran vers l'autre ;
+- changement d'orientation si le matériel le permet ;
+- mise à l'échelle fractionnaire lorsque la session la prend en charge ;
+- déconnexion puis reconnexion d'un écran externe.
+
+Pour chaque cas, notez résolution, échelle, taille logique de la fenêtre, taille des polices et session. Comparez des captures réalisées avec les mêmes dimensions logiques. Une capture en pixels physiques ne suffit pas à comparer deux facteurs d'échelle différents.
+
+Ne compensez pas une mauvaise configuration d'affichage en augmentant arbitrairement toutes les dimensions CSS. Vérifiez d'abord si le défaut vient de l'échelle, d'une métrique du toolkit, d'une taille minimale de fenêtre ou d'une règle de thème.
+
+## 16. Diagnostic structuré des décorations
+
+### La barre de titre ne répond pas au CSS
+
+Vérifiez si elle est dessinée par GTK, Libadwaita, l'application ou le compositeur. Inspectez le widget réel. Si elle est SSD, une règle GTK n'est pas le bon point d'intervention.
+
+### La bordure change mais pas l'ombre
+
+La bordure et l'ombre peuvent appartenir à deux couches différentes. Identifiez le propriétaire de chacune. Ne multipliez pas les règles `box-shadow` dans le thème GTK sans preuve que le widget dessine cette ombre.
+
+### Les boutons de fenêtre sont différents selon les applications
+
+Certaines applications utilisent une barre d'en-tête et des boutons GTK ; d'autres délèguent la décoration au serveur ou possèdent leurs propres contrôles. Documentez les groupes d'applications séparément.
+
+### Le rendu change entre Wayland et X11
+
+Vérifiez le type de décoration négocié, les extensions et les différences du gestionnaire de fenêtres. Le même CSS ne garantit pas que les deux sessions dessinent les mêmes éléments.
+
+## 17. Compte rendu d'une campagne Mutter
+
+Utilisez une fiche par combinaison application/session/écran :
+
+```text
+Application et version :
+Paquet et origine :
+Session : Wayland / X11
+Toolkit :
+Type de décoration : CSD / SSD / mixte / inconnu
+Barre de titre :
+Boutons :
+Bordure :
+Ombre :
+Résolution :
+Facteur d'échelle :
+Moniteurs :
+Réglages Mutter modifiés :
+Valeurs initiales conservées :
+Procédure de restauration :
+Résultat :
+Limites et éléments non testés :
+```
+
+La fiche doit distinguer les observations des hypothèses. Si le propriétaire d'un effet n'a pas été identifié, indiquez « inconnu » plutôt que d'attribuer son rendu à Mutter ou à GTK sans preuve.
