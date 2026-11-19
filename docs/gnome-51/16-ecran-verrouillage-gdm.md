@@ -36,12 +36,12 @@ Un sélecteur CSS valide n'est utile que s'il est chargé par le bon processus S
 
 Dans GNOME Shell 51.0, le comportement de l'écran verrouillé est piloté par js/ui/screenShield.js. Les repères de style importants comprennent :
 
-- .screen-shield-clock : groupe de l'horloge ;
-- .screen-shield-clock-time : heure ;
-- .screen-shield-clock-date : date ;
-- .screen-shield-notifications-container : zone des notifications ;
-- .screen-shield-notification-label : libellé principal ;
-- .screen-shield-notification-count-text : résumé ou compteur ;
+- .unlock-dialog-clock : groupe de l'horloge ;
+- .unlock-dialog-clock-time : heure ;
+- .unlock-dialog-clock-date : date ;
+- .unlock-dialog-notifications-container : zone des notifications ;
+- .unlock-dialog-notification-label : libellé principal ;
+- .unlock-dialog-notification-count-text : résumé ou compteur ;
 - #panel.lock-screen : panneau supérieur dans le contexte verrouillé.
 
 Ces noms sont des détails d'implémentation. Vérifiez leur présence dans les sources de la version réellement utilisée.
@@ -49,18 +49,18 @@ Ces noms sont des détails d'implémentation. Vérifiez leur présence dans les 
 ### Exemple : améliorer la lisibilité de l'horloge
 
 ~~~css
-.screen-shield-clock {
+.unlock-dialog-clock {
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   text-align: center;
 }
 
-.screen-shield-clock-time {
+.unlock-dialog-clock-time {
   font-size: 64pt;
   font-weight: 700;
 }
 
-.screen-shield-clock-date {
+.unlock-dialog-clock-date {
   font-size: 20pt;
   font-weight: 500;
 }
@@ -71,12 +71,12 @@ Les tailles sont des exemples et non les valeurs natives. Testez plusieurs réso
 ### Exemple : notifications
 
 ~~~css
-.screen-shield-notifications-container {
+.unlock-dialog-notifications-container {
   spacing: 8px;
 }
 
-.screen-shield-notifications-container .notification,
-.screen-shield-notifications-container .screen-shield-notification-source {
+.unlock-dialog-notifications-container .notification,
+.unlock-dialog-notifications-container .screen-shield-notification-source {
   border-radius: 12px;
   padding: 12px;
   background-color: rgba(30, 30, 30, 0.82);

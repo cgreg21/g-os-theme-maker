@@ -22,6 +22,7 @@ SOURCE_FILES=(
   docs/gnome-51/15-menus-reglages-notifications.md
   docs/gnome-51/16-ecran-verrouillage-gdm.md
   docs/gnome-51/17-osd-dialogues-alt-tab-capture.md
+  docs/gnome-51/18-clavier-ibus-accessibilite.md
   docs/gnome-51/01-architecture.md
   docs/gnome-51/02-gnome-shell.md
   docs/gnome-51/03-gtk-libadwaita.md

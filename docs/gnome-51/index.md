@@ -21,12 +21,13 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Les sél
 13. [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
 14. [Écran de verrouillage, déverrouillage et GDM](16-ecran-verrouillage-gdm.md)
 15. [OSD, dialogues, Alt-Tab et capture d'écran](17-osd-dialogues-alt-tab-capture.md)
+16. [Clavier virtuel, saisie, IBus et accessibilité](18-clavier-ibus-accessibilite.md)
 
 ## Captures de l'interface GNOME standard
 
 - [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
 - [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
-- [Anatomie d'une application GNOME](https://release.gnome.org/49/assets/img/gnome49.png)
+- [Anatomie d'une application GNOME](https://release.gnome.org/49/papers-screenshot.webp)
 - [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
 - [Calendrier et notifications](https://help.gnome.org/gnome-help/figures/shell-appts.png)
 
