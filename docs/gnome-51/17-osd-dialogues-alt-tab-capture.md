@@ -335,3 +335,189 @@ Modifiez le contour de sélection et vérifiez que la zone choisie reste éviden
 - [Dialogue d'exécution — runDialog.js](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/51.0/js/ui/runDialog.js)
 - [Thème Shell — widgets SCSS](https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/51.0/data/theme/gnome-shell-sass/widgets)
 - [Documentation St](https://gnome.pages.gitlab.gnome.org/gnome-shell/st/)
+
+
+## 12. Préparer des états reproductibles pour les OSD
+
+Les OSD sont éphémères. Préparez la feuille CSS avant de déclencher l'action, puis consignez le matériel et le contexte : clavier, touches multimédia, pilote graphique, nombre d'écrans, facteur d'échelle et session.
+
+Testez au moins :
+- volume à zéro, faible, moyen et élevé ;
+- volume coupé puis réactivé ;
+- changement de périphérique de sortie ;
+- luminosité faible, moyenne et élevée si elle est réglable ;
+- branchement ou retrait d'un périphérique audio ;
+- OSD affiché sur chaque écran lorsque plusieurs moniteurs sont utilisés.
+
+Ne supposez pas qu'un OSD de luminosité sera présent sur un écran externe. Le matériel et le pilote déterminent si le réglage est exposé au Shell.
+
+### Contrôler la géométrie et la lisibilité
+
+Observez la position de l'OSD, son ancrage, sa largeur et sa hauteur. Vérifiez que le niveau reste lisible lorsque la valeur est minimale ou maximale et que le texte ne déborde pas avec une traduction longue.
+
+Un OSD doit rester visible au-dessus des fenêtres et sur des fonds très différents. Une transparence excessive peut le rendre illisible sur une fenêtre claire. Une ombre trop forte peut au contraire produire un halo gênant.
+
+Ne définissez pas une largeur fixe globale pour .osd-window sans vérifier les variantes de contenu. Le Shell peut utiliser ce conteneur pour des messages et des indicateurs qui n'ont pas la même structure.
+
+## 13. Tester les dialogues modaux selon leur fonction
+
+Les dialogues modaux ne sont pas un seul composant uniforme. Le contenu et les actions dépendent de l'opération demandée. Préparez plusieurs situations dans un environnement de test :
+- dialogue de confirmation avec deux actions ;
+- message d'erreur avec une seule action ;
+- demande d'autorisation ;
+- liste de périphériques ;
+- avertissement de batterie ;
+- dialogue de fin de session ;
+- texte descriptif long ;
+- contenu défilant.
+
+Pour chaque dialogue, vérifiez :
+1. Le titre est distinct du corps.
+2. Le texte reste lisible et ne passe pas sous les boutons.
+3. Les actions ont des libellés compréhensibles.
+4. Le bouton par défaut est identifiable.
+5. Le focus clavier est visible.
+6. Échap ferme uniquement les dialogues pour lesquels cette action est prévue.
+7. Les actions destructives ne ressemblent pas à une action neutre.
+8. Le contenu reste accessible à une échelle élevée.
+
+Ne forcez pas tous les dialogues à avoir la même largeur ou la même hauteur. Certains contiennent des listes, des avertissements ou des explications qui exigent davantage d'espace.
+
+## 14. Vérifier Alt-Tab et Alt-Échap
+
+Le sélecteur varie selon les préférences de regroupement, les espaces de travail et les fenêtres ouvertes. Il faut tester le parcours de sélection et non seulement la capture du popup.
+
+Scénarios :
+- plusieurs applications différentes ;
+- plusieurs fenêtres de la même application ;
+- fenêtres réparties sur plusieurs espaces de travail ;
+- fenêtre maximisée et fenêtre de petite taille ;
+- titres longs ;
+- applications avec icône générique ;
+- navigation maintenue avec Alt puis relâchement ;
+- navigation inverse avec Maj ;
+- Alt-Échap si le raccourci est configuré.
+
+Pendant la navigation, le retour visuel doit suivre immédiatement l'élément sélectionné. Le contraste doit être suffisant pour distinguer l'élément actif des autres, même lorsque les miniatures ont des couleurs proches.
+
+Vérifiez séparément les préférences qui changent le regroupement des fenêtres et des applications. Le nombre et l'ordre des éléments affichés ne sont pas contrôlés par le CSS.
+
+### Contrôler les aperçus
+
+Les miniatures peuvent représenter des fenêtres avec des proportions très différentes. Contrôlez les formats paysage, portrait et très petits, ainsi que les fenêtres contenant des zones très claires ou très sombres.
+
+Évitez de réduire excessivement les miniatures pour gagner de la place. Si le popup devient trop large, examinez d'abord les espacements et les marges. Préservez une cible visuelle suffisamment grande pour identifier la sélection.
+
+## 15. Vérifier la fenêtre Alt-F2 sans exécuter de commande
+
+La fenêtre d'exécution est un champ de saisie fonctionnel. Son apparence ne doit pas rendre le texte saisi, le curseur ou les suggestions difficiles à distinguer.
+
+Testez :
+- champ vide ;
+- saisie courte ;
+- saisie longue ;
+- texte avec accents ;
+- correction et sélection de texte ;
+- focus à l'ouverture ;
+- fermeture par Échap ;
+- affichage sur un écran à facteur d'échelle élevé.
+
+Pour un test visuel, ouvrez Alt-F2, saisissez une chaîne inoffensive comme test-theme puis fermez le dialogue sans valider. N'exécutez pas de commande inconnue pour provoquer un résultat visuel.
+
+## 16. Tester l'interface de capture étape par étape
+
+L'outil de capture combine des contrôles et une zone de sélection. Testez les opérations dans l'ordre où elles sont réellement utilisées :
+
+1. Ouvrez l'interface de capture.
+2. Vérifiez les commandes de type de capture.
+3. Sélectionnez une fenêtre et observez son contour.
+4. Sélectionnez un écran et vérifiez l'indication de l'écran cible.
+5. Sélectionnez une zone.
+6. Déplacez la zone sélectionnée.
+7. Redimensionnez-la avec chaque poignée.
+8. Vérifiez le voile extérieur et le contour intérieur.
+9. Activez ou désactivez l'affichage du pointeur.
+10. Fermez l'outil sans enregistrer.
+
+Si l'enregistrement vidéo est disponible, vérifiez également les états avant démarrage, pendant l'enregistrement et à l'arrêt. Ne masquez jamais un indicateur qui permet de savoir qu'une capture ou un enregistrement est actif.
+
+### Problèmes fréquents de sélection
+
+Si le contour ne correspond pas à la zone sélectionnée, inspectez séparément l'acteur de sélection, les poignées et le voile. Le CSS peut changer les bordures et les couleurs, mais ne corrige pas le calcul des coordonnées ou la zone réellement capturée.
+
+Si les poignées sont difficiles à saisir, n'augmentez pas uniquement leur décoration. Vérifiez leur taille interactive réelle et les acteurs créés par le Shell. Une poignée visuellement plus grande ne signifie pas nécessairement que sa zone de capture des événements l'est aussi.
+
+## 17. Valider les dialogues sur plusieurs écrans et échelles
+
+Les dialogues sont généralement positionnés par le Shell dans un espace d'écran disponible. Une largeur confortable sur un écran 4K peut être disproportionnée sur un écran plus petit.
+
+Testez :
+- écran unique ;
+- plusieurs écrans de tailles différentes ;
+- écran principal à gauche puis à droite ;
+- résolution réduite ;
+- facteur d'échelle 100 %, 150 % et 200 % lorsque disponibles ;
+- texte agrandi ;
+- langue avec libellés longs ;
+- sens de lecture RTL.
+
+Contrôlez que le dialogue ne sort pas de l'écran, que ses boutons restent visibles et que le focus n'est pas masqué par une bordure ou une ombre.
+
+## 18. Distinguer le défaut CSS du défaut fonctionnel
+
+Le CSS ne pilote pas les raccourcis clavier, le choix de la fenêtre active, la capture réelle, le volume ni les permissions.
+
+Quand le résultat est incorrect :
+- vérifiez d'abord si l'action système fonctionne sans le thème personnalisé ;
+- observez si le composant est créé et si son état évolue ;
+- inspectez les classes et les acteurs dans Looking Glass ;
+- vérifiez ensuite la cascade et les propriétés CSS ;
+- comparez avec le thème GNOME natif.
+
+Exemples :
+- un OSD absent après une touche de volume peut relever du périphérique ou du service audio ;
+- Alt-Tab qui choisit la mauvaise fenêtre relève de la logique de sélection ;
+- une capture qui contient la mauvaise zone relève du calcul de capture ;
+- un bouton modal inactif relève de l'action ou du dialogue, pas de son apparence.
+
+Ne tentez pas de corriger ces problèmes en augmentant la spécificité CSS.
+
+## 19. Accessibilité des interfaces temporaires
+
+Les interfaces temporaires sont souvent utilisées rapidement. Préservez :
+- le contraste du texte et des icônes ;
+- la distinction entre sélection et survol ;
+- le focus visible ;
+- des boutons assez grands ;
+- des libellés compréhensibles ;
+- la visibilité des avertissements ;
+- des indications qui ne reposent pas uniquement sur la couleur.
+
+Vérifiez que les transitions n'empêchent pas de comprendre l'état courant. Une animation décorative ne doit pas retarder l'affichage de l'information utile ni masquer un indicateur de sécurité.
+
+## 20. Fiche de validation OSD et dialogues
+
+~~~text
+GNOME Shell et version :
+Session :
+Résolution et facteur d'échelle :
+Nombre et disposition des écrans :
+Langue et sens de lecture :
+OSD testés :
+Matériel et périphériques :
+Dialogues testés :
+Alt-Tab / Alt-Échap :
+Alt-F2 :
+Interface de capture :
+États clavier et focus :
+Échelle élevée :
+Textes longs :
+Indicateurs de sécurité préservés :
+Extensions actives :
+Sélecteurs modifiés :
+Captures ou vidéos :
+Anomalies :
+Conclusion : validé / partiel / à corriger
+~~~
+
+Une validation complète doit couvrir les transitions et les actions réelles. Une capture isolée ne prouve ni que le focus est visible, ni que le dialogue fonctionne, ni que la sélection de capture correspond à la zone dessinée.
