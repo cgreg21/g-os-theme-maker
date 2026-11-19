@@ -1,5 +1,7 @@
 # Composants Shell spécialisés : espaces, avatars, défilement et dialogues avancés
 
+![Vue Activités de GNOME avec le thème standard Adwaita](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
+
 Les chapitres précédents couvrent les grandes zones de GNOME Shell. Il reste des composants plus spécialisés, visibles seulement dans certaines situations : sélecteur d'espace de travail, fenêtre de redimensionnement, dialogues de permission, sélection audio, avatars, liens et aides visuelles.
 
 Ce chapitre complète l'inventaire GNOME Shell 51.0. Il s'appuie sur les sélecteurs présents dans le catalogue et évite d'inventer des classes pour les modules dont les noms internes doivent être inspectés dans la source.

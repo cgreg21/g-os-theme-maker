@@ -2,7 +2,7 @@
 
 Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d'écran légendées, des méthodes de diagnostic et un catalogue technique.
 
-La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 23 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
+La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 25 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
 ## Parcours débutant — à lire dans l'ordre
 
@@ -27,18 +27,23 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle reg
 19. [Personnaliser Libadwaita en détail](21-libadwaita-theming-detaille.md)
 20. [Créer les ressources d'un thème](22-ressources-icones-curseurs-polices-fonds-sons.md)
 21. [Composants Shell spécialisés](23-composants-shell-specialises.md)
+22. [Mutter, fenêtres, décorations et écrans](24-mutter-fenetres-decorations-ecrans.md)
+23. [Construire, installer, tester et publier un thème](25-creer-installer-publier-theme.md)
 
 ## Captures de l'interface GNOME standard
 
-Les captures GNOME Shell proviennent de l'aide officielle GNOME. Les captures d'applications et le fond d'écran proviennent des notes de version officielles GNOME 51. Les liens permettent de retrouver leur contexte et leur attribution.
+Les visuels sont des captures d'interfaces GNOME réelles, issues de l'aide officielle GNOME et des notes de version GNOME 51. Ils montrent l'apparence standard Adwaita, pas des schémas redessinés. Les captures GNOME Help peuvent provenir d'une version antérieure ; les captures release.gnome.org/51 correspondent à GNOME 51.
 
 - [Anatomie du panneau supérieur](https://help.gnome.org/gnome-help/figures/shell-top-bar.png)
 - [Anatomie de la vue Activités](https://help.gnome.org/gnome-help/figures/shell-activities-dash.png)
 - [Application GNOME 51 : Papers](https://release.gnome.org/51/papers-signature-screenshot.webp)
 - [Menus et réglages rapides](https://help.gnome.org/gnome-help/figures/shell-exit.png)
-- [Calendrier et notifications](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
+- [Calendrier GNOME 51](https://release.gnome.org/51/calendar-event-editor-screenshot.webp)
+- [Aperçu de document GNOME 51](https://release.gnome.org/51/sushi-screenshot.webp)
+- [Loupe GNOME 51](https://release.gnome.org/51/loupe-properties-screenshot.webp)
+- [Fond d'écran Adwaita GNOME 51](https://release.gnome.org/51/adwaita-thumb.webp)
 
-Les visuels renvoient désormais aux captures officielles de GNOME Help et aux images de présentation GNOME. Ils montrent l'apparence standard ; certaines captures documentaires sont antérieures à GNOME 51 et servent à identifier les composants, pas à figer leurs dimensions.
+Les captures GNOME Help servent à identifier les zones du Shell, pas à figer leurs dimensions ou sélecteurs. Les captures des notes de version sont propres à GNOME 51.
 
 ## Compléments pédagogiques
 
@@ -47,6 +52,9 @@ Les visuels renvoient désormais aux captures officielles de GNOME Help et aux i
 - [Panneau supérieur](13-panneau-superieur-shell.md)
 - [Vue Activités](14-vue-activites-overview.md)
 - [Menus, réglages rapides, calendrier et notifications](15-menus-reglages-notifications.md)
+- [Composants Shell spécialisés](23-composants-shell-specialises.md)
+- [Mutter et décorations](24-mutter-fenetres-decorations-ecrans.md)
+- [Publication d'un thème complet](25-creer-installer-publier-theme.md)
 
 ## Référence technique
 
