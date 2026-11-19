@@ -382,7 +382,7 @@ Suivez cette séquence :
 
 Ne tentez pas de redémarrer le Shell sur une session de travail simplement pour forcer le rechargement. Utilisez la session imbriquée ou la machine virtuelle prévue pour les tests.
 
-## 13. Exercices progressifs
+## 16. Exercices progressifs
 
 ### Exercice A — panneau minimal
 
@@ -416,3 +416,85 @@ Ne tentez pas de redémarrer le Shell sur une session de travail simplement pour
 - Consigner la version de GNOME Shell et les sélecteurs utilisés.
 
 Le chapitre est terminé lorsque vous pouvez expliquer quelle règle modifie chaque élément et démontrer que les états interactifs et les indicateurs de sécurité restent visibles.
+
+## 14. Vérifier l'encombrement et les collisions du panneau
+
+Le panneau est une ligne de hauteur limitée. Un style peut être syntaxiquement valide tout en provoquant des chevauchements, des boutons trop serrés ou la disparition visuelle d'un indicateur. Évaluez l'ensemble du panneau, pas seulement le bouton que vous venez de modifier.
+
+Procédure de mesure :
+
+1. Démarrez la session de test avec une résolution connue et notez le facteur d'échelle.
+2. Activez les indicateurs usuels : réseau, son, alimentation si disponible, calendrier et notifications.
+3. Ajoutez temporairement les extensions que vous utilisez réellement, une par une.
+4. Observez le panneau avec une horloge courte, puis avec un format de date et d'heure plus long.
+5. Répétez le test avec une langue dont les libellés sont plus longs.
+6. Vérifiez le panneau dans le bureau, la vue Activités et l'écran verrouillé.
+7. Recommencez avec une résolution plus faible ou une échelle supérieure.
+
+Surveillez particulièrement :
+- les boutons qui se touchent ou se recouvrent ;
+- les icônes qui perdent leur zone de clic ;
+- les libellés qui poussent les autres éléments hors du panneau ;
+- les indicateurs de confidentialité masqués par une couleur ou un arrière-plan ;
+- les changements de hauteur causés par une police ou un padding excessif.
+
+Évitez de fixer une largeur rigide à tous les boutons. Les libellés, les extensions et les indicateurs disponibles varient selon la session. Préférez de petites modifications d'espacement, puis vérifiez leur effet sur toute la ligne.
+
+### Distinguer un défaut du thème d'un conflit d'extension
+
+Si un bouton présente un style différent des autres, désactivez temporairement l'extension concernée dans la session de test, puis comparez le rendu. Ne concluez pas immédiatement à un défaut du sélecteur natif : une extension peut créer ses propres classes, ajouter des conteneurs ou appliquer des règles plus spécifiques.
+
+Consignez le nom et la version de l'extension, son état activé/désactivé et le sélecteur réellement observé. Réactivez ensuite l'extension et vérifiez que la correction ne dégrade pas les autres boutons. N'utilisez pas cette méthode pour désactiver les indicateurs système de sécurité ou de confidentialité.
+
+## 15. Exercice complet : construire un panneau cohérent
+
+Cet exercice rassemble les règles du chapitre sans chercher à reproduire exactement le thème par défaut. Utilisez-le dans une session GNOME Shell de test.
+
+Commencez par cette base :
+
+```css
+#panel {
+  background-color: #20242b;
+  color: #f6f5f4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#panel .panel-button {
+  color: inherit;
+  border-radius: 7px;
+  transition-duration: 150ms;
+}
+
+#panel .panel-button:hover {
+  background-color: rgba(255, 255, 255, 0.10);
+}
+
+#panel .panel-button:active,
+#panel .panel-button:checked {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+#panel .clock-display .clock {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#panel .system-status-icon {
+  icon-size: 16px;
+}
+```
+
+Ce point de départ ne définit volontairement ni largeur fixe, ni hauteur imposée, ni couleur qui neutraliserait les indicateurs de confidentialité. Les états `:active` et `:checked` ne sont pertinents que pour les boutons qui exposent ces états ; vérifiez leur présence dans l'inspecteur.
+
+Procédez par petites étapes :
+
+1. Appliquez uniquement le fond et la couleur du panneau.
+2. Ajoutez le rayon des boutons et contrôlez les zones cliquables.
+3. Ajoutez le survol et l'état actif, sans confondre les deux.
+4. Ajustez l'horloge et les icônes après avoir vérifié leur taille native.
+5. Testez les indicateurs d'enregistrement et de partage d'écran.
+6. Reprenez tous les tests d'encombrement de la section précédente.
+7. Supprimez les règles qui n'apportent aucune amélioration ou qui dépendent d'une classe non observée.
+
+Dans le compte rendu, indiquez la version exacte de GNOME Shell, le contexte testé, les classes confirmées, les états vérifiés et les éventuels conflits d'extensions. Une capture avant/après doit être prise à résolution, échelle, langue et état d'interface identiques.
+
