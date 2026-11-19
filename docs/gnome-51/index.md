@@ -1,6 +1,6 @@
 # Manuel de création et de personnalisation GNOME 51
 
-Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des illustrations locales légendées, des méthodes de diagnostic et un catalogue technique.
+Ce manuel accompagne un débutant depuis ses premières notions jusqu'à la création d'un thème GNOME structuré. Il comprend des tutoriels pratiques, des exemples, des exercices, des captures d’écran officielles GNOME légendées, des méthodes de diagnostic et un catalogue technique.
 
 La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle regroupe 25 chapitres thématiques complémentaires, des tutoriels débutants aux références techniques. Les sélecteurs Shell et les détails internes des widgets peuvent changer : vérifiez toujours la version installée.
 
@@ -32,17 +32,19 @@ La documentation cible GNOME Shell 51.0, GTK 3.24, GTK 4 et Libadwaita. Elle reg
 
 ## Captures de l'interface GNOME standard
 
-Les visuels ci-dessous sont des illustrations SVG originales stockées dans ce dépôt. Elles reprennent la palette, les surfaces, les arrondis et la hiérarchie du thème Adwaita par défaut pour expliquer les interfaces. Ce ne sont pas des captures d'écran GNOME réelles ni des ressources officielles.
+Les images sont des captures d’écran PNG provenant du dépôt officiel [GNOME User Documentation](https://github.com/GNOME/gnome-user-docs/tree/gnome-51/gnome-help/C/figures), branche `gnome-51`. Elles montrent le bureau GNOME standard et ses composants réels. Les fichiers sont copiés dans le dépôt pour rendre le manuel autonome et consultable hors ligne.
 
-- [Panneau supérieur Adwaita](images/panneau-superieur-adwaita.svg)
-- [Vue Activités Adwaita](images/vue-activites-adwaita.svg)
-- [Fenêtre d'application Adwaita](images/fenetre-adwaita.svg)
-- [Réglages rapides](images/reglages-rapides-adwaita.svg)
-- [Calendrier et notifications](images/calendrier-notifications-adwaita.svg)
-- [Écran de verrouillage](images/ecran-verrouillage-adwaita.svg)
-- [Fond Adwaita](images/fond-adwaita.svg)
+- ![Barre supérieure GNOME](images/official/shell-top-bar.png)
+- ![Lanceur et vue Activités](images/official/shell-activities-dash.png)
+- ![Calendrier, rendez-vous et notifications](images/official/shell-appts.png)
+- ![Menu système et réglages rapides](images/official/shell-exit.png)
+- ![Espaces de travail](images/official/shell-workspaces.png)
+- ![Outil de capture d’écran](images/official/screenshot-tool.png)
+- ![Vue des fichiers et icônes](images/official/nautilus-icons.png)
+- ![Sélecteur de méthode de saisie](images/official/input-methods-switcher.png)
+- ![Ordre des résultats de recherche](images/official/search-results-order.png)
 
-Les sélecteurs, dimensions et comportements doivent toujours être vérifiés dans la version de GNOME ciblée. Les SVG sont des supports pédagogiques, pas des spécifications de pixels.
+Les captures ne remplacent pas l’inspection de la version installée : les dimensions, les libellés et les sélecteurs internes peuvent évoluer.
 
 ## Compléments pédagogiques
 
@@ -80,4 +82,4 @@ Le manuel vise les familles de composants natifs documentées pour GNOME Shell 5
 
 ## Formats exportés
 
-Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des illustrations SVG locales du dépôt. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.
+Le PDF et l'EPUB sont générés à partir des chapitres Markdown et des captures PNG locales du dépôt. Après chaque modification, reconstruisez les deux formats et vérifiez que les schémas et exemples sont présents.

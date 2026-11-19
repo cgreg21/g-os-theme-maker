@@ -4,9 +4,9 @@ Ce chapitre explique comment aborder les applications GNOME une par une. Il comp
 
 L'objectif est de savoir **ce qui peut être personnalisé**, **où chercher l'implémentation**, **comment tester une règle** et **comment documenter une limite**. Aucun sélecteur présenté ici ne doit être supposé universel : il faut toujours le confirmer dans la version de l'application installée.
 
-![Illustration locale d'une fenêtre GNOME dans le style Adwaita : barre d'en-tête, navigation, contenu et contrôles](images/fenetre-adwaita.svg)
+![Capture officielle de GNOME Fichiers : vue des éléments et icônes, issue de GNOME User Documentation 51](images/official/nautilus-icons.png)
 
-Cette illustration représente un exemple pédagogique de fenêtre GTK 4/Libadwaita ; elle ne constitue pas une capture d'écran réelle ni le gabarit obligatoire de toutes les applications. Certaines applications n'ont pas de barre latérale, utilisent une barre d'outils différente ou dessinent leur contenu avec des composants spécialisés.
+Cette capture documente GNOME Fichiers. Elle illustre une application réelle ; elle ne décrit pas à elle seule les styles internes de toutes les applications GTK. Certaines applications n'ont pas de barre latérale, utilisent une barre d'outils différente ou dessinent leur contenu avec des composants spécialisés.
 
 ## 1. Comprendre les couches d'une application
 
