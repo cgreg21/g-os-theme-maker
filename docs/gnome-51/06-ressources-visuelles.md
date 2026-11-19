@@ -1,45 +1,5 @@
 # 6. Icônes, curseurs, polices, fonds et sons
 
-## 8. Icônes, curseurs, polices et arrière-plans
-
-### 8.1 Icônes
-
-Un thème d’icônes contient `index.theme` et des ressources classées par taille et contexte. Les contextes usuels comprennent Applications, Actions, Devices, Places, Status, MimeTypes, Emblems et Categories. Respecter les noms Freedesktop et les replis vers `hicolor`.
-
-```ini
-[Icon Theme]
-Name=MonTheme
-Comment=Thème d’icônes
-Inherits=hicolor
-Directories=scalable/apps,scalable/actions
-
-[scalable/apps]
-Size=48
-Type=Scalable
-MinSize=16
-MaxSize=256
-Context=Applications
-
-[scalable/actions]
-Size=16
-Type=Scalable
-MinSize=16
-MaxSize=64
-Context=Actions
-```
-
-### 8.2 Curseurs
-
-Les curseurs sont des fichiers Xcursor, pas des SVG ordinaires. Prévoir au minimum les rôles pointeur, main, texte, attente, déplacement, redimensionnement dans chaque direction et précision. Hériter d’un thème existant si une ressource manque.
-
-### 8.3 Polices
-
-Documenter famille, graisse, taille, hauteur de ligne et rendu. Les polices sont installées séparément et sélectionnées par les paramètres GNOME / Fontconfig. Ne pas prétendre que le CSS Shell modifie toutes les polices système.
-
-### 8.4 Fonds et images
-
-Le fond du bureau et celui de l’écran verrouillé sont des ressources d’arrière-plan gérées par GNOME, non des widgets CSS. Le paquet doit documenter les images, leur format, leur résolution et leur licence.
-
 ## 6.1 Contextes d'icônes
 
 Prévoir Applications, Actions, Devices, Places, Status, MimeTypes, Emblems, Categories et éventuellement Panel. Respecter noms Freedesktop, contextes, tailles, types et héritages. Déclarer `hicolor` comme repli. Contrôler icônes manquantes et licences.

@@ -1,6 +1,6 @@
 # 4. Référence CSS et compatibilité
 
-## 5.2 Glossaire des propriétés CSS et compatibilité
+## Propriétés CSS et compatibilité
 
 Ce glossaire indique les propriétés utiles à la création de thèmes et leur disponibilité selon le moteur. « Oui » signifie que la propriété est généralement reconnue ; « Partiel » signifie que sa syntaxe, son effet ou les widgets concernés varient ; « Non » signifie qu’il ne faut pas compter dessus pour cette cible.
 
@@ -101,22 +101,22 @@ Références techniques :
 - [GTK 4 — CSS Properties](https://gnome.pages.gitlab.gnome.org/gtk/gtk4/css-properties.html)
 - [Libadwaita — CSS Variables](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/css-variables.html)
 
-## 4.1 Sélecteurs GTK
+## Sélecteurs GTK
 
 Formes courantes : nœud (`button`), classe (`.suggested-action`), nom de widget (`#my-widget`), descendants (`headerbar button`), enfant direct (`notebook > header`), pseudo-classes et combinateurs. GTK ne prend pas en charge tous les sélecteurs Web ; ne pas supposer les sélecteurs d'attributs. Dans GTK, #nom désigne le nom du widget, pas un identifiant HTML.
 
-## 4.2 États et pseudo-classes
+## États et pseudo-classes
 
 `:hover`, `:focus`, `:active`, `:checked`, `:disabled`, `:insensitive`, `:indeterminate`, `:inconsistent`, `:selected`, `:backdrop`, `:dir(ltr)`, `:dir(rtl)`, `:drop(active)` doivent être vérifiés selon moteur et nœud. Une pseudo-classe valide syntaxiquement peut ne correspondre à aucun nœud.
 
-## 4.3 Valeurs, unités et images
+## Valeurs, unités et images
 
 Les longueurs peuvent utiliser px, pt, em, ex, rem et unités physiques selon moteur. Les unités sont logiques et influencées par l'échelle. GTK supporte images et dégradés avec extensions propres ; les formats dépendent des chargeurs. Les propriétés `-gtk-*` sont spécifiques à GTK.
 
-## 4.4 Exclusions du socle commun
+## Propriétés non portables
 
 Ne pas proposer comme universels : `display:flex`, `display:grid`, `position:absolute`, `z-index`, `transform`, `filter`, `backdrop-filter`, `@media`, sélecteurs d'attributs et animations Web. Une propriété reconnue par un moteur ne garantit pas son effet sur chaque nœud.
 
-## 4.5 Métadonnées de compatibilité
+## Métadonnées de compatibilité pour l’éditeur
 
 Chaque propriété de l'inspecteur doit déclarer moteur, version minimale, type, widgets admissibles, états admissibles, exporteur, statut de validation et référence. Statuts : commun vérifié, spécifique, partiel, non pris en charge. Un parseur sans erreur ne prouve pas le rendu.

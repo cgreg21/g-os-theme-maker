@@ -4,7 +4,7 @@
 
 Les noms ci-dessous proviennent de l’organisation des sources SCSS de GNOME Shell 51.0, dans `data/theme/gnome-shell-sass/widgets/`. Les sélecteurs sont des détails d’implémentation, pas une API stable. Toujours vérifier le code de la version ciblée.
 
-### 2.1 Panneau supérieur et indicateurs
+#### 3. Panneau supérieur et indicateurs
 
 - **Élément** : Panneau supérieur ; **Sélecteurs / classes repères** : `#panel` ; **Ce qui doit être personnalisable** : fond, hauteur, bordure, typographie, ombre
 - **Élément** : Boutons du panneau ; **Sélecteurs / classes repères** : `.panel-button` ; **Ce qui doit être personnalisable** : fond, texte, marges, padding, rayon
@@ -25,7 +25,7 @@ Exemple :
 #panel .panel-button:focus { background-color: #3584e4; }
 ```
 
-### 2.2 Vue Activités, recherche et navigation
+#### 4. Vue Activités, recherche et navigation
 
 - **Élément** : Fond de la vue Activités ; **Sélecteurs / classes repères** : `#overviewGroup`, `#overview` selon version ; **Couverture visuelle** : fond, voile, contraste
 - **Élément** : Conteneur des résultats ; **Sélecteurs / classes repères** : `#searchResults`, `#searchResultsContent` ; **Couverture visuelle** : largeur, marges
@@ -41,7 +41,7 @@ Exemple :
 - **Élément** : Prévisualisation de mosaïque ; **Sélecteurs / classes repères** : `.tile-preview` ; **Couverture visuelle** : contour et couleur d’accent
 - **Élément** : Écrans secondaires ; **Sélecteurs / classes repères** : `.secondary-monitor-workspaces` ; **Couverture visuelle** : espacement
 
-### 2.3 Grille d’applications et dock
+#### 5. Grille d’applications et dock
 
 - **Élément** : Grille ; **Sélecteurs / classes repères** : `.icon-grid`, `.apps-scroll-view` ; **Couverture visuelle** : espacements et marges
 - **Élément** : Tuile d’application ; **Sélecteurs / classes repères** : `.overview-tile`, `.overview-icon` ; **Couverture visuelle** : fond, rayon, padding
@@ -59,7 +59,7 @@ Exemple :
 - **Élément** : Emplacement de glisser-déposer ; **Sélecteurs / classes repères** : `.placeholder`, `.empty-dash-drop-target` ; **Couverture visuelle** : taille et état cible
 - **Élément** : Infobulle du dock ; **Sélecteurs / classes repères** : `.dash-label` ; **Couverture visuelle** : fond, texte, ombre
 
-### 2.4 Espaces de travail et changement de fenêtre
+#### 6. Espaces de travail et changement de fenêtre
 
 - Miniatures des espaces : `.workspace-thumbnails`, `.workspace-thumbnail`.
 - Indicateur de l’espace sélectionné : `.workspace-thumbnail-indicator`.
@@ -72,7 +72,7 @@ Exemple :
 - Mise en évidence de fenêtre : `.cycler-highlight`.
 - Indicateurs du sélecteur d’espace : `.workspace-switcher`, `.ws-switcher-indicator`.
 
-### 2.5 Menus, popovers et menus contextuels
+#### 7. Menus, popovers et menus contextuels
 
 - **Élément** : Conteneur du menu ; **Sélecteurs / classes repères** : `.popup-menu`, `.popup-menu-content`
 - **Élément** : Flèche du popover ; **Sélecteurs / classes repères** : `.popup-menu-boxpointer`
@@ -88,7 +88,7 @@ Exemple :
 
 Ne pas supposer que le style d’un élément parent suffit : les sous-menus, ornements, cases, séparateurs et éléments désactivés possèdent leurs propres états.
 
-### 2.6 Réglages rapides et état du système
+#### 8. Réglages rapides et état du système
 
 - Conteneur des réglages : `.quick-settings`.
 - Grille des commandes : `.quick-settings-grid`.
@@ -110,7 +110,7 @@ Ne pas supposer que le style d’un élément parent suffit : les sous-menus, or
 
 Les commandes visibles dépendent du matériel, des services et des extensions installés. Le thème doit couvrir les commandes génériques, pas figer la liste des appareils disponibles.
 
-### 2.7 Date, calendrier, événements, horloges et météo
+#### 9. Date, calendrier, événements, horloges et météo
 
 - Zone date/heure : `#calendarArea`, `.datemenu-popover`.
 - Colonne du calendrier : `.datemenu-calendar-column`.
@@ -125,7 +125,7 @@ Les commandes visibles dépendent du matériel, des services et des extensions i
 - Horloges mondiales : `.world-clocks-button`, `.world-clocks-header`, `.world-clocks-grid`, `.world-clocks-city`, `.world-clocks-time`, `.world-clocks-timezone`.
 - Météo : `.weather-button`, `.weather-box`, `.weather-header-box`, `.weather-header`, `.weather-grid`, `.weather-forecast-time`, `.weather-forecast-icon`, `.weather-forecast-temp`.
 
-### 2.8 Notifications et contrôles multimédias
+#### 10. Notifications et contrôles multimédias
 
 - Liste : `.message-list`, `.message-view`, `.message-list-placeholder`.
 - Contrôles de la liste : `.message-list-controls`, `.message-list-clear-button`.
@@ -138,7 +138,7 @@ Les commandes visibles dépendent du matériel, des services et des extensions i
 - Média : `.media-message`, `.message-media-control`.
 - Bannière : `.notification-banner`, `.notification-buttons-bin`, `.notification-button`.
 
-### 2.9 Dialogues, authentification et session
+#### 11. Dialogues, authentification et session
 
 - Dialogue générique : `.modal-dialog`, `.modal-dialog-content-box`, `.modal-dialog-button-box`, `.modal-dialog-button`.
 - Listes dans les dialogues : `.dialog-list`, `.dialog-list-title`, `.dialog-list-scrollview`, `.dialog-list-box`, `.dialog-list-item`.
@@ -222,39 +222,43 @@ Les fichiers `_buttons.scss`, `_check-box.scss`, `_entries.scss`, `_slider.scss`
 - infobulle (style partagé `%tooltip`) ;
 - barre de défilement `StScrollBar`.
 
-## 2.1 Sources et variantes
+## Méthode de personnalisation et variantes
+
+Les inventaires précédents répondent à la question « où se trouve le composant ? ». Cette partie explique dans quel ordre le modifier et comment éviter les effets de bord.
+
+### Sources et variantes
 
 Le thème amont 51 est produit depuis `data/theme/gnome-shell-sass/`. Les variantes générées incluent clair, sombre et contraste élevé. Sources importantes : `_colors.scss`, `_default-colors.scss`, `_high-contrast-colors.scss`, `_common.scss` et `widgets/*.scss`. Les variables SCSS sont résolues à la compilation : elles ne sont pas des variables CSS dynamiques du thème final.
 
-## 2.2 Palette sémantique
+### 4. Palette sémantique
 
 Définir fond, surface, surface élevée, popover, dialogue, texte principal/secondaire/désactivé, accent normal/hover/pressed, bordure, séparateur, focus, sélection, succès, avertissement, erreur et information. Construire trois palettes cohérentes, ne pas simplement inverser les couleurs.
 
-## 2.3 Panneau et indicateurs
+### 5. Panneau et indicateurs
 
 Tester repos, hover, focus, pressed, menu ouvert, application active et notification en attente. Vérifier horloge, date, activités, indicateurs de confidentialité, enregistrement et partage d'écran. Ces indicateurs dépendent des services actifs.
 
-## 2.4 Activités, recherche et dock
+### 6. Activités, recherche et dock
 
 Couvrir recherche vide/en saisie/aucun résultat, résultats liste/grille, fournisseur, libellés longs, icônes absentes, dossier ouvert/fermé/renommé, pagination, multi-écrans, miniatures, sélection de fenêtre, dock masqué/visible, favoris, applications actives, infobulles et glisser-déposer. Le placeholder et la cible DnD doivent être testés fonctionnellement : le CSS ne corrige pas un DnD cassé.
 
-## 2.5 Menus et réglages rapides
+### 7. Menus et réglages rapides
 
 Tester élément normal, survolé, sélectionné, désactivé, sous-menu, séparateur, case, toggle, icône, raccourci, texte secondaire et menu défilant. Les réglages rapides varient selon matériel : Wi-Fi, Bluetooth, audio, alimentation, luminosité, périphériques et applications d'arrière-plan.
 
-## 2.6 Calendrier, événements et météo
+### 8. Calendrier, événements et météo
 
 Tester navigation mois, jours hors mois, aujourd'hui, sélection, événements, fuseaux horaires, plusieurs horloges, prévisions et absence de données. La météo et les événements dépendent de services externes.
 
-## 2.7 Notifications et média
+### 9. Notifications et média
 
 Couvrir carte seule/empilée, groupe replié/déplié, source, icône, image, texte long, actions, lien, média, fermeture, suppression et état vide.
 
-## 2.8 Dialogues, authentification et verrouillage
+### 10. Dialogues, authentification et verrouillage
 
 Couvrir dialogues génériques, fin de session, exécution de commande, Polkit, mot de passe, montage chiffré, choix audio, verrouillage, sélection utilisateur, méthode d'authentification, erreurs et notifications privées. Ne jamais masquer les erreurs, le focus ou les indications de sécurité.
 
-## 2.9 Capture, OSD, clavier et accessibilité
+### 11. Capture, OSD, clavier et accessibilité
 
 Tester capture écran/fenêtre/zone, poignées, pointeur, enregistrement, volume, luminosité, tablette, compte à rebours, clavier virtuel, emoji, IBus, suggestions, loupe et aides visuelles.
 

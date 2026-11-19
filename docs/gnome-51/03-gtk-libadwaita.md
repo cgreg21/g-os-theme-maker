@@ -1,6 +1,6 @@
 # 3. GTK 3, GTK 4 et Libadwaita
 
-## 3. GTK 3.24 : catalogue des widgets
+## Catalogue des widgets GTK 3.24
 
 GTK 3 utilise les nœuds CSS, classes de style et états. Le nom du widget et le nom de son nœud CSS peuvent différer. Les widgets ci-dessous couvrent les familles standard courantes. Les applications peuvent ajouter des widgets personnalisés.
 
@@ -46,7 +46,7 @@ entry { background: #202020; color: @theme_fg_color; border: 1px solid #555; }
 
 GTK 3 autorise des nœuds et classes spécifiques. Pour un composant précis, consulter la page API du widget et son arbre CSS réel. Ne pas utiliser les sélecteurs GTK 3 dans une feuille GTK 4 sans vérification.
 
-## 4. GTK 4 : catalogue des widgets
+## Catalogue des widgets GTK 4
 
 GTK 4 conserve le CSS par nœuds mais a fait évoluer les widgets et les conteneurs. Les familles de composants à représenter dans un éditeur sont :
 
@@ -84,7 +84,7 @@ entry, textview { background-color: #202020; color: #ffffff; }
 
 GTK 4.16+ prend en charge les propriétés CSS personnalisées et `var()`. Ne pas les utiliser pour une cible GTK 4.0–4.15.
 
-## 5. Libadwaita : composants GNOME modernes
+## Catalogue des composants Libadwaita
 
 Libadwaita repose sur GTK 4 et ajoute des composants, des conventions visuelles et des variables de style. Les classes API `Adw*` ne sont pas nécessairement des sélecteurs CSS. Vérifier les nœuds et classes de style indiqués par la documentation de chaque composant.
 
@@ -99,7 +99,7 @@ Libadwaita repose sur GTK 4 et ajoute des composants, des conventions visuelles 
 - **Famille** : Contenu ; **Composants Libadwaita** : `AdwStatusPage`, `AdwBanner`, `AdwToastOverlay`, `AdwToast`, `AdwClamp`, `AdwClampScrollable`, `AdwCarousel` ; **Éléments à couvrir** : état vide, bannière, notification, largeur
 - **Famille** : Utilitaires ; **Composants Libadwaita** : `AdwAvatar`, `AdwSpinner`, `AdwViewStack`, `AdwViewStackPage`, `AdwBreakpoint` ; **Éléments à couvrir** : avatar, chargement, navigation adaptative
 
-### 5.1 Couleurs et surfaces
+### Couleurs et surfaces
 
 Les couleurs Libadwaita doivent conserver la sémantique : fond de fenêtre, fond de vue, barre d’en-tête, carte, popover, accent, texte et bordure. Exemple de variables (la disponibilité exacte dépend de la version Libadwaita) :
 
@@ -124,25 +124,25 @@ Les couleurs Libadwaita doivent conserver la sémantique : fond de fenêtre, fon
 
 Un CSS utilisateur peut être ignoré ou supplanté par une application. Libadwaita ne fournit pas de mécanisme universel pour remplacer tous les styles de toutes les applications.
 
-## 3.1 Inspecter les nœuds CSS
+## Comprendre et inspecter les nœuds CSS
 
 GTK ne stylise pas un DOM Web. Chaque widget expose un arbre de nœuds CSS : noms, classes, états et enfants. GtkScale possède par exemple trough, slider, marks et fill. La classe API du widget n'est pas nécessairement le sélecteur CSS.
 
 Méthode : inspecter l'arbre avec les outils de développement disponibles ; consulter la documentation du widget ; relever nœud/classes/états ; écrire une règle ciblée ; vérifier les avertissements ; refaire le test après changement de version.
 
-## 3.2 Providers et priorité
+## Cascade et priorité des providers
 
 Les providers internes, thème, paramètres et application ont des priorités différentes. Une application peut ajouter son CSS, avoir des classes privées ou dessiner ses composants. Ne pas promettre qu'un thème global peut forcer tous les styles Libadwaita.
 
-## 3.3 GTK 3 et GTK 4 ne sont pas interchangeables
+## Différences entre GTK 3 et GTK 4
 
 GTK 3 conserve des widgets historiques comme GtkTreeView. GTK 4 privilégie ListView/GridView/ColumnView et expose des nœuds différents. Vérifier les sélecteurs de headerbars, menus, popovers, champs, listes, scrollbars, notebooks, dialogues, infobulles et sélecteurs de fichiers sur chaque version.
 
-## 3.4 Libadwaita
+## Règles propres à Libadwaita
 
 Les classes Adw* sont des classes API, pas nécessairement des sélecteurs CSS. Préférer les classes de style et couleurs sémantiques documentées. Les applications peuvent charger leur propre CSS ; le CSS utilisateur n'est pas une API universelle de re-skinning.
 
-## 3.5 Couleurs sémantiques
+## Couleurs sémantiques
 
 Selon version : window-bg/fg, view-bg/fg, headerbar-bg/fg, card-bg/fg, popover-bg/fg, accent-bg/fg, accent-color et destructive-color. Vérifier la référence de la version Libadwaita ciblée.
 
