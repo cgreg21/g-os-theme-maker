@@ -18,22 +18,41 @@ ALLOWED_IMAGES = {".png", ".jpg", ".jpeg"}
 
 
 def markdown_lines(path: Path):
-    """Yield lines outside fenced code blocks."""
+    """Yield lines outside fenced code blocks and reject unclosed fences."""
     fence_char = None
     fence_length = 0
-    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        stripped = line.lstrip()
-        match = re.match(r"(\`{3,}|~{3,})", stripped)
-        if match:
-            marker = match.group(1)
-            if fence_char is None:
-                fence_char, fence_length = marker[0], len(marker)
-            elif marker[0] == fence_char and len(marker) >= fence_length:
-                fence_char, fence_length = None, 0
-            continue
-        if fence_char is None:
-            yield number, line
+    opening_line = None
 
+    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if fence_char is None:
+            if opening:
+                marker, info = opening.groups()
+                if marker[0] == "`" and "`" in info:
+                    raise ValueError(
+                        f"{path}:{number}: métadonnées de bloc à backticks invalides"
+                    )
+                fence_char = marker[0]
+                fence_length = len(marker)
+                opening_line = number
+                continue
+            yield number, line
+            continue
+
+        closing = re.match(
+            r"^ {0,3}" + re.escape(fence_char) +
+            r"{" + str(fence_length) + r",}[ \t]*$",
+            line,
+        )
+        if closing:
+            fence_char = None
+            fence_length = 0
+            opening_line = None
+
+    if fence_char is not None:
+        raise ValueError(
+            f"{path}:{opening_line}: bloc de code non refermé avant la fin du fichier"
+        )
 
 def main() -> int:
     errors = []
@@ -77,7 +96,12 @@ def main() -> int:
             )
 
     for document in markdown_files:
-        for number, line in markdown_lines(document):
+        try:
+            visible_lines = list(markdown_lines(document))
+        except ValueError as error:
+            errors.append(str(error))
+            continue
+        for number, line in visible_lines:
             if TABLE_SEPARATOR_RE.match(line):
                 errors.append(
                     f"{document.relative_to(ROOT)}:{number}: tableau Markdown interdit"
