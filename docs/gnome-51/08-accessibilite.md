@@ -112,7 +112,11 @@ Les noms de schémas et les clés disponibles dépendent de la version installé
 
 ```sh
 gsettings list-schemas | grep -E 'a11y|interface|wm'
-gsettings list-recursively org.gnome.desktop.a11y
+
+for schema in $(gsettings list-schemas | grep '^org.gnome.desktop.a11y'); do
+  gsettings list-recursively "$schema"
+done
+
 gsettings list-recursively org.gnome.desktop.interface
 ```
 
