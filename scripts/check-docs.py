@@ -73,11 +73,11 @@ def code_blocks(path: Path):
 
         closing = re.match(
             r"^ {0,3}" + re.escape(fence_char) +
-            r"{" + str(fence_length) + r",}[ \\t]*$",
+            r"{" + str(fence_length) + r",}[ \t]*$",
             line,
         )
         if closing:
-            yield "\\n".join(block_lines)
+            yield "\n".join(block_lines)
             fence_char = None
             fence_length = 0
             block_lines = []
@@ -128,7 +128,7 @@ def main() -> int:
     for document in markdown_files:
         for block in code_blocks(document):
             if re.search(
-                r"St\\.BoxLayout\\s*\\(\\s*\\{[^}]*\\bvertical\\s*:",
+                r"St\.BoxLayout\s*\(\s*\{[^}]*\bvertical\s*:",
                 block,
                 re.S,
             ):
