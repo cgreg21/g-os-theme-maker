@@ -205,7 +205,7 @@ Cette règle empêche une régression de devenir la nouvelle référence simplem
 Vérifiez d'abord que les images ont les mêmes dimensions et le même espace colorimétrique :
 
 ```sh
-identify -format '%f : %wx%h %[colorspace]\\n' reference.png candidate.png
+identify -format '%f : %wx%h %[colorspace]\n' reference.png candidate.png
 ```
 
 Si les dimensions diffèrent, ne redimensionnez pas silencieusement une capture pour faire disparaître le problème. Recommencez la capture dans le bon environnement ou documentez pourquoi les dimensions sont volontairement différentes.
@@ -315,7 +315,7 @@ output=${3:?Usage: compare.sh reference.png candidate.png output.png}
 
 for file in "$reference" "$candidate"; do
   if [ ! -s "$file" ]; then
-    printf 'Fichier absent ou vide : %s\\n' "$file" >&2
+    printf 'Fichier absent ou vide : %s\n' "$file" >&2
     exit 2
   fi
 done
@@ -324,13 +324,13 @@ ref_size=$(identify -format '%wx%h' "$reference")
 candidate_size=$(identify -format '%wx%h' "$candidate")
 
 if [ "$ref_size" != "$candidate_size" ]; then
-  printf 'Dimensions incompatibles : référence=%s candidat=%s\\n' \\
+  printf 'Dimensions incompatibles : référence=%s candidat=%s\n' \
     "$ref_size" "$candidate_size" >&2
   exit 2
 fi
 
 magick compare "$reference" "$candidate" "$output"
-printf 'Différence enregistrée dans %s\\n' "$output"
+printf 'Différence enregistrée dans %s\n' "$output"
 ```
 
 Le code de sortie de `magick compare` peut signaler qu'une différence existe. Si vous l'intégrez à une CI, traitez séparément les erreurs d'exécution et les différences visuelles, puis publiez l'image de différence comme artefact. Une différence détectée ne doit pas être acceptée ou rejetée sans règle explicite et revue humaine.
