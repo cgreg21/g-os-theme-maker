@@ -267,3 +267,218 @@ Limites et éléments non testés :
 ```
 
 La fiche doit distinguer les observations des hypothèses. Si le propriétaire d'un effet n'a pas été identifié, indiquez « inconnu » plutôt que d'attribuer son rendu à Mutter ou à GTK sans preuve.
+
+
+## 18. Construire un environnement de test Mutter
+
+Mutter gère la composition des fenêtres, les sorties d'affichage, les interactions avec le gestionnaire de fenêtres et une partie des comportements de session. Il ne faut pas confondre ses réglages avec ceux de GTK ou de GNOME Shell.
+
+Avant un test, collectez les informations de base :
+
+~~~bash
+gnome-shell --version
+mutter --version 2>/dev/null || true
+echo "$XDG_SESSION_TYPE"
+echo "$WAYLAND_DISPLAY"
+echo "$DISPLAY"
+gsettings list-schemas | grep -E 'mutter|desktop.wm'
+~~~
+
+La disponibilité des commandes dépend de la distribution et du paquet installé. Une commande absente ne signifie pas que Mutter est absent : le composant peut être intégré à la session GNOME.
+
+Notez la version du paquet réellement utilisé et non uniquement celle d'un outil de développement installé séparément.
+
+Créez un dossier de campagne :
+
+~~~bash
+mkdir -p "$HOME/gnome-mutter-lab"/{before,after,logs,screenshots}
+~~~
+
+Conservez-y les valeurs initiales, les journaux utiles et les captures. N'enregistrez pas de contenu privé dans les captures.
+
+## 19. Identifier les réglages et leurs valeurs initiales
+
+Listez les schémas présents avant de lire une clé. Les clés et leurs valeurs par défaut peuvent varier selon la version et la distribution.
+
+~~~bash
+gsettings list-schemas | grep -E 'mutter|desktop.wm.preferences'
+gsettings list-recursively org.gnome.mutter
+gsettings list-recursively org.gnome.desktop.wm.preferences
+~~~
+
+Si un schéma n'existe pas, n'inventez pas la clé. Recherchez le schéma correspondant dans l'installation et dans les sources de la version concernée.
+
+Pour examiner une clé :
+
+~~~bash
+gsettings describe org.gnome.mutter NOM_DE_CLE
+gsettings get org.gnome.mutter NOM_DE_CLE
+~~~
+
+Remplacez NOM_DE_CLE uniquement par une clé réellement listée. La commande describe peut ne pas fournir de description pour toutes les clés.
+
+Avant toute modification, sauvegardez les valeurs du schéma concerné. Ne restaurez pas un export complet à l'aveugle si d'autres réglages ont changé entre-temps : comparez les différences et ne rétablissez que les clés modifiées par la campagne.
+
+## 20. Distinguer les réglages d'affichage des réglages de fenêtres
+
+Une anomalie de position ou de taille peut provenir de plusieurs couches :
+- configuration des sorties ;
+- règles de placement de Mutter ;
+- contraintes de taille de l'application ;
+- décoration CSD ou SSD ;
+- mise à l'échelle ;
+- taille des polices ;
+- espace de travail et état maximisé.
+
+Pour isoler la cause, conservez une application de test et un document de contenu identiques. Changez une seule dimension à la fois : écran, échelle, décoration, taille de fenêtre ou réglage de gestionnaire.
+
+Ne modifiez pas simultanément la résolution, le facteur d'échelle et les marges CSS. Le résultat ne permettrait plus d'identifier le paramètre responsable.
+
+## 21. Atelier : placement, maximisation et mosaïque
+
+Préparez plusieurs fenêtres de test de tailles différentes. Vérifiez :
+- ouverture d'une fenêtre non maximisée ;
+- déplacement sur le bureau ;
+- déplacement vers un autre espace de travail ;
+- maximisation ;
+- restauration depuis l'état maximisé ;
+- mosaïque à gauche et à droite si disponible ;
+- redimensionnement depuis chaque bord ;
+- fenêtres avec taille minimale ;
+- fenêtres modales ;
+- fenêtres toujours au-dessus lorsque l'application propose cette fonction.
+
+Contrôlez que les décorations ne recouvrent pas les zones de déplacement et que les poignées de redimensionnement restent utilisables. Les ombres ne doivent pas être prises pour des bordures interactives.
+
+Testez également les fenêtres proches des bords de l'écran. Une fenêtre peut être correctement placée mais sembler coupée à cause de son ombre ou de sa décoration.
+
+## 22. Atelier : espaces de travail et navigation multi-écrans
+
+Avec plusieurs espaces de travail, contrôlez le déplacement d'une fenêtre, le changement d'espace et le retour à l'espace précédent. Vérifiez que les animations ne produisent pas de décalage durable ou de fenêtre perdue.
+
+Avec plusieurs moniteurs :
+1. Identifiez l'écran principal.
+2. Ouvrez une fenêtre sur cet écran.
+3. Déplacez-la vers chaque écran secondaire.
+4. Maximisez puis restaurez la fenêtre.
+5. Débranchez un écran externe uniquement si le scénario est sûr.
+6. Reconnectez-le et observez la restauration des fenêtres.
+7. Répétez avec des résolutions et échelles différentes.
+
+Notez où Mutter replace les fenêtres après la disparition d'un écran. Ne concluez pas qu'un défaut CSS est responsable d'une fenêtre déplacée ou redimensionnée.
+
+## 23. Comprendre l'échelle logique et physique
+
+La mise à l'échelle relie les dimensions logiques de l'interface aux pixels physiques de l'écran. Une capture peut donc avoir des dimensions différentes alors que la fenêtre conserve la même taille logique.
+
+Relevez :
+- résolution physique ;
+- facteur d'échelle ;
+- dimensions logiques ;
+- taille de police ;
+- taille de la décoration ;
+- dimensions de la capture.
+
+Comparez les captures à taille logique équivalente. Si vous comparez des pixels physiques, indiquez le facteur d'échelle et ne mesurez pas directement les mêmes distances sans normalisation.
+
+La mise à l'échelle fractionnaire peut dépendre de la version de Mutter, du type de session et de la configuration de la distribution. Ne supposez pas qu'une option expérimentale existe sur toutes les installations.
+
+## 24. Diagnostic des fenêtres invisibles ou hors écran
+
+Si une fenêtre semble avoir disparu :
+- vérifiez les espaces de travail ;
+- utilisez le sélecteur de fenêtres ;
+- vérifiez les écrans connectés ;
+- examinez si la fenêtre est minimisée ;
+- testez le raccourci de déplacement vers un autre espace ;
+- rétablissez une configuration d'écran connue si un moniteur a été retiré.
+
+Ne supprimez pas les fichiers de configuration de l'utilisateur comme première mesure. Commencez par les commandes de l'environnement et les réglages accessibles.
+
+Si une fenêtre est visible mais qu'une partie de son contenu est inaccessible, vérifiez la taille minimale imposée par l'application, la décoration et l'échelle avant d'appliquer une règle CSS.
+
+## 25. Journaux et diagnostic de la session
+
+Consultez les journaux de la session utilisateur autour de l'heure du problème :
+
+~~~bash
+journalctl --user -b --no-pager | grep -Ei 'mutter|gnome-shell|monitor|display'
+~~~
+
+Pour réduire le bruit, ajoutez une période ou un filtre adapté. Les messages de journal peuvent contenir des noms d'applications, de périphériques ou d'utilisateurs : retirez les informations privées avant de partager un extrait.
+
+Une absence de message d'erreur ne prouve pas qu'un réglage est correct. Combinez les journaux avec une reproduction exacte et une comparaison au thème de référence.
+
+Ne redémarrez pas GNOME Shell au milieu d'une session de travail pour tester une hypothèse. Utilisez une session de test ou déconnectez-vous après avoir sauvegardé les données ouvertes.
+
+## 26. Tester les décorations CSD et SSD avec des applications comparables
+
+Sélectionnez au moins deux applications de chaque catégorie identifiée. Pour chacune, notez le toolkit, la présence d'une barre d'en-tête, les boutons de fenêtre et le propriétaire des ombres.
+
+Comparez des états équivalents :
+- fenêtre normale ;
+- fenêtre maximisée ;
+- fenêtre active ;
+- fenêtre inactive ;
+- fenêtre avec dialogue modal ;
+- fenêtre étroite ;
+- fenêtre sur écran secondaire.
+
+Une application CSD peut dessiner sa propre barre d'en-tête. Une application SSD peut déléguer cette zone au gestionnaire de fenêtres. Les règles CSS ne peuvent pas uniformiser ces deux architectures de manière fiable.
+
+Si le thème vise une cohérence visuelle, décrivez les limites connues et privilégiez des ajustements qui ne suppriment pas les contrôles natifs.
+
+## 27. Préparer un protocole de restauration
+
+Une campagne Mutter doit pouvoir être annulée même si le thème ou un réglage rend l'interface difficile à utiliser.
+
+Avant de modifier :
+- exportez les clés ciblées ;
+- notez les valeurs exactes ;
+- gardez un accès à un terminal ;
+- conservez un thème fonctionnel ;
+- évitez de modifier simultanément GDM et la session utilisateur.
+
+Après le test, comparez les valeurs :
+
+~~~bash
+diff -u "$HOME/gnome-mutter-lab/before/mutter-settings.txt" \
+  "$HOME/gnome-mutter-lab/after/mutter-settings.txt"
+~~~
+
+Si vous avez sauvegardé des réglages avec dconf dump, restaurez uniquement le chemin concerné et seulement si vous êtes certain que les autres valeurs n'ont pas changé. Une restauration globale peut écraser des préférences sans rapport avec le test.
+
+Terminez par une déconnexion/reconnexion contrôlée si le réglage ne prend effet qu'au démarrage de la session. Vérifiez ensuite que le comportement de base est revenu.
+
+## 28. Fiche de comparaison multi-environnements
+
+~~~text
+Campagne :
+Application :
+Version de l'application :
+Toolkit :
+GNOME Shell :
+Mutter :
+Distribution :
+Session : Wayland / X11
+Écran principal :
+Écrans secondaires :
+Résolutions :
+Facteurs d'échelle :
+Type de décoration :
+État de fenêtre :
+Réglages initiaux :
+Réglages modifiés :
+Procédure :
+Résultat attendu :
+Résultat observé :
+Journaux associés :
+Capture de référence :
+Capture après changement :
+Retour arrière effectué :
+Différence reproductible :
+Cause confirmée ou hypothèse :
+Conclusion :
+~~~
+
+Une comparaison n'est exploitable que si les versions, la session, les écrans et les états de fenêtre sont consignés. Si l'un de ces éléments diffère, présentez le résultat comme une observation conditionnelle plutôt que comme une régression générale.
