@@ -8,7 +8,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gdk, Gio, Gtk
 
-from .exporter import export_css
+from .exporter import export_css, export_gnome_shell_theme
 from .model import ThemeDocument, ThemeTokens
 from .mutter import NestedShellController
 
@@ -34,7 +34,7 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
         title = Gtk.Label(label="G-OS Theme Maker")
         title.add_css_class("title")
         header.set_title_widget(title)
-        for label, callback in (("Ouvrir", self._open_project), ("Enregistrer", self._save_project), ("Exporter CSS", self._export_css)):
+        for label, callback in (("Ouvrir", self._open_project), ("Enregistrer", self._save_project), ("Exporter CSS", self._export_css), ("Exporter thème Shell", self._export_gnome_shell_theme)):
             button = Gtk.Button(label=label)
             button.connect("clicked", callback)
             header.pack_start(button)
@@ -370,6 +370,19 @@ class ThemeMakerWindow(Gtk.ApplicationWindow):
             self.status.set_text(f"Projet enregistré : {self.project_path.name}")
         except Exception as exc:
             self.status.set_text(f"Enregistrement impossible : {exc}")
+
+    def _export_gnome_shell_theme(self, _button: Gtk.Button) -> None:
+        dialog = Gtk.FileDialog(title="Choisir le dossier de destination")
+        dialog.select_folder(self, None, self._on_gnome_shell_folder_selected)
+
+    def _on_gnome_shell_folder_selected(self, dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
+        try:
+            folder = dialog.select_folder_finish(result)
+            destination = Path(folder.get_path())
+            theme_dir = export_gnome_shell_theme(self.tokens, destination)
+            self.status.set_text(f"Thème GNOME Shell exporté : {theme_dir}")
+        except Exception as exc:
+            self.status.set_text(f"Export GNOME Shell impossible : {exc}")
 
     def _export_css(self, _button: Gtk.Button) -> None:
         dialog = Gtk.FileDialog(title="Exporter le thème CSS")
