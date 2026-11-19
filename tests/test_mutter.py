@@ -9,7 +9,9 @@ from g_os_theme_maker.mutter import NestedShellController
 class NestedShellControllerTests(unittest.TestCase):
     @patch("g_os_theme_maker.mutter.subprocess.Popen")
     @patch("g_os_theme_maker.mutter.shutil.which", return_value="/usr/bin/fake")
-    def test_starts_nested_shell_with_isolated_theme_extension(self, _which, popen):
+    @patch("g_os_theme_maker.mutter.subprocess.run")
+    def test_starts_nested_shell_with_isolated_theme_extension(self, run, _which, popen):
+        run.return_value.stdout = "GNOME Shell 50.0"
         process = popen.return_value
         process.poll.return_value = None
         controller = NestedShellController()
@@ -28,6 +30,7 @@ class NestedShellControllerTests(unittest.TestCase):
             self.assertTrue((extension / "metadata.json").is_file())
             self.assertTrue((extension / "extension.js").is_file())
             self.assertIn("enabled-extensions", command[3])
+            self.assertIn("--devkit", command[3])
             self.assertTrue(Path(env["DCONF_PROFILE"]).is_file())
         finally:
             controller.stop()
