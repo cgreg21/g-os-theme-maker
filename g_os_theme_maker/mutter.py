@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -73,7 +74,7 @@ class NestedShellController:
         (extension_dir / "gnome-shell.css").write_text(theme_css or "", encoding="utf-8")
 
         env = {
-            **__import__("os").environ,
+            **os.environ,
             "XDG_DATA_HOME": str(data_home),
             "XDG_CONFIG_HOME": str(config_home),
             "DCONF_PROFILE": str(root / "dconf-profile"),
